@@ -1,0 +1,61 @@
+{{!
+    @template theme_p4u/mydashboard
+}}
+{{> theme_boost/head }}
+<body {{{ bodyattributes }}}>
+{{> core/local/toast/wrapper}}
+<div id="page-wrapper" class="d-print-block">
+    {{{ output.standard_top_of_body_html }}}
+    <header class="p4u-header">
+        <div class="p4u-shell p4u-header-inner">
+            <a class="p4u-brand" href="{{{ config.wwwroot }}}/my/">
+                <span class="p4u-brand-mark">P4U</span>
+                <span class="p4u-brand-text">{{ sitename }}</span>
+            </a>
+            <div class="p4u-header-menu">
+                {{{ langmenu }}}
+                {{{ usermenu }}}
+            </div>
+        </div>
+    </header>
+
+    <main id="page" class="p4u-shell p4u-main p4u-main-dashboard">
+        <section class="p4u-hero">
+            <p class="p4u-section-label">Dashboard</p>
+            <h1 class="p4u-hero-title">{{#str}}myhome, core{{/str}}</h1>
+            <p class="p4u-hero-subtitle">Deine Kurse, Aufgaben und Community-Updates auf einen Blick.</p>
+        </section>
+
+        <section class="p4u-grid p4u-grid-dashboard">
+            <article class="p4u-card p4u-card-gradient">
+                <p class="p4u-card-eyebrow">Aktivitäten</p>
+                <h2 class="p4u-card-title">Aktueller Lernstand</h2>
+                <p class="p4u-card-text">Behalte offene Aufgaben und Modulfortschritte strukturiert im Blick.</p>
+            </article>
+            <article class="p4u-card p4u-card-blocks {{^hasblocks}}p4u-card-empty{{/hasblocks}}">
+                <p class="p4u-card-eyebrow">Seitenleiste</p>
+                <h2 class="p4u-card-title">Schnellzugriff</h2>
+                {{#hasblocks}}
+                    <div class="p4u-blocks">
+                        {{{ sidepreblocks }}}
+                    </div>
+                {{/hasblocks}}
+                {{^hasblocks}}
+                    <p class="p4u-card-text">Füge in der Bearbeitungsansicht Blöcke hinzu, um die Schnellzugriffe zu konfigurieren.</p>
+                {{/hasblocks}}
+            </article>
+        </section>
+
+        <section id="region-main" class="p4u-content">
+            {{{ output.course_content_header }}}
+            {{{ output.main_content }}}
+            {{{ output.activity_navigation }}}
+            {{{ output.course_content_footer }}}
+        </section>
+    </main>
+
+    {{> theme_boost/footer }}
+    {{{ output.standard_after_main_region_html }}}
+</div>
+</body>
+</html>

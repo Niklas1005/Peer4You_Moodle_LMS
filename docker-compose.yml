@@ -1,0 +1,87 @@
+services:
+  web:
+    build:
+      context: .
+      dockerfile: docker/php/Dockerfile
+    container_name: moodle-web
+    ports:
+      - "${MOODLE_HTTP_PORT:-8080}:80"
+    environment:
+      APACHE_DOCUMENT_ROOT: /var/www/html
+      PHP_MEMORY_LIMIT: 512M
+      PHP_MAX_EXECUTION_TIME: 300
+      PHP_POST_MAX_SIZE: 128M
+      PHP_UPLOAD_MAX_FILESIZE: 128M
+    volumes:
+      - ./:/var/www/html
+      - moodledata:/var/moodledata
+    command: >
+      sh -c "mkdir -p /var/moodledata &&
+      chown -R www-data:www-data /var/moodledata &&
+      apache2-foreground"
+    depends_on:
+      db:
+        condition: service_healthy
+
+  db:
+    image: mariadb:11.4
+    container_name: moodle-db
+    restart: unless-stopped
+    environment:
+      MARIADB_DATABASE: ${MOODLE_DB_NAME:-moodle}
+      MARIADB_USER: ${MOODLE_DB_USER:-moodle}
+      MARIADB_PASSWORD: ${MOODLE_DB_PASSWORD:-change-me}
+      MARIADB_ROOT_PASSWORD: ${MOODLE_DB_ROOT_PASSWORD:-change-root-me}
+    command: >
+      --character-set-server=utf8mb4
+      --collation-server=utf8mb4_unicode_ci
+      --innodb_file_per_table=1
+      --max_allowed_packet=256M
+    volumes:
+      - mariadb_data:/var/lib/mysql
+    healthcheck:
+      test: ["CMD", "healthcheck.sh", "--connect", "--innodb_initialized"]
+      interval: 10s
+      timeout: 5s
+      retries: 10
+
+  cron:
+    build:
+      context: .
+      dockerfile: docker/php/Dockerfile
+    container_name: moodle-cron
+    depends_on:
+      db:
+        condition: service_healthy
+      web:
+        condition: service_started
+    volumes:
+      - ./:/var/www/html
+      - moodledata:/var/moodledata
+    command: >
+      sh -c "mkdir -p /var/moodledata &&
+      chown -R www-data:www-data /var/moodledata;
+      while true; do
+      if [ -f /var/www/html/config.php ]; then
+      php /var/www/html/admin/cli/cron.php;
+      else
+      echo 'Waiting for Moodle installer to generate config.php...';
+      fi;
+      sleep 60;
+      done"
+
+  phpmyadmin:
+    image: phpmyadmin/phpmyadmin:5
+    container_name: moodle-phpmyadmin
+    depends_on:
+      db:
+        condition: service_healthy
+    environment:
+      PMA_HOST: db
+      PMA_PORT: 3306
+    ports:
+      - "${PHPMYADMIN_PORT:-8081}:80"
+
+volumes:
+  mariadb_data:
+  moodledata:

@@ -1,0 +1,53 @@
+{{!
+    @template theme_p4u/frontpage
+}}
+{{> theme_boost/head }}
+<body {{{ bodyattributes }}}>
+{{> core/local/toast/wrapper}}
+<div id="page-wrapper" class="d-print-block">
+    {{{ output.standard_top_of_body_html }}}
+    <header class="p4u-header">
+        <div class="p4u-shell p4u-header-inner">
+            <a class="p4u-brand" href="{{{ config.wwwroot }}}/">
+                <span class="p4u-brand-mark">P4U</span>
+                <span class="p4u-brand-text">{{ sitename }}</span>
+            </a>
+            <div class="p4u-header-menu">
+                {{{ langmenu }}}
+                {{{ usermenu }}}
+            </div>
+        </div>
+    </header>
+
+    <main id="page" class="p4u-shell p4u-main p4u-main-frontpage">
+        <section class="p4u-hero">
+            <p class="p4u-section-label">Lernplattform</p>
+            <h1 class="p4u-hero-title">{{ welcometitle }}</h1>
+            <p class="p4u-hero-subtitle">Peer-Beratung und Kursmaterialien in einer einheitlichen Oberfläche.</p>
+        </section>
+
+        <section class="p4u-grid p4u-grid-frontpage">
+            <article class="p4u-card p4u-card-gradient">
+                <p class="p4u-card-eyebrow">Schnellstart</p>
+                <h2 class="p4u-card-title">Zur Kursübersicht</h2>
+                <p class="p4u-card-text">Starte mit den nächsten Modulen und verfolge deinen Lernfortschritt.</p>
+            </article>
+            <article class="p4u-card">
+                <p class="p4u-card-eyebrow">Community</p>
+                <h2 class="p4u-card-title">Forum und Austausch</h2>
+                <p class="p4u-card-text">Nutze das integrierte Forum für Fragen, Erfahrungsberichte und Ressourcen.</p>
+            </article>
+        </section>
+
+        <section id="region-main" class="p4u-content">
+            {{{ output.course_content_header }}}
+            {{{ output.main_content }}}
+            {{{ output.course_content_footer }}}
+        </section>
+    </main>
+
+    {{> theme_boost/footer }}
+    {{{ output.standard_after_main_region_html }}}
+</div>
+</body>
+</html>
