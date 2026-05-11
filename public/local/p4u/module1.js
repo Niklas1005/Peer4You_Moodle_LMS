@@ -1,0 +1,412 @@
+(function() {
+    const sections = ['intro', 'flashcards', 'roles', 'exercise', 'video', 'casestudy', 'quiz'];
+    const sectionLabels = ['Einstieg', 'Grundlagen', 'Rolle kl\u00e4ren', 'Zuordnung', 'Praxisimpuls', 'Fallbeispiel', 'Abschlussquiz'];
+    const requiredBeforeQuiz = ['intro', 'flashcards', 'roles', 'exercise', 'video', 'casestudy'];
+    const visited = new Set(['intro']);
+
+    const flashcards = [
+        {
+            front: 'Was ist Peer-Beratung?',
+            back: 'Beratung auf Augenh\u00f6he durch Gleichaltrige. Peers h\u00f6ren zu, informieren und vermitteln an Fachstellen weiter.'
+        },
+        {
+            front: 'Warum ist Peer-Beratung wirksam?',
+            back: 'Sie baut Hemmschwellen ab, st\u00e4rkt Vertrauen und hilft, Probleme fr\u00fcher anzusprechen.'
+        },
+        {
+            front: 'Deine Rolle als Peer',
+            back: 'Du begleitest und unterst\u00fctzt in der Peerberatung, ohne professionelle Beratung zu ersetzen.'
+        },
+        {
+            front: 'Was Peers nicht tun',
+            back: 'Keine rechtliche Beratung, keine Empfehlung von Finanzprodukten, stattdessen Weitervermittlung an Fachstellen.'
+        }
+    ];
+
+    let flashIndex = 0;
+    let dragged = null;
+    let quizAttempt = 1;
+    let quizSubmitted = false;
+    let furthestSectionIndex = 0;
+
+    function byId(id) {
+        return document.getElementById(id);
+    }
+
+    function showSection(id) {
+        if (id === 'quiz' && !isQuizUnlocked()) {
+            showMessage('Das Quiz wird freigeschaltet, wenn du alle vorherigen Abschnitte besucht hast.');
+            return;
+        }
+
+        document.querySelectorAll('.p4u-section').forEach(section => section.classList.remove('active'));
+        byId('p4u-sec-' + id)?.classList.add('active');
+
+        const currentIndex = sections.indexOf(id);
+        furthestSectionIndex = Math.max(furthestSectionIndex, currentIndex);
+
+        document.querySelectorAll('.p4u-nav button').forEach(button => {
+            button.classList.toggle('active', button.dataset.target === id);
+            const targetIndex = sections.indexOf(button.dataset.target);
+            button.classList.toggle('visited', targetIndex >= 0 && targetIndex < furthestSectionIndex);
+        });
+
+        visited.add(id);
+        updateQuizNav();
+        updateProgress(currentIndex);
+        window.scrollTo({top: 0, behavior: 'smooth'});
+    }
+
+    function updateProgress(index) {
+        const pct = Math.round(((index + 1) / sections.length) * 100);
+        byId('p4u-progress-label').textContent = sectionLabels[index] + ' \u00b7 Station ' + (index + 1) + ' von ' + sections.length;
+        byId('p4u-progress-fill').style.width = pct + '%';
+        byId('p4u-progress-pct').textContent = pct + ' %';
+    }
+
+    function isQuizUnlocked() {
+        return requiredBeforeQuiz.every(id => visited.has(id));
+    }
+
+    function updateQuizNav() {
+        byId('p4u-quiz-nav')?.classList.toggle('locked', !isQuizUnlocked());
+    }
+
+    function showMessage(message) {
+        const existing = document.querySelector('.p4u-toast');
+        if (existing) {
+            existing.remove();
+        }
+        const toast = document.createElement('div');
+        toast.className = 'p4u-toast alert alert-info';
+        toast.style.position = 'fixed';
+        toast.style.right = '24px';
+        toast.style.bottom = '24px';
+        toast.style.zIndex = '9999';
+        toast.textContent = message;
+        document.body.appendChild(toast);
+        setTimeout(() => toast.remove(), 2800);
+    }
+
+    function renderFlashcard() {
+        const card = flashcards[flashIndex];
+        byId('p4u-flash-front').textContent = card.front;
+        byId('p4u-flash-back').textContent = card.back;
+        byId('p4u-flash-count').textContent = 'Karte ' + (flashIndex + 1) + ' von ' + flashcards.length;
+        byId('p4u-flashcard').classList.remove('flipped');
+        byId('p4u-flash-prev').disabled = flashIndex === 0;
+        byId('p4u-flash-next').disabled = flashIndex === flashcards.length - 1;
+        byId('p4u-flash-next').textContent = flashIndex === flashcards.length - 1 ? 'Alle Karten gesehen' : 'N\u00e4chste Karte';
+    }
+
+    function initFlashcards() {
+        const card = byId('p4u-flashcard');
+        card?.addEventListener('click', () => card.classList.toggle('flipped'));
+        card?.addEventListener('keydown', event => {
+            if (event.key === 'Enter' || event.key === ' ') {
+                event.preventDefault();
+                card.classList.toggle('flipped');
+            }
+        });
+        byId('p4u-flash-prev')?.addEventListener('click', () => {
+            flashIndex = Math.max(0, flashIndex - 1);
+            renderFlashcard();
+        });
+        byId('p4u-flash-next')?.addEventListener('click', () => {
+            flashIndex = Math.min(flashcards.length - 1, flashIndex + 1);
+            renderFlashcard();
+        });
+        renderFlashcard();
+    }
+
+    function initDragDrop() {
+        document.querySelectorAll('.p4u-draggable').forEach(card => {
+            card.addEventListener('dragstart', () => {
+                dragged = card;
+                card.classList.remove('correct', 'incorrect');
+                byId('p4u-drag-next').disabled = true;
+            });
+        });
+
+        document.querySelectorAll('.p4u-dropzone, #p4u-card-bank').forEach(zone => {
+            zone.addEventListener('dragover', event => {
+                event.preventDefault();
+                zone.classList.add('over');
+            });
+            zone.addEventListener('dragleave', () => zone.classList.remove('over'));
+            zone.addEventListener('drop', event => {
+                event.preventDefault();
+                zone.classList.remove('over');
+                if (dragged) {
+                    zone.appendChild(dragged);
+                    dragged = null;
+                    byId('p4u-drag-next').disabled = true;
+                }
+            });
+        });
+
+        byId('p4u-check-drag')?.addEventListener('click', checkDragAnswers);
+        byId('p4u-reset-drag')?.addEventListener('click', resetDragAnswers);
+    }
+
+    function checkDragAnswers() {
+        let total = 0;
+        let correct = 0;
+
+        document.querySelectorAll('.p4u-draggable').forEach(card => {
+            card.classList.remove('correct', 'incorrect');
+        });
+
+        document.querySelectorAll('.p4u-dropzone').forEach(zone => {
+            const accepted = (zone.dataset.accept || '').split(',');
+            zone.querySelectorAll('.p4u-draggable').forEach(card => {
+                total++;
+                if (accepted.includes(card.dataset.id)) {
+                    correct++;
+                    card.classList.add('correct');
+                } else {
+                    card.classList.add('incorrect');
+                }
+            });
+        });
+
+        byId('p4u-card-bank').querySelectorAll('.p4u-draggable').forEach(card => {
+            total++;
+            card.classList.add('incorrect');
+        });
+
+        if (total === 0) {
+            showMessage('Ziehe zuerst Karten in die Felder.');
+            byId('p4u-drag-next').disabled = true;
+        } else if (correct === total) {
+            byId('p4u-drag-next').disabled = false;
+            showMessage('Alles richtig. Du kannst weitergehen.');
+        } else {
+            byId('p4u-drag-next').disabled = true;
+            showMessage(correct + ' von ' + total + ' richtig. Korrigiere die roten Karten.');
+        }
+    }
+
+    function resetDragAnswers() {
+        const bank = byId('p4u-card-bank');
+        document.querySelectorAll('.p4u-draggable').forEach(card => {
+            card.classList.remove('correct', 'incorrect');
+            bank.appendChild(card);
+        });
+        byId('p4u-drag-next').disabled = true;
+    }
+
+    function initQuiz() {
+        document.querySelectorAll('.p4u-quiz button').forEach(option => {
+            option.addEventListener('click', () => {
+                if (quizSubmitted) {
+                    showMessage('Dieser Versuch ist abgeschlossen. Starte einen neuen Versuch, um Antworten zu \u00e4ndern.');
+                    return;
+                }
+                const group = option.closest('.p4u-quiz');
+                group.classList.remove('unanswered');
+                const feedback = group.querySelector('.p4u-question-feedback');
+                if (feedback) {
+                    feedback.textContent = '';
+                    feedback.classList.remove('good', 'bad');
+                }
+                if (group.dataset.multi === 'true') {
+                    option.classList.toggle('selected');
+                } else {
+                    group.querySelectorAll('button').forEach(button => button.classList.remove('selected'));
+                    option.classList.add('selected');
+                }
+            });
+        });
+
+        byId('p4u-submit-quiz')?.addEventListener('click', checkQuiz);
+        byId('p4u-retry-quiz')?.addEventListener('click', resetQuizAttempt);
+        updateQuizAttemptLabel();
+    }
+
+    function initRoleSelfcheck() {
+        document.querySelectorAll('.p4u-role-option').forEach(option => {
+            option.addEventListener('click', () => {
+                const isCorrect = option.dataset.correct === 'true';
+                document.querySelectorAll('.p4u-role-option').forEach(button => {
+                    button.classList.remove('selected', 'correct', 'incorrect');
+                });
+                option.classList.add('selected', isCorrect ? 'correct' : 'incorrect');
+
+                const feedback = byId('p4u-role-feedback');
+                feedback.textContent = option.dataset.feedback;
+                feedback.classList.toggle('good', isCorrect);
+                feedback.classList.toggle('bad', !isCorrect);
+            });
+        });
+    }
+
+    function initCaseChoice() {
+        document.querySelectorAll('.p4u-case-options button').forEach(option => {
+            option.addEventListener('click', () => {
+                const isCorrect = option.dataset.correct === 'true';
+                document.querySelectorAll('.p4u-case-options button').forEach(button => {
+                    button.classList.remove('selected', 'correct', 'incorrect');
+                });
+                option.classList.add('selected', isCorrect ? 'correct' : 'incorrect');
+
+                const feedback = byId('p4u-case-feedback');
+                feedback.textContent = option.dataset.feedback;
+                feedback.classList.toggle('good', isCorrect);
+                feedback.classList.toggle('bad', !isCorrect);
+            });
+        });
+    }
+
+    function initPracticeChoice() {
+        document.querySelectorAll('.p4u-practice-options button').forEach(option => {
+            option.addEventListener('click', () => {
+                const isCorrect = option.dataset.correct === 'true';
+                document.querySelectorAll('.p4u-practice-options button').forEach(button => {
+                    button.classList.remove('selected', 'correct', 'incorrect');
+                });
+                option.classList.add('selected', isCorrect ? 'correct' : 'incorrect');
+
+                const feedback = byId('p4u-practice-feedback');
+                feedback.textContent = option.dataset.feedback;
+                feedback.classList.toggle('good', isCorrect);
+                feedback.classList.toggle('bad', !isCorrect);
+                byId('p4u-practice-reveal')?.classList.remove('p4u-hidden');
+            });
+        });
+    }
+
+    function checkQuiz() {
+        if (quizSubmitted) {
+            showMessage('Der aktuelle Versuch ist bereits abgeschlossen. Starte einen neuen Versuch.');
+            return;
+        }
+
+        const groups = document.querySelectorAll('.p4u-quiz');
+        let correctGroups = 0;
+        let answeredGroups = 0;
+
+        groups.forEach(group => {
+            group.classList.remove('unanswered');
+            const options = Array.from(group.querySelectorAll('button'));
+            const selected = options.filter(option => option.classList.contains('selected'));
+            let groupCorrect = selected.length > 0;
+            if (selected.length > 0) {
+                answeredGroups++;
+            } else {
+                group.classList.add('unanswered');
+            }
+
+            options.forEach(option => {
+                option.classList.remove('correct', 'incorrect');
+                const shouldSelect = option.dataset.correct === 'true';
+                const isSelected = option.classList.contains('selected');
+                if (shouldSelect) {
+                    option.classList.add('correct');
+                }
+                if (isSelected && !shouldSelect) {
+                    option.classList.add('incorrect');
+                }
+                if (shouldSelect !== isSelected) {
+                    groupCorrect = false;
+                }
+            });
+
+            if (groupCorrect) {
+                correctGroups++;
+            }
+            updateQuestionFeedback(group, groupCorrect, selected.length > 0);
+        });
+
+        const result = byId('p4u-quiz-result');
+        result.classList.remove('good', 'bad', 'warning');
+        if (answeredGroups < groups.length) {
+            const missing = groups.length - answeredGroups;
+            result.innerHTML = missing === 1
+                ? '<strong>Noch nicht abschlie\u00dfbar</strong><span>Noch eine Frage ist offen. W\u00e4hle dort eine Antwort aus und schlie\u00dfe das Quiz dann ab.</span>'
+                : '<strong>Noch nicht abschlie\u00dfbar</strong><span>Noch ' + missing + ' Fragen sind offen. W\u00e4hle dort Antworten aus und schlie\u00dfe das Quiz dann ab.</span>';
+            result.classList.add('warning');
+            result.scrollIntoView({behavior: 'smooth', block: 'center'});
+            return;
+        }
+
+        quizSubmitted = true;
+        byId('p4u-submit-quiz').disabled = true;
+        byId('p4u-retry-quiz').classList.remove('p4u-hidden');
+        byId('p4u-quiz-state').textContent = 'Versuch abgeschlossen';
+        document.querySelectorAll('.p4u-quiz button').forEach(option => option.disabled = true);
+
+        const percent = Math.round((correctGroups / groups.length) * 100);
+        if (percent >= 60) {
+            result.innerHTML = '<strong>Bestanden: ' + percent + ' %</strong><span>Modul 1 ist abgeschlossen. Du siehst unten eine kurze Zusammenfassung und kannst bei Bedarf trotzdem einen neuen Versuch starten.</span>';
+            result.classList.add('good');
+            byId('p4u-completion').classList.remove('p4u-hidden');
+            byId('p4u-quiz-state').textContent = 'Bestanden';
+        } else {
+            result.innerHTML = '<strong>Noch nicht bestanden: ' + percent + ' %</strong><span>Du brauchst mindestens 60 %. Schau dir die Hinweise bei den Fragen an und starte danach einen neuen Versuch.</span>';
+            result.classList.add('bad');
+            byId('p4u-completion').classList.add('p4u-hidden');
+            byId('p4u-quiz-state').textContent = 'Noch nicht bestanden';
+        }
+
+        result.scrollIntoView({behavior: 'smooth', block: 'center'});
+    }
+
+    function updateQuestionFeedback(group, isCorrect, isAnswered) {
+        const feedback = group.querySelector('.p4u-question-feedback');
+        if (!feedback || !isAnswered) {
+            return;
+        }
+        feedback.textContent = isCorrect ? feedback.dataset.success : feedback.dataset.error;
+        feedback.classList.toggle('good', isCorrect);
+        feedback.classList.toggle('bad', !isCorrect);
+    }
+
+    function resetQuizAttempt() {
+        quizAttempt++;
+        quizSubmitted = false;
+
+        document.querySelectorAll('.p4u-quiz button').forEach(option => {
+            option.disabled = false;
+            option.classList.remove('selected', 'correct', 'incorrect');
+        });
+        document.querySelectorAll('.p4u-quiz').forEach(group => group.classList.remove('unanswered'));
+        document.querySelectorAll('.p4u-question-feedback').forEach(feedback => {
+            feedback.textContent = '';
+            feedback.classList.remove('good', 'bad');
+        });
+
+        const result = byId('p4u-quiz-result');
+        result.textContent = '';
+        result.classList.remove('good', 'bad', 'warning');
+
+        byId('p4u-submit-quiz').disabled = false;
+        byId('p4u-retry-quiz').classList.add('p4u-hidden');
+        byId('p4u-completion').classList.add('p4u-hidden');
+        byId('p4u-quiz-state').textContent = 'Neuer Versuch bereit';
+        updateQuizAttemptLabel();
+        showMessage('Neuer Quiz-Versuch gestartet.');
+    }
+
+    function updateQuizAttemptLabel() {
+        byId('p4u-quiz-attempt').textContent = 'Versuch ' + quizAttempt;
+    }
+
+    document.addEventListener('DOMContentLoaded', () => {
+        document.querySelectorAll('.p4u-nav button[data-target]').forEach(button => {
+            button.addEventListener('click', () => showSection(button.dataset.target));
+        });
+        document.querySelectorAll('[data-next]').forEach(button => {
+            button.addEventListener('click', () => showSection(button.dataset.next));
+        });
+
+        initFlashcards();
+        initDragDrop();
+        initRoleSelfcheck();
+        initPracticeChoice();
+        initCaseChoice();
+        initQuiz();
+        updateProgress(0);
+        updateQuizNav();
+    });
+})();

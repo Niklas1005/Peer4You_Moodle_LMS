@@ -1,39 +1,51 @@
 #!/usr/bin/env php
 <?php
 /**
- * CLI script: Create "Modul 1: Einführung & Rollenverständnis" in an existing Moodle course.
+ * CLI script: Create/update the P4U "Modul 1" course entry in Moodle.
  *
  * Usage:
  *   php local/p4u/cli/create_modul1.php
  *   php local/p4u/cli/create_modul1.php --courseid=5
+ *   php local/p4u/cli/create_modul1.php --section=2
+ *
+ * If no courseid is provided, a reusable test course with shortname P4U-TEST is
+ * created or reused.
  */
 
 define('CLI_SCRIPT', true);
 
 require(__DIR__ . '/../../../config.php');
 require_once($CFG->libdir . '/clilib.php');
+require_once($CFG->libdir . '/resourcelib.php');
+require_once($CFG->libdir . '/enrollib.php');
 require_once($CFG->dirroot . '/course/lib.php');
 require_once($CFG->dirroot . '/course/modlib.php');
 
-global $DB;
+global $DB, $CFG;
 
-$defaultcourseid = 2;
 $defaultsection = 1;
 list($options) = cli_get_params(
-    ['help' => false, 'courseid' => $defaultcourseid, 'section' => $defaultsection],
+    [
+        'help' => false,
+        'courseid' => 0,
+        'section' => $defaultsection,
+        'shortname' => 'P4U-TEST',
+    ],
     ['h' => 'help']
 );
 
 if (!empty($options['help'])) {
     $help = <<<HELP
-Create P4U Modul 1 in section 1.
+Create P4U Modul 1 in Moodle.
 
 Options:
-  --courseid=ID   Target course id (default: {$defaultcourseid})
-  --section=NUM   Target section number in the course (default: {$defaultsection})
-  -h, --help      Show help
+  --courseid=ID       Target course id. If omitted, a test course is created/reused.
+  --section=NUM       Target section number in the course (default: {$defaultsection})
+  --shortname=NAME    Test course shortname if no courseid is given (default: P4U-TEST)
+  -h, --help          Show help
 
-Example:
+Examples:
+  php local/p4u/cli/create_modul1.php
   php local/p4u/cli/create_modul1.php --courseid=7
 
 HELP;
@@ -43,11 +55,119 @@ HELP;
 
 $courseid = (int)$options['courseid'];
 $targetsection = (int)$options['section'];
-if ($courseid <= 0) {
-    cli_error("Invalid courseid.");
-}
+$testshortname = clean_param((string)$options['shortname'], PARAM_ALPHANUMEXT);
+
 if ($targetsection < 0) {
-    cli_error("Invalid section number.");
+    cli_error('Invalid section number.');
+}
+
+/**
+ * Return a reusable test course, creating it when it does not exist.
+ */
+function p4u_get_or_create_course(int $courseid, string $shortname): stdClass {
+    global $DB;
+
+    if ($courseid > 0) {
+        return get_course($courseid);
+    }
+
+    if ($course = $DB->get_record('course', ['shortname' => $shortname])) {
+        $updates = [];
+        if ($course->fullname !== 'Peers for You - Ausbildung') {
+            $updates['fullname'] = 'Peers for You - Ausbildung';
+        }
+        if ($course->summary !== '<p>Ausbildungskurs fuer Peer-Berater:innen.</p>') {
+            $updates['summary'] = '<p>Ausbildungskurs fuer Peer-Berater:innen.</p>';
+            $updates['summaryformat'] = FORMAT_HTML;
+        }
+        if ($updates) {
+            $updates['id'] = $course->id;
+            update_course((object)$updates);
+            $course = $DB->get_record('course', ['id' => $course->id], '*', MUST_EXIST);
+        }
+        mtrace("Using existing course: {$course->fullname} (id={$course->id})");
+        return get_course($course->id);
+    }
+
+    $categoryid = 1;
+    if (!$DB->record_exists('course_categories', ['id' => $categoryid])) {
+        $categoryid = (int)$DB->get_field('course_categories', 'id', [], IGNORE_MULTIPLE);
+    }
+    if ($categoryid <= 0) {
+        cli_error('No course category exists. Create a category in Moodle first.');
+    }
+
+    $data = (object)[
+        'fullname' => 'Peers for You - Ausbildung',
+        'shortname' => $shortname,
+        'category' => $categoryid,
+        'summary' => '<p>Ausbildungskurs fuer Peer-Berater:innen.</p>',
+        'summaryformat' => FORMAT_HTML,
+        'format' => 'topics',
+        'numsections' => 6,
+        'visible' => 1,
+        'enablecompletion' => 1,
+        'startdate' => time(),
+    ];
+
+    $course = create_course($data);
+    mtrace("Created test course: {$course->fullname} (id={$course->id})");
+    return get_course($course->id);
+}
+
+/**
+ * Enrol the site admin into the course so it appears on the Moodle dashboard.
+ */
+function p4u_enrol_admin_user(stdClass $course, stdClass $admin): void {
+    global $DB;
+
+    $manual = enrol_get_plugin('manual');
+    if (!$manual) {
+        mtrace('  ! Manual enrolment plugin is not available; dashboard course listing may stay empty.');
+        return;
+    }
+
+    $instances = enrol_get_instances($course->id, true);
+    $manualinstance = null;
+    foreach ($instances as $instance) {
+        if ($instance->enrol === 'manual') {
+            $manualinstance = $instance;
+            break;
+        }
+    }
+
+    if (!$manualinstance) {
+        $manual->add_default_instance($course);
+        $instances = enrol_get_instances($course->id, true);
+        foreach ($instances as $instance) {
+            if ($instance->enrol === 'manual') {
+                $manualinstance = $instance;
+                break;
+            }
+        }
+    }
+
+    if (!$manualinstance) {
+        mtrace('  ! Could not create a manual enrolment instance.');
+        return;
+    }
+
+    $context = context_course::instance($course->id);
+    $roleid = (int)$DB->get_field('role', 'id', ['shortname' => 'student']);
+    if ($roleid <= 0) {
+        $roleid = (int)$DB->get_field('role', 'id', ['shortname' => 'manager']);
+    }
+
+    if (!$DB->record_exists('user_enrolments', ['enrolid' => $manualinstance->id, 'userid' => $admin->id])) {
+        $manual->enrol_user($manualinstance, $admin->id, $roleid);
+        mtrace("  + Enrolled admin user {$admin->username} into course {$course->id}");
+    } else {
+        mtrace("  = Admin user {$admin->username} already enrolled in course {$course->id}");
+    }
+
+    if ($roleid > 0 && !user_has_role_assignment($admin->id, $roleid, $context->id)) {
+        role_assign($roleid, $admin->id, $context->id);
+    }
 }
 
 /**
@@ -75,22 +195,13 @@ function p4u_build_moduleinfo(stdClass $course, int $sectionnum, string $modname
     $mi->visibleoncoursepage = 1;
     $mi->groupmode = NOGROUPS;
     $mi->groupingid = 0;
-    $mi->completion = COMPLETION_DISABLED;
-    $mi->completionview = 0;
+    $mi->completion = COMPLETION_TRACKING_AUTOMATIC;
+    $mi->completionview = 1;
     $mi->completionexpected = 0;
     $mi->availabilityconditionsjson = null;
-    $mi->showdescription = 0;
+    $mi->showdescription = 1;
 
     return $mi;
-}
-
-/**
- * Add module and return resulting cm info.
- */
-function p4u_add_module(stdClass $course, stdClass $moduleinfo): stdClass {
-    $result = add_moduleinfo($moduleinfo, $course);
-    mtrace("  + Added {$moduleinfo->modulename}: {$moduleinfo->name} (cmid={$result->coursemodule})");
-    return $result;
 }
 
 /**
@@ -111,6 +222,96 @@ function p4u_activity_exists(int $courseid, int $sectionnum, string $activitynam
     return false;
 }
 
+/**
+ * Find a course module by visible activity name in a section.
+ */
+function p4u_find_activity(int $courseid, int $sectionnum, string $activityname): ?cm_info {
+    $modinfo = get_fast_modinfo($courseid);
+    $sections = $modinfo->get_sections();
+    if (empty($sections[$sectionnum])) {
+        return null;
+    }
+    foreach ($sections[$sectionnum] as $cmid) {
+        $cm = $modinfo->get_cm($cmid);
+        if (trim($cm->name) === trim($activityname)) {
+            return $cm;
+        }
+    }
+    return null;
+}
+
+/**
+ * Remove legacy static page activities from earlier Modul 1 iterations.
+ */
+function p4u_remove_static_module_pages(stdClass $course, int $sectionnum): void {
+    $names = [
+        '1. Einfuehrung',
+        '2. Lernkarten',
+        '3. Rollenverstaendnis',
+        '4. Zuordnung: Peer-Rolle',
+        '5. Video-Platzhalter',
+        '6. Fallbeispiel Marko',
+        '7. Abschlussfragen',
+    ];
+
+    foreach ($names as $name) {
+        $cm = p4u_find_activity($course->id, $sectionnum, $name);
+        if (!$cm) {
+            continue;
+        }
+        course_delete_module($cm->id);
+        mtrace("  - Removed static page: {$name} (cmid={$cm->id})");
+        rebuild_course_cache($course->id, true);
+    }
+}
+
+/**
+ * Remove the default announcements forum for a focused one-module course view.
+ */
+function p4u_remove_default_forums(stdClass $course): void {
+    $modinfo = get_fast_modinfo($course->id);
+    foreach ($modinfo->get_cms() as $cm) {
+        if ($cm->modname !== 'forum') {
+            continue;
+        }
+        course_delete_module($cm->id);
+        mtrace("  - Removed default forum: {$cm->name} (cmid={$cm->id})");
+        rebuild_course_cache($course->id, true);
+    }
+}
+
+/**
+ * Add the interactive Moodle page as a URL activity in the course.
+ */
+function p4u_add_interactive_link(stdClass $course, int $sectionnum): void {
+    global $CFG, $DB;
+
+    $name = 'Modul 1: Einfuehrung & Rollenverstaendnis';
+    $legacyname = 'Interaktives Modul 1';
+    if ($legacycm = p4u_find_activity($course->id, $sectionnum, $legacyname)) {
+        $DB->set_field('url', 'name', $name, ['id' => $legacycm->instance]);
+        mtrace("  ~ Renamed url: {$legacyname} -> {$name}");
+        rebuild_course_cache($course->id, true);
+    }
+    if (p4u_activity_exists($course->id, $sectionnum, $name)) {
+        mtrace("  = Skip url: {$name} (already exists)");
+        return;
+    }
+
+    $mi = p4u_build_moduleinfo(
+        $course,
+        $sectionnum,
+        'url',
+        $name,
+        '<p>Interaktives Lernmodul mit Lernkarten, Zuordnungsaufgabe, Fallbeispiel und Quiz.</p>'
+    );
+    $mi->externalurl = $CFG->wwwroot . '/local/p4u/module1.php?courseid=' . $course->id;
+    $mi->display = RESOURCELIB_DISPLAY_OPEN;
+
+    $result = add_moduleinfo($mi, $course);
+    mtrace("  + Added url: {$name} (cmid={$result->coursemodule})");
+}
+
 try {
     $admin = get_admin();
     if (!$admin) {
@@ -118,194 +319,35 @@ try {
     }
     \core\session\manager::set_user($admin);
 
-    $course = get_course($courseid);
-    if (!$course) {
-        throw new moodle_exception('invalidcourseid', '', '', $courseid);
-    }
-
+    $course = p4u_get_or_create_course($courseid, $testshortname);
+    p4u_enrol_admin_user($course, $admin);
     course_create_sections_if_missing($course, [$targetsection]);
 
     $sectionrecord = $DB->get_record('course_sections', ['course' => $course->id, 'section' => $targetsection], '*', MUST_EXIST);
-    $sectionsummary = <<<HTML
-<h2>Modul 1: Einführung &amp; Rollenverständnis</h2>
+$sectionsummary = <<<HTML
+<h2>Modul 1: Einf&uuml;hrung &amp; Rollenverst&auml;ndnis</h2>
 <p><strong>Dauer:</strong> ca. 10 Minuten</p>
-<p>Was ist Peer-Beratung und welche Rolle/Grenzen hat ein Peer?</p>
+<p>Interaktives Lernmodul f&uuml;r die Ausbildung von Peer-Berater:innen.</p>
 HTML;
 
     course_update_section($course, $sectionrecord, [
-        'name' => 'Modul 1: Einführung',
+        'name' => 'Modul 1: Einfuehrung',
         'summary' => $sectionsummary,
         'summaryformat' => FORMAT_HTML,
     ]);
+    mtrace("Section {$targetsection} prepared: 'Modul 1: Einfuehrung'");
 
-    mtrace("Section {$targetsection} prepared: 'Modul 1: Einführung'");
-
-    // Activity 1: Label.
-    $introhtml = <<<HTML
-<h1>Willkommen bei Peers for You</h1>
-<h2>Was ist Peer-Beratung und warum bist du hier genau richtig?</h2>
-<p>
-Das Diakonische Werk Baden-Baden / Rastatt bietet verschiedene Dienstleistungen an:
-Suchtberatung, Allgemeine Sozialberatung, Schuldenprävention, Schuldnerberatung
-und Schwangerenberatung.
-</p>
-<div style="border:1px solid #d9d9d9; border-radius:8px; padding:12px; background:#f9fbfd; margin:12px 0;">
-    <p><strong>Das Diakonische Werk Rastatt</strong></p>
-    <p>
-    Du wirst als Peer-Berater:in eingesetzt — das heißt, du berätst andere junge Menschen
-    auf Augenhöhe, anonym und niederschwellig.
-    </p>
-</div>
-<h2>Lernziele in diesem Modul</h2>
-<ul>
-    <li>Peer-Beratung als niedrigschwellige Unterstützung auf Augenhöhe verstehen</li>
-    <li>Kernprinzipien benennen: auf Augenhöhe, vertraulich, niedrigschwellig</li>
-    <li>Rolle von Peer-Berater:innen vom professionellen Beratungsauftrag abgrenzen</li>
-    <li>Erlaubte vs. nicht erlaubte Handlungen in der Peer-Rolle sicher unterscheiden</li>
-    <li>In einem Fallbeispiel angemessene Peer-Schritte auswählen</li>
-    <li>Wissen im Abschlussquiz anwenden (Bestehensgrenze: 60%)</li>
-</ul>
-HTML;
-    if (!p4u_activity_exists($course->id, $targetsection, 'Einführung')) {
-        $mi = p4u_build_moduleinfo($course, $targetsection, 'label', 'Einführung', $introhtml);
-        p4u_add_module($course, $mi);
-    } else {
-        mtrace("  = Skip label: Einführung (already exists)");
-    }
-
-    // Activity 2: H5P Lernkarten.
-    $h5p1intro = <<<HTML
-<p><strong>Placeholder:</strong> Lernkarten (Flashcards)</p>
-<p>Geplante Karten: Was ist Peer-Beratung? · Warum wirksam? · Rolle als Peer · Was Peers nicht tun</p>
-HTML;
-    if (!p4u_activity_exists($course->id, $targetsection, 'Lernkarten')) {
-        $fallback = p4u_build_moduleinfo(
-            $course,
-            $targetsection,
-            'label',
-            'Lernkarten',
-            '<p><strong>Platzhalter:</strong> H5P Flashcards folgen später.</p>'
-        );
-        p4u_add_module($course, $fallback);
-    } else {
-        mtrace("  = Skip h5pactivity/label: Lernkarten (already exists)");
-    }
-
-    // Activity 3: Lesson Rollenverständnis.
-    $lessonintro = <<<HTML
-<p>Rollenverständnis: Was dürfen Peer-Berater:innen, wo sind die Grenzen?</p>
-<ul>
-    <li><strong>Peers dürfen:</strong> Zuhören, informieren, motivieren, weitervermitteln</li>
-    <li><strong>Peers dürfen nicht:</strong> Rechtliche Beratung, Finanzprodukte empfehlen</li>
-</ul>
-<p>Die Lektion ist als Basis vorbereitet. Inhalts-/Fragenseiten können später programmatisch ergänzt werden.</p>
-HTML;
-    if (!p4u_activity_exists($course->id, $targetsection, 'Rollenverständnis')) {
-        $mi = p4u_build_moduleinfo($course, $targetsection, 'lesson', 'Rollenverständnis', $lessonintro);
-        $mi->practice = 0;
-        $mi->modattempts = 0;
-        $mi->usepassword = 0;
-        $mi->password = '';
-        $mi->dependency = 0;
-        $mi->timelimit = 0;
-        $mi->retake = 1;
-        $mi->progressbar = 1;
-        $mi->displayleft = 0;
-        $mi->grade = 0;
-        $mi->maxanswers = 4;
-        $mi->maxattempts = 5;
-        p4u_add_module($course, $mi);
-    } else {
-        mtrace("  = Skip lesson: Rollenverständnis (already exists)");
-    }
-
-    // Activity 4: H5P Drag & Drop.
-    $h5p2intro = <<<HTML
-<p><strong>Placeholder:</strong> Drag &amp; Drop</p>
-<p>Lernauftrag: Ordne Aktivitäten korrekt zu: „Peers dürfen“ vs. „Peers dürfen nicht“.</p>
-HTML;
-    if (!p4u_activity_exists($course->id, $targetsection, 'Drag & Drop')) {
-        $fallback = p4u_build_moduleinfo(
-            $course,
-            $targetsection,
-            'label',
-            'Drag & Drop',
-            '<p><strong>Platzhalter:</strong> H5P Drag &amp; Drop folgt später.</p>'
-        );
-        p4u_add_module($course, $fallback);
-    } else {
-        mtrace("  = Skip h5pactivity/label: Drag & Drop (already exists)");
-    }
-
-    // Activity 5: URL Video.
-    $videointro = <<<HTML
-<p>Thema: Peer-Beratung in der Praxis</p>
-<p>Ziel: Typischen Ablauf eines Peer-Gesprächs nachvollziehen.</p>
-<p><em>Video-URL wird später ergänzt.</em></p>
-HTML;
-    if (!p4u_activity_exists($course->id, $targetsection, 'Video')) {
-        $mi = p4u_build_moduleinfo($course, $targetsection, 'url', 'Video', $videointro);
-        $mi->externalurl = 'https://example.org/video-placeholder';
-        $mi->display = 0;
-        p4u_add_module($course, $mi);
-    } else {
-        mtrace("  = Skip url: Video (already exists)");
-    }
-
-    // Activity 6: Lesson Fallbeispiel.
-    $fallintro = <<<HTML
-<p><strong>Fall:</strong> Marko, 22 Jahre; Studienabbruch, Minijob, ca. 4.500 EUR Schulden, Überforderung/Isolation.</p>
-<p><strong>Erwünschtes Vorgehen:</strong> Zuhören und validieren, professionelle Hilfe motivieren, an Schuldnerberatung weitervermitteln.</p>
-<p><strong>Zu vermeiden:</strong> Eigene Schuldenregulierungsratschläge, rechtliche Tipps.</p>
-<p><strong>Merksatz:</strong> Zuhören, Verständnis zeigen, weitervermitteln – nicht das Problem selbst lösen.</p>
-<p>Diese Lektion ist als Grundlage für Branch-Table/entscheidungsorientierte Seiten vorbereitet.</p>
-HTML;
-    if (!p4u_activity_exists($course->id, $targetsection, 'Fallbeispiel')) {
-        $mi = p4u_build_moduleinfo($course, $targetsection, 'lesson', 'Fallbeispiel', $fallintro);
-        $mi->practice = 0;
-        $mi->modattempts = 0;
-        $mi->usepassword = 0;
-        $mi->password = '';
-        $mi->dependency = 0;
-        $mi->timelimit = 0;
-        $mi->retake = 1;
-        $mi->progressbar = 1;
-        $mi->displayleft = 0;
-        $mi->grade = 0;
-        $mi->maxanswers = 4;
-        $mi->maxattempts = 5;
-        p4u_add_module($course, $mi);
-    } else {
-        mtrace("  = Skip lesson: Fallbeispiel (already exists)");
-    }
-
-    // Activity 7: Quiz.
-    $quizintro = <<<HTML
-<p>Abschlussquiz zu Modul 1.</p>
-<ul>
-    <li>Fragenfokus: Dienstleistungen der Diakonie, Einsatzbereich Peer-Beratung, Nutzen von Beratung durch Gleichaltrige</li>
-    <li>Bestehensgrenze: 60%</li>
-</ul>
-HTML;
-    if (!p4u_activity_exists($course->id, $targetsection, 'Quiz')) {
-        $fallback = p4u_build_moduleinfo(
-            $course,
-            $targetsection,
-            'label',
-            'Quiz',
-            '<p><strong>Platzhalter:</strong> Abschlussquiz wird später ergänzt. Bestehensgrenze: 60%.</p>'
-        );
-        p4u_add_module($course, $fallback);
-    } else {
-        mtrace("  = Skip quiz/label: Quiz (already exists)");
-    }
+    p4u_remove_default_forums($course);
+    p4u_remove_static_module_pages($course, $targetsection);
+    p4u_add_interactive_link($course, $targetsection);
 
     rebuild_course_cache($course->id, true);
     mtrace("Done: Modul 1 created successfully in course {$course->id}.");
+    mtrace("Open: {$CFG->wwwroot}/course/view.php?id={$course->id}");
     exit(0);
 
 } catch (Throwable $e) {
-    mtrace("ERROR: " . $e->getMessage());
+    mtrace('ERROR: ' . $e->getMessage());
     mtrace($e->getTraceAsString());
     exit(1);
 }
