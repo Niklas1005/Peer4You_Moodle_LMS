@@ -8,6 +8,8 @@ This documentation is maintained for a professional Moodle implementation and ha
 - `03-customization-strategy.md` - upgrade-safe customization approach.
 - `04-deployment-plan.md` - production deployment and operations baseline.
 - `05-theme-p4u-runbook.md` - operational runbook for prototype-aligned custom Moodle theme.
+- `06-module1-implementation-notes.md` - module 1 implementation notes.
+- `07-coolify-hetzner-handoff.md` - Coolify/Hetzner staging checklist and watchouts.
 
 ## Documentation Rules
 - Every significant technical decision must be documented.

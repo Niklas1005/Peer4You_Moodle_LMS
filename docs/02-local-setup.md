@@ -11,7 +11,9 @@
 2. Update secure values in `.env`:
    - `MOODLE_DB_PASSWORD`
    - `MOODLE_DB_ROOT_PASSWORD`
-3. Keep `.env` private and never commit secrets.
+3. Keep `.env` private and never commit secrets (`.env` is listed in `.gitignore`).
+4. **phpMyAdmin** is optional: `.env.example` sets `COMPOSE_PROFILES=tools` so phpMyAdmin starts locally. Remove that line if you do not want phpMyAdmin.
+5. For production-like Moodle URLs locally, set `MOODLE_WWWROOT=http://localhost:8080` (or copy `config.php.example` to `config.php` after install so PHP reads the same URL from the environment).
 
 ## 3) Start Moodle stack
 Run in project root:
@@ -28,7 +30,7 @@ git checkout MOODLE_502_STABLE
 
 ## 4) Access services
 - Moodle: `http://localhost:8080`
-- phpMyAdmin: `http://localhost:8081`
+- phpMyAdmin: `http://localhost:8081` — only when `COMPOSE_PROFILES=tools` is set (see `.env.example`). Without that profile, phpMyAdmin does not run (safer default for servers).
 - Note: this repository serves Moodle from `public/` as web root.
 
 ## 5) Complete Moodle web installer

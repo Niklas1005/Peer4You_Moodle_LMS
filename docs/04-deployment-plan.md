@@ -18,6 +18,11 @@
    - `moodledata` backups
 9. Run smoke tests (login, course access, uploads, notifications).
 
+## Coolify / Docker Compose staging
+
+- Prefer the compose defaults: **no** `COMPOSE_PROFILES=tools` on internet-facing servers (phpMyAdmin stays off).
+- Use `config.php.example` plus Coolify environment variables for `MOODLE_WWWROOT` and database credentials (see `07-coolify-hetzner-handoff.md`).
+
 ## Security Baseline
 - HTTPS enforced.
 - Strong admin credentials + MFA if available.

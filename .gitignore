@@ -10,6 +10,9 @@
 # See gitignore(5) man page for more details
 #
 
+# Local secrets (never commit)
+/.env
+
 # Swap files (vim)
 [._]*.s[a-v][a-z]
 [._]*.sw[a-p]

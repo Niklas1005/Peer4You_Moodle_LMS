@@ -1,0 +1,47 @@
+<?php
+// Copy to `config.php` (gitignored) and adjust, or inject values via container environment (Coolify / Docker Compose).
+
+unset($CFG);
+global $CFG;
+$CFG = new stdClass();
+
+$dbpass = getenv('MOODLE_DB_PASSWORD');
+if ($dbpass === false || $dbpass === '') {
+    $dbpass = 'change-me';
+}
+
+$CFG->dbtype    = 'mariadb';
+$CFG->dblibrary = 'native';
+$CFG->dbhost    = getenv('MOODLE_DB_HOST') ?: 'db';
+$CFG->dbname    = getenv('MOODLE_DB_NAME') ?: 'moodle';
+$CFG->dbuser    = getenv('MOODLE_DB_USER') ?: 'moodle';
+$CFG->dbpass    = $dbpass;
+$CFG->prefix    = getenv('MOODLE_DB_PREFIX') ?: 'mdl_';
+$CFG->dboptions = [
+    'dbpersist' => 0,
+    'dbport' => (int) (getenv('MOODLE_DB_PORT') ?: 3306),
+    'dbsocket' => '',
+    'dbcollation' => 'utf8mb4_unicode_ci',
+];
+
+$wwwroot = getenv('MOODLE_WWWROOT') ?: 'http://localhost:8080';
+$CFG->wwwroot = rtrim($wwwroot, '/');
+$CFG->dataroot  = getenv('MOODLE_DATAROOT') ?: '/var/moodledata';
+$CFG->admin     = getenv('MOODLE_ADMIN_DIR') ?: 'admin';
+
+$perm = getenv('MOODLE_DIRECTORY_PERMISSIONS');
+if ($perm !== false && $perm !== '') {
+    $CFG->directorypermissions = octdec($perm);
+} else {
+    $CFG->directorypermissions = 02777;
+}
+
+// Behind Coolify / Traefik: terminate TLS at proxy and set wwwroot to https://...
+if (getenv('MOODLE_REVERSE_PROXY') === '1') {
+    $CFG->reverseproxy = 1;
+}
+if (getenv('MOODLE_SSL_PROXY') === '1') {
+    $CFG->sslproxy = 1;
+}
+
+require_once(__DIR__ . '/lib/setup.php');
