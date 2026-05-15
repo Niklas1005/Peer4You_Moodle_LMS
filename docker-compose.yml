@@ -27,8 +27,8 @@ services:
       - moodledata:/var/moodledata
     command: >
       sh -c "mkdir -p /var/moodledata &&
-      chown -R www-data:www-data /var/moodledata &&
-      apache2-foreground"
+      chown -R www-data:www-data /var/moodledata /var/www/html &&
+      exec docker-php-entrypoint apache2-foreground"
     depends_on:
       db:
         condition: service_healthy

@@ -37,8 +37,7 @@ RUN apt-get update \
     && a2enmod rewrite headers \
     && rm -rf /var/lib/apt/lists/*
 
-RUN sed -ri -e 's!/var/www/html!/var/www/html/public!g' /etc/apache2/sites-available/*.conf \
-    && sed -ri -e 's!/var/www/!/var/www/html/public!g' /etc/apache2/apache2.conf /etc/apache2/conf-available/*.conf
+COPY docker/php/moodle.apache.conf /etc/apache2/sites-available/000-default.conf
 
 RUN { \
       echo "memory_limit=512M"; \
