@@ -25,7 +25,6 @@ services:
       MOODLE_SSL_PROXY: ${MOODLE_SSL_PROXY:-0}
     volumes:
       - ./:/var/www/html
-      - ./docker/php/moodle.apache.conf:/etc/apache2/sites-available/000-default.conf:ro
       - moodledata:/var/moodledata
     command: ["/usr/local/bin/entrypoint-web.sh"]
     depends_on:
