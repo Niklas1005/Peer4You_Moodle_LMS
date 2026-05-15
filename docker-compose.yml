@@ -5,6 +5,8 @@ services:
       dockerfile: docker/php/Dockerfile
     container_name: moodle-web
     restart: unless-stopped
+    expose:
+      - "80"
     ports:
       - "${MOODLE_HTTP_PORT:-8080}:80"
     environment:
@@ -23,11 +25,9 @@ services:
       MOODLE_SSL_PROXY: ${MOODLE_SSL_PROXY:-0}
     volumes:
       - ./:/var/www/html
+      - ./docker/php/moodle.apache.conf:/etc/apache2/sites-available/000-default.conf:ro
       - moodledata:/var/moodledata
-    command: >
-      sh -c "mkdir -p /var/moodledata &&
-      chown -R www-data:www-data /var/moodledata /var/www/html &&
-      exec apache2-foreground"
+    command: ["/usr/local/bin/entrypoint-web.sh"]
     depends_on:
       db:
         condition: service_healthy

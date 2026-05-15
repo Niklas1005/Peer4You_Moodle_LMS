@@ -38,6 +38,8 @@ RUN apt-get update \
     && rm -rf /var/lib/apt/lists/*
 
 COPY docker/php/moodle.apache.conf /etc/apache2/sites-available/000-default.conf
+COPY docker/php/entrypoint-web.sh /usr/local/bin/entrypoint-web.sh
+RUN chmod +x /usr/local/bin/entrypoint-web.sh
 
 RUN { \
       echo "memory_limit=512M"; \
