@@ -24,7 +24,6 @@ services:
       MOODLE_REVERSE_PROXY: ${MOODLE_REVERSE_PROXY:-0}
       MOODLE_SSL_PROXY: ${MOODLE_SSL_PROXY:-0}
     volumes:
-      - ./:/var/www/html
       - moodledata:/var/moodledata
     command: ["/usr/local/bin/entrypoint-web.sh"]
     depends_on:
@@ -75,7 +74,6 @@ services:
       web:
         condition: service_started
     volumes:
-      - ./:/var/www/html
       - moodledata:/var/moodledata
     command: >
       sh -c "mkdir -p /var/moodledata &&
