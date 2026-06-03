@@ -40,9 +40,9 @@ body#page-my-index.editing .editing_move {
 .p4u-dashboard-hero {
     margin: 24px 0 18px;
     padding: 26px;
-    border: 1px solid #C5EBF9;
+    border: 1px solid #DED3E3;
     border-radius: 10px;
-    background: linear-gradient(135deg, #006490, #009BDC);
+    background: linear-gradient(135deg, #481E5B, #5A2572);
     color: #fff;
     overflow: hidden;
     position: relative;
@@ -109,7 +109,7 @@ body#page-my-index.editing .editing_move {
 
 .p4u-dashboard-primary {
     background: #fff;
-    color: #0080B8;
+    color: #5A2572;
 }
 
 .p4u-dashboard-secondary {
@@ -180,14 +180,14 @@ body#page-my-index.editing .editing_move {
 }
 
 .p4u-dashboard-module.is-active {
-    border-color: #C5EBF9;
-    background: #E8F7FD;
+    border-color: #DED3E3;
+    background: #F4EDF7;
 }
 
 .p4u-dashboard-module small {
     display: inline-flex;
     margin-bottom: 8px;
-    color: #0080B8;
+    color: #5A2572;
     font-size: .68rem;
     font-weight: 900;
     letter-spacing: .08em;
@@ -233,14 +233,14 @@ body#page-my-index .block_myoverview .dashboard-card {
 }
 
 body#page-my-index .block_myoverview .dashboard-card:hover {
-    border-color: #8DD7F4;
-    box-shadow: 0 14px 28px rgba(0, 128, 184, .12);
+    border-color: #AD92B9;
+    box-shadow: 0 14px 28px rgba(90, 37, 114, .14);
     transform: translateY(-2px);
 }
 
 body#page-my-index .block_myoverview .dashboard-card-img {
     min-height: 86px;
-    background: linear-gradient(135deg, #E8F7FD, #8DD7F4) !important;
+    background: linear-gradient(135deg, #F4EDF7, #5A2572) !important;
 }
 
 body#page-my-index .block_timeline .no-overflow {
@@ -248,13 +248,13 @@ body#page-my-index .block_timeline .no-overflow {
 }
 
 body#page-my-index .btn-primary {
-    border-color: #009BDC;
-    background: #009BDC;
+    border-color: #5A2572;
+    background: #5A2572;
 }
 
 body#page-my-index .btn-outline-primary {
-    border-color: #009BDC;
-    color: #0080B8;
+    border-color: #5A2572;
+    color: #5A2572;
 }
 
 @media (max-width: 900px) {

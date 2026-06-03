@@ -72,9 +72,9 @@ body#page-course-view-topics .summarytext p {
 body#page-course-view-topics .section .activity {
     margin: 8px 20px 20px;
     padding: 12px 14px;
-    border: 1px solid #C5EBF9;
+    border: 1px solid #DED3E3;
     border-radius: 8px;
-    background: #F8FCFE;
+    background: #FCF8FD;
 }
 
 body#page-course-view-topics .activity-item {
@@ -83,13 +83,13 @@ body#page-course-view-topics .activity-item {
 }
 
 body#page-course-view-topics .activityname a {
-    color: #0080B8;
+    color: #5A2572;
     font-weight: 850;
     text-decoration: none;
 }
 
 body#page-course-view-topics .activityname a:hover {
-    color: #006490;
+    color: #481E5B;
     text-decoration: none;
 }
 
@@ -110,11 +110,11 @@ body#page-course-view-topics .btn {
 }
 
 body#page-course-view-topics .course-section:nth-of-type(1) {
-    border-color: #C5EBF9 !important;
+    border-color: #DED3E3 !important;
 }
 
 body#page-course-view-topics .course-section:nth-of-type(1) .course-section-header {
-    background: linear-gradient(135deg, #E8F7FD, #fff);
+    background: linear-gradient(135deg, #F4EDF7, #fff);
 }
 
 body#page-course-view-topics.editing .section-modchooser,
