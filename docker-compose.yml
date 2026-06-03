@@ -3,7 +3,6 @@ services:
     build:
       context: .
       dockerfile: docker/php/Dockerfile
-    container_name: moodle-web
     restart: unless-stopped
     expose:
       - "80"
@@ -21,7 +20,6 @@ services:
       MOODLE_DB_PASSWORD: ${MOODLE_DB_PASSWORD:-change-me}
       MOODLE_DB_PORT: ${MOODLE_DB_PORT:-3306}
       MOODLE_DATAROOT: ${MOODLE_DATAROOT:-/var/moodledata}
-      MOODLE_REVERSE_PROXY: ${MOODLE_REVERSE_PROXY:-0}
       MOODLE_SSL_PROXY: ${MOODLE_SSL_PROXY:-0}
     volumes:
       - moodledata:/var/moodledata
@@ -32,7 +30,6 @@ services:
 
   db:
     image: mariadb:11.4
-    container_name: moodle-db
     restart: unless-stopped
     environment:
       MARIADB_DATABASE: ${MOODLE_DB_NAME:-moodle}
@@ -56,7 +53,6 @@ services:
     build:
       context: .
       dockerfile: docker/php/Dockerfile
-    container_name: moodle-cron
     restart: unless-stopped
     environment:
       MOODLE_WWWROOT: ${MOODLE_WWWROOT:-http://localhost:8080}
@@ -66,7 +62,6 @@ services:
       MOODLE_DB_PASSWORD: ${MOODLE_DB_PASSWORD:-change-me}
       MOODLE_DB_PORT: ${MOODLE_DB_PORT:-3306}
       MOODLE_DATAROOT: ${MOODLE_DATAROOT:-/var/moodledata}
-      MOODLE_REVERSE_PROXY: ${MOODLE_REVERSE_PROXY:-0}
       MOODLE_SSL_PROXY: ${MOODLE_SSL_PROXY:-0}
     depends_on:
       db:
@@ -92,7 +87,6 @@ services:
   phpmyadmin:
     profiles: ["tools"]
     image: phpmyadmin/phpmyadmin:5
-    container_name: moodle-phpmyadmin
     depends_on:
       db:
         condition: service_healthy

@@ -36,10 +36,9 @@ if ($perm !== false && $perm !== '') {
     $CFG->directorypermissions = 02777;
 }
 
-// Behind Coolify / Traefik: terminate TLS at proxy and set wwwroot to https://...
-if (getenv('MOODLE_REVERSE_PROXY') === '1') {
-    $CFG->reverseproxy = 1;
-}
+// Coolify / Traefik: HTTPS terminates at the proxy; Apache sees HTTP. Set wwwroot to https://...
+// Enable sslproxy only. Do NOT enable reverseproxy unless the proxy forwards a different
+// internal Host header than MOODLE_WWWROOT (unusual on Coolify; causes "reverseproxyabused").
 if (getenv('MOODLE_SSL_PROXY') === '1') {
     $CFG->sslproxy = 1;
 }

@@ -23,6 +23,15 @@ Modul 1 is the first interactive learning module for the Peer4You Moodle trainin
 - Progress, completion state, and quiz attempts are shown inside the module.
 - The module has a clear completion moment after a successful quiz attempt.
 
+## Quiz content: Type A vs Type B (decision pending)
+
+| Type | Location | Handoff |
+|------|----------|---------|
+| **A** | `module1.js` (current end-of-module quiz) | Git deploy |
+| **B** | Moodle Quiz activity in course | `.mbz` export |
+
+**Status (2026-05-19):** Team tendency is **Type B**; **manager approval pending** — see `Notizen/Entwicklung To-Do.md` and `docs/08-environments-and-customer-handoff.md`.
+
 ## Known Implementation Gaps
 - Quiz results are not yet written to the Moodle gradebook.
 - Completion is currently visual and not persisted as Moodle activity completion.

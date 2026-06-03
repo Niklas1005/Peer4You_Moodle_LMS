@@ -9,7 +9,12 @@ if [ ! -f /var/www/html/public/index.php ]; then
   ls -la /var/www/html/public 2>&1 | head -20 >&2 || true
 fi
 
-mkdir -p /var/moodledata
+mkdir -p /var/moodledata/sessions /var/moodledata/cache /var/moodledata/temp /var/moodledata/localcache
+
+if [ ! -f /var/www/html/config.php ] && [ -f /var/www/html/config.php.example ]; then
+  cp /var/www/html/config.php.example /var/www/html/config.php
+fi
+
 chown -R www-data:www-data /var/moodledata /var/www/html
 
 exec apache2-foreground

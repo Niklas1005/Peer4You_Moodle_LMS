@@ -49,6 +49,7 @@ RUN { \
       echo "post_max_size=128M"; \
       echo "opcache.enable=1"; \
       echo "zend.exception_ignore_args=On"; \
+      echo "session.save_path=/var/moodledata/sessions"; \
     } > /usr/local/etc/php/conf.d/moodle.ini
 
 COPY --from=composer:2 /usr/bin/composer /usr/local/bin/composer

@@ -1,0 +1,5 @@
+# Course shortnames to export for customer handoff (one per line).
+# Copy to courses.conf before running export-company-courses.sh
+#
+# Agreed setup: ONE course with six module sections (not six separate courses):
+P4U-TEST
