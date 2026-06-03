@@ -9,6 +9,63 @@
     color: var(--p4u-text);
 }
 
+.navbar.fixed-top {
+    min-height: 64px;
+    border-bottom: 4px solid #FABA00;
+    background: #481E5B !important;
+    box-shadow: 0 10px 24px rgba(72, 30, 91, .18);
+}
+
+.navbar.fixed-top .navbar-brand {
+    display: inline-flex;
+    align-items: center;
+    gap: 12px;
+    color: #fff !important;
+    font-weight: 900;
+}
+
+.navbar.fixed-top .navbar-brand::before {
+    content: "P4U";
+    display: inline-grid;
+    place-items: center;
+    width: 48px;
+    height: 40px;
+    border-radius: 6px;
+    background: #FABA00;
+    color: #481E5B;
+    font-size: .95rem;
+    font-weight: 950;
+    letter-spacing: .02em;
+}
+
+.navbar.fixed-top .primary-navigation .nav-link,
+.navbar.fixed-top .navbar-nav .nav-link {
+    min-height: 42px;
+    display: inline-flex;
+    align-items: center;
+    color: rgba(255, 255, 255, .88) !important;
+    font-weight: 800;
+}
+
+.navbar.fixed-top .primary-navigation .nav-link.active,
+.navbar.fixed-top .navbar-nav .nav-link.active {
+    border-radius: 6px;
+    background: #fff;
+    color: #481E5B !important;
+}
+
+.navbar.fixed-top .btn,
+.navbar.fixed-top .icon,
+.navbar.fixed-top .usertext,
+.navbar.fixed-top .dropdown-toggle {
+    color: #fff !important;
+}
+
+.navbar.fixed-top .usermenu .userbutton {
+    border-left: 1px solid rgba(255, 255, 255, .28);
+    padding-left: 14px;
+}
+
 .p4u-module-hero {
     padding: 22px;
     margin-bottom: 14px;
