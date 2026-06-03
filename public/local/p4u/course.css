@@ -194,6 +194,45 @@ body#page-course-view-topics .btn {
     border-radius: 8px;
 }
 
+body#page-course-view-topics a:not(.nav-link):not(.navbar-brand):not(.dropdown-item) {
+    color: #5A2572;
+}
+
+body#page-course-view-topics a:not(.nav-link):not(.navbar-brand):not(.dropdown-item):hover {
+    color: #481E5B;
+}
+
+body#page-course-view-topics .btn-primary {
+    border-color: #5A2572;
+    background: #5A2572;
+}
+
+body#page-course-view-topics .btn-primary:hover,
+body#page-course-view-topics .btn-primary:focus {
+    border-color: #481E5B;
+    background: #481E5B;
+}
+
+body#page-course-view-topics .btn-outline-primary {
+    border-color: #5A2572;
+    color: #5A2572;
+}
+
+body#page-course-view-topics .btn-outline-primary:hover,
+body#page-course-view-topics .btn-outline-primary:focus {
+    border-color: #5A2572;
+    background: #5A2572;
+    color: #fff;
+}
+
+body#page-course-view-topics .form-control:focus,
+body#page-course-view-topics .form-select:focus,
+body#page-course-view-topics .custom-select:focus,
+body#page-course-view-topics .btn:focus {
+    border-color: #AD92B9;
+    box-shadow: 0 0 0 .2rem rgba(90, 37, 114, .16);
+}
+
 body#page-course-view-topics .course-section:nth-of-type(1) {
     border-color: #DED3E3 !important;
 }

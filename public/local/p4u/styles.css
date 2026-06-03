@@ -948,3 +948,43 @@
         flex-direction: column;
     }
 }
+
+.p4u-shell a {
+    color: var(--p4u-brand);
+}
+
+.p4u-shell a:hover {
+    color: var(--p4u-brand-dark);
+}
+
+.p4u-shell .p4u-primary,
+.p4u-shell button.p4u-primary {
+    background: var(--p4u-brand) !important;
+    border-color: var(--p4u-brand) !important;
+    color: #fff !important;
+}
+
+.p4u-shell .p4u-primary:hover,
+.p4u-shell button.p4u-primary:hover,
+.p4u-shell .p4u-primary:focus,
+.p4u-shell button.p4u-primary:focus {
+    background: var(--p4u-brand-dark) !important;
+    border-color: var(--p4u-brand-dark) !important;
+}
+
+.p4u-shell .p4u-nav button.active,
+.p4u-shell .p4u-goals,
+.p4u-shell .p4u-recap,
+.p4u-shell .p4u-completion,
+.p4u-shell .p4u-pillgrid span,
+.p4u-shell .p4u-meta,
+.p4u-shell .p4u-attemptbar,
+.p4u-shell .p4u-journey span {
+    border-color: #DED3E3 !important;
+    background: var(--p4u-soft) !important;
+    color: var(--p4u-brand-dark) !important;
+}
+
+.p4u-shell .p4u-progressbar span {
+    background: linear-gradient(90deg, var(--p4u-brand-dark), var(--p4u-brand), var(--p4u-accent)) !important;
+}

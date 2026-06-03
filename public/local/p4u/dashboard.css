@@ -332,14 +332,60 @@ body#page-my-index .block_timeline .no-overflow {
     min-height: 150px;
 }
 
+body#page-my-index a:not(.nav-link):not(.navbar-brand):not(.dropdown-item) {
+    color: #5A2572;
+}
+
+body#page-my-index a:not(.nav-link):not(.navbar-brand):not(.dropdown-item):hover {
+    color: #481E5B;
+}
+
 body#page-my-index .btn-primary {
     border-color: #5A2572;
     background: #5A2572;
 }
 
+body#page-my-index .btn-primary:hover,
+body#page-my-index .btn-primary:focus {
+    border-color: #481E5B;
+    background: #481E5B;
+}
+
 body#page-my-index .btn-outline-primary {
     border-color: #5A2572;
     color: #5A2572;
+}
+
+body#page-my-index .btn-outline-primary:hover,
+body#page-my-index .btn-outline-primary:focus {
+    border-color: #5A2572;
+    background: #5A2572;
+    color: #fff;
+}
+
+body#page-my-index .form-control:focus,
+body#page-my-index .form-select:focus,
+body#page-my-index .custom-select:focus,
+body#page-my-index .btn:focus {
+    border-color: #AD92B9;
+    box-shadow: 0 0 0 .2rem rgba(90, 37, 114, .16);
+}
+
+body#page-my-index .calendar_event_course,
+body#page-my-index .calendar_event_global,
+body#page-my-index .calendar-controls .current,
+body#page-my-index .maincalendar .calendarmonth td.today .day-number-circle,
+body#page-my-index .block_calendar_month .today .day-number-circle,
+body#page-my-index .block_calendar_month .today a {
+    background-color: #5A2572 !important;
+    border-color: #5A2572 !important;
+    color: #fff !important;
+}
+
+body#page-my-index .block_calendar_month .arrow,
+body#page-my-index .block_calendar_month .arrow_link,
+body#page-my-index .block_calendar_month .footer a {
+    color: #5A2572 !important;
 }
 
 @media (max-width: 900px) {
