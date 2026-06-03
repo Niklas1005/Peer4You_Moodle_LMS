@@ -5,51 +5,79 @@
     }
 
     const main = document.querySelector('#region-main .card-body, #region-main-box, [role="main"]');
-    if (!main || document.querySelector('.p4u-dashboard-hero')) {
+    if (!main || document.querySelector('.p4u-dashboard-shell')) {
         return;
     }
 
-    const hero = document.createElement('section');
-    hero.className = 'p4u-dashboard-hero';
-    hero.innerHTML = [
-        '<p class="p4u-dashboard-label">Peers for You</p>',
-        '<h1>Deine Ausbildung zur Peer-Berater:in</h1>',
-        '<p>Starte direkt mit Modul 1 in Moodle. Weitere Module k&ouml;nnen sp&auml;ter im gleichen Lernpfad erg&auml;nzt werden.</p>',
-        '<div class="p4u-dashboard-actions">',
-        '<a class="p4u-dashboard-primary" href="/local/p4u/module1.php?courseid=2">Modul 1 &ouml;ffnen</a>',
-        '<a class="p4u-dashboard-secondary" href="/course/view.php?id=2">Zum Kurs</a>',
-        '</div>'
+    const fallbackCourseId = 2;
+    const courseLink = document.querySelector('.block_myoverview a[href*="/course/view.php?id="], a[href*="/course/view.php?id="]');
+    const courseIdMatch = courseLink ? courseLink.href.match(/[?&]id=(\d+)/) : null;
+    const courseId = courseIdMatch ? courseIdMatch[1] : fallbackCourseId;
+    const courseUrl = '/course/view.php?id=' + courseId;
+    const moduleUrl = '/local/p4u/module1.php?courseid=' + courseId;
+
+    const courseTitle = (courseLink && courseLink.textContent.trim()) || 'Peers for You - Ausbildung';
+    const favouriteKey = 'p4u-dashboard-favourite-' + courseId;
+    const isFavourite = localStorage.getItem(favouriteKey) === '1';
+
+    const shell = document.createElement('section');
+    shell.className = 'p4u-dashboard-shell';
+    shell.innerHTML = [
+        '<h1>Dashboard</h1>',
+        '<section class="p4u-dashboard-panel p4u-dashboard-timeline">',
+        '<div class="p4u-dashboard-panel-head">',
+        '<h2>Zeitliste</h2>',
+        '</div>',
+        '<div class="p4u-dashboard-toolbar">',
+        '<button type="button">N&auml;chste 7 Tage</button>',
+        '<button type="button">Sortiert nach Datum</button>',
+        '<input type="search" aria-label="Aktivit&auml;t suchen" placeholder="Suche nach Aktivit&auml;tstyp oder Aktivit&auml;tsname">',
+        '</div>',
+        '<div class="p4u-dashboard-timeline-entry">',
+        '<div>',
+        '<strong>Heute</strong>',
+        '<span>Keine f&auml;lligen Aufgaben</span>',
+        '</div>',
+        '<a href="' + moduleUrl + '">Interaktives Lernmodul fortsetzen</a>',
+        '</div>',
+        '</section>',
+        '<section class="p4u-dashboard-panel p4u-dashboard-courses">',
+        '<div class="p4u-dashboard-panel-head">',
+        '<h2>Kurs&uuml;bersicht</h2>',
+        '</div>',
+        '<div class="p4u-dashboard-toolbar">',
+        '<button type="button">Favoriten</button>',
+        '<input type="search" aria-label="Kurs suchen" placeholder="Suchen">',
+        '<button type="button">Sortiert nach Kursname</button>',
+        '<button type="button">Liste</button>',
+        '</div>',
+        '<div class="p4u-dashboard-course-list">',
+        '<article class="p4u-dashboard-course-row">',
+        '<button class="p4u-dashboard-star' + (isFavourite ? ' is-active' : '') + '" type="button" aria-pressed="' + (isFavourite ? 'true' : 'false') + '" aria-label="Kurs favorisieren">&#9733;</button>',
+        '<div class="p4u-dashboard-course-main">',
+        '<a href="' + courseUrl + '">' + courseTitle + '</a>',
+        '<span>Modul 1 aktiv &middot; weitere Module vorbereitet</span>',
+        '</div>',
+        '<a class="p4u-dashboard-course-action" href="' + moduleUrl + '">Modul starten</a>',
+        '<button class="p4u-dashboard-more" type="button" aria-label="Weitere Aktionen">&#8942;</button>',
+        '</article>',
+        '</div>',
+        '</section>'
     ].join('');
 
-    const stats = document.createElement('section');
-    stats.className = 'p4u-dashboard-grid';
-    stats.innerHTML = [
-        '<div class="p4u-dashboard-stat"><strong>1</strong><span>Modul angebunden</span></div>',
-        '<div class="p4u-dashboard-stat"><strong>7</strong><span>Lernstationen in Modul 1</span></div>',
-        '<div class="p4u-dashboard-stat"><strong>60 %</strong><span>Bestehensgrenze im Quiz</span></div>'
-    ].join('');
+    main.prepend(shell);
 
-    const plan = document.createElement('section');
-    plan.className = 'p4u-dashboard-plan';
-    plan.innerHTML = [
-        '<h2>Ausbildungsplan</h2>',
-        '<div class="p4u-dashboard-modules">',
-        '<div class="p4u-dashboard-module is-active"><small>aktiv</small><strong>1. Einf&uuml;hrung &amp; Rollenverst&auml;ndnis</strong><span>Rolle, Grenzen, Fall und Quiz.</span></div>',
-        '<div class="p4u-dashboard-module"><small>geplant</small><strong>2. Finanzwissen</strong><span>Grundlagen zu Geld, Konsum und Schuldenrisiken.</span></div>',
-        '<div class="p4u-dashboard-module"><small>geplant</small><strong>3. Kommunikation &amp; Gespr&auml;chsf&uuml;hrung</strong><span>Aktives Zuh&ouml;ren und Gespr&auml;che strukturieren.</span></div>',
-        '<div class="p4u-dashboard-module"><small>geplant</small><strong>4. Digitale Sicherheit &amp; Datenschutz</strong><span>Sicher beraten und vertraulich handeln.</span></div>',
-        '<div class="p4u-dashboard-module"><small>geplant</small><strong>5. Krisen erkennen &amp; weiterverweisen</strong><span>Grenzen erkennen und passende Hilfe einbinden.</span></div>',
-        '<div class="p4u-dashboard-module"><small>geplant</small><strong>6. Abschluss &amp; Zertifikat</strong><span>Wissen b&uuml;ndeln und Ausbildung abschlie&szlig;en.</span></div>',
-        '</div>'
-    ].join('');
-
-    main.prepend(plan);
-    main.prepend(stats);
-    main.prepend(hero);
+    const star = shell.querySelector('.p4u-dashboard-star');
+    star.addEventListener('click', function() {
+        const active = !star.classList.contains('is-active');
+        star.classList.toggle('is-active', active);
+        star.setAttribute('aria-pressed', active ? 'true' : 'false');
+        localStorage.setItem(favouriteKey, active ? '1' : '0');
+    });
 
     document.querySelectorAll('button, a').forEach(control => {
         const label = (control.textContent || '').trim();
-        if (label.includes('Standard wiederherstellen') || label.includes('Block hinzufügen')) {
+        if (label.includes('Standard wiederherstellen') || label.includes('Block hinzuf') || label.includes('Block hinzufÃ¼gen')) {
             control.classList.add('p4u-dashboard-hidden-edit-control');
         }
     });

@@ -122,6 +122,204 @@ body#page-my-index.editing .editing_move {
     pointer-events: none;
 }
 
+body#page-my-index .block_myoverview,
+body#page-my-index .block_timeline {
+    display: none;
+}
+
+.p4u-dashboard-shell {
+    margin: 26px 0 24px;
+}
+
+.p4u-dashboard-shell h1 {
+    margin: 0 0 12px;
+    color: #1E1B2E;
+    font-size: 1.9rem;
+    line-height: 1.1;
+    font-weight: 900;
+}
+
+.p4u-dashboard-panel {
+    margin: 0 0 14px;
+    padding: 14px;
+    border: 1px solid #E8E4DF;
+    border-radius: 8px;
+    background: #fff;
+    box-shadow: 0 12px 30px rgba(30, 27, 46, .04);
+}
+
+.p4u-dashboard-panel-head {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 12px;
+    margin-bottom: 12px;
+}
+
+.p4u-dashboard-panel h2 {
+    margin: 0;
+    color: #1E1B2E;
+    font-size: 1.05rem;
+    font-weight: 900;
+}
+
+.p4u-dashboard-toolbar {
+    display: grid;
+    grid-template-columns: max-content max-content minmax(180px, 1fr) max-content;
+    gap: 8px;
+    padding-bottom: 14px;
+    border-bottom: 1px solid #E8E4DF;
+}
+
+.p4u-dashboard-timeline .p4u-dashboard-toolbar {
+    grid-template-columns: max-content max-content minmax(260px, 1fr);
+}
+
+.p4u-dashboard-toolbar button,
+.p4u-dashboard-toolbar input {
+    min-height: 38px;
+    border: 1px solid #9CA3AF;
+    border-radius: 6px;
+    background: #fff;
+    color: #4B5563;
+    font: inherit;
+    font-size: .88rem;
+}
+
+.p4u-dashboard-toolbar button {
+    padding: 8px 12px;
+    cursor: pointer;
+}
+
+.p4u-dashboard-toolbar input {
+    padding: 8px 12px;
+}
+
+.p4u-dashboard-toolbar button:hover,
+.p4u-dashboard-toolbar input:focus {
+    border-color: #5A2572;
+    box-shadow: 0 0 0 .18rem rgba(90, 37, 114, .12);
+    outline: 0;
+}
+
+.p4u-dashboard-timeline-entry {
+    display: grid;
+    grid-template-columns: minmax(0, 1fr) max-content;
+    gap: 18px;
+    align-items: center;
+    min-height: 76px;
+    padding: 14px 2px 0;
+}
+
+.p4u-dashboard-timeline-entry strong,
+.p4u-dashboard-timeline-entry span {
+    display: block;
+}
+
+.p4u-dashboard-timeline-entry strong {
+    color: #1E1B2E;
+    font-size: .95rem;
+}
+
+.p4u-dashboard-timeline-entry span {
+    margin-top: 4px;
+    color: #6B7280;
+    font-size: .86rem;
+}
+
+.p4u-dashboard-timeline-entry a,
+.p4u-dashboard-course-action {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    min-height: 34px;
+    padding: 7px 12px;
+    border: 1px solid #5A2572;
+    border-radius: 6px;
+    color: #5A2572;
+    font-size: .84rem;
+    font-weight: 800;
+    text-decoration: none;
+}
+
+.p4u-dashboard-timeline-entry a:hover,
+.p4u-dashboard-course-action:hover {
+    background: #5A2572;
+    color: #fff;
+    text-decoration: none;
+}
+
+.p4u-dashboard-course-list {
+    display: grid;
+}
+
+.p4u-dashboard-course-row {
+    display: grid;
+    grid-template-columns: 28px minmax(0, 1fr) max-content 34px;
+    gap: 10px;
+    align-items: center;
+    min-height: 58px;
+    border-bottom: 1px solid #E8E4DF;
+}
+
+.p4u-dashboard-course-row:last-child {
+    border-bottom: 0;
+}
+
+.p4u-dashboard-star,
+.p4u-dashboard-more {
+    width: 30px;
+    height: 30px;
+    display: inline-grid;
+    place-items: center;
+    border: 0;
+    border-radius: 6px;
+    background: transparent;
+    color: #7C7285;
+    cursor: pointer;
+    font-weight: 900;
+}
+
+.p4u-dashboard-star {
+    color: #B8A9BF;
+    font-size: 1.08rem;
+}
+
+.p4u-dashboard-star:hover,
+.p4u-dashboard-star.is-active {
+    color: #FABA00;
+}
+
+.p4u-dashboard-star.is-active {
+    text-shadow: 0 1px 4px rgba(250, 186, 0, .35);
+}
+
+.p4u-dashboard-more:hover {
+    background: #F4EDF7;
+    color: #481E5B;
+}
+
+.p4u-dashboard-course-main {
+    display: grid;
+    gap: 3px;
+}
+
+.p4u-dashboard-course-main a {
+    color: #481E5B;
+    font-weight: 850;
+    text-decoration: none;
+}
+
+.p4u-dashboard-course-main a:hover {
+    color: #5A2572;
+    text-decoration: underline;
+}
+
+.p4u-dashboard-course-main span {
+    color: #6B7280;
+    font-size: .82rem;
+}
+
 .p4u-dashboard-hero {
     margin: 24px 0 18px;
     padding: 26px;
