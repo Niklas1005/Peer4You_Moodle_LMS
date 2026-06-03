@@ -54,6 +54,26 @@ body#page-course-view-topics .navbar.fixed-top .dropdown-toggle {
     color: #fff !important;
 }
 
+body#page-course-view-topics .navbar.fixed-top .editmode-switch-form,
+body#page-course-view-topics .navbar.fixed-top .editmode-switch-form label,
+body#page-course-view-topics .navbar.fixed-top .custom-control-label,
+body#page-course-view-topics .navbar.fixed-top .form-check-label,
+body#page-course-view-topics .navbar.fixed-top .logininfo {
+    color: rgba(255, 255, 255, .94) !important;
+    font-weight: 700;
+}
+
+body#page-course-view-topics .navbar.fixed-top .custom-control-input:checked ~ .custom-control-label::before,
+body#page-course-view-topics .navbar.fixed-top .form-check-input:checked {
+    background-color: #FABA00 !important;
+    border-color: #FABA00 !important;
+}
+
+body#page-course-view-topics .navbar.fixed-top .custom-control-label::before {
+    border-color: rgba(255, 255, 255, .72) !important;
+    background-color: rgba(255, 255, 255, .82) !important;
+}
+
 body#page-course-view-topics .navbar.fixed-top .usermenu .userbutton {
     border-left: 1px solid rgba(255, 255, 255, .28);
     padding-left: 14px;

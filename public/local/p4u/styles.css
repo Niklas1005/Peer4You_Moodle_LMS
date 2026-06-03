@@ -61,6 +61,26 @@
     color: #fff !important;
 }
 
+.navbar.fixed-top .editmode-switch-form,
+.navbar.fixed-top .editmode-switch-form label,
+.navbar.fixed-top .custom-control-label,
+.navbar.fixed-top .form-check-label,
+.navbar.fixed-top .logininfo {
+    color: rgba(255, 255, 255, .94) !important;
+    font-weight: 700;
+}
+
+.navbar.fixed-top .custom-control-input:checked ~ .custom-control-label::before,
+.navbar.fixed-top .form-check-input:checked {
+    background-color: #FABA00 !important;
+    border-color: #FABA00 !important;
+}
+
+.navbar.fixed-top .custom-control-label::before {
+    border-color: rgba(255, 255, 255, .72) !important;
+    background-color: rgba(255, 255, 255, .82) !important;
+}
+
 .navbar.fixed-top .usermenu .userbutton {
     border-left: 1px solid rgba(255, 255, 255, .28);
     padding-left: 14px;
