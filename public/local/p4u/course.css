@@ -55,11 +55,14 @@ body#page-course-view-topics .navbar.fixed-top .dropdown-toggle {
 }
 
 body#page-course-view-topics .navbar.fixed-top .editmode-switch-form,
+body#page-course-view-topics .navbar.fixed-top .editmode-switch-form *,
 body#page-course-view-topics .navbar.fixed-top .editmode-switch-form label,
+body#page-course-view-topics .navbar.fixed-top .editmode-switch-form .text-primary,
+body#page-course-view-topics .navbar.fixed-top .editmode-switch-form .input-group,
 body#page-course-view-topics .navbar.fixed-top .custom-control-label,
 body#page-course-view-topics .navbar.fixed-top .form-check-label,
 body#page-course-view-topics .navbar.fixed-top .logininfo {
-    color: rgba(255, 255, 255, .94) !important;
+    color: #fff !important;
     font-weight: 700;
 }
 
@@ -71,6 +74,11 @@ body#page-course-view-topics .navbar.fixed-top .form-check-input:checked {
 
 body#page-course-view-topics .navbar.fixed-top .custom-control-label::before {
     border-color: rgba(255, 255, 255, .72) !important;
+    background-color: rgba(255, 255, 255, .82) !important;
+}
+
+body#page-course-view-topics .navbar.fixed-top .form-check-input {
+    border-color: rgba(255, 255, 255, .82) !important;
     background-color: rgba(255, 255, 255, .82) !important;
 }
 
