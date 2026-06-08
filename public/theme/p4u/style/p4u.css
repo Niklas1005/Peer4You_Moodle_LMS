@@ -1,10 +1,12 @@
-/* Diakonie light palette + login (static fallback; mirrors scss/p4u.scss + scss/login.scss). */
+/* Diakonie primary blue + secondary purple + login (static fallback; mirrors scss/p4u.scss + scss/login.scss). */
 :root {
-    --p4u-brand-50: #f4edf7;
-    --p4u-brand-100: #ded3e3;
-    --p4u-brand-500: #8c4b9e;
-    --p4u-brand-600: #5a2572;
-    --p4u-brand-700: #481e5b;
+    --p4u-brand-50: #e8f6fc;
+    --p4u-brand-100: #cceef9;
+    --p4u-brand-500: #33b0e3;
+    --p4u-brand-600: #009bdc;
+    --p4u-brand-700: #0080b8;
+    --p4u-secondary: #5a2572;
+    --p4u-secondary-dark: #481e5b;
     --p4u-accent: #faba00;
     --p4u-accent-dark: #ac9e00;
     --p4u-warm-50: #fdfbf9;
@@ -26,7 +28,7 @@ body::before {
     inset: 0;
     z-index: -2;
     pointer-events: none;
-    background-image: radial-gradient(circle at 1px 1px, rgba(90, 37, 114, 0.06) 0.9px, transparent 0);
+    background-image: radial-gradient(circle at 1px 1px, rgba(0, 155, 220, 0.06) 0.9px, transparent 0);
     background-size: 22px 22px;
 }
 
@@ -140,7 +142,7 @@ body.path-login #region-main-box {
     left: 15%;
     width: 420px;
     height: 420px;
-    background: radial-gradient(circle, rgba(90, 37, 114, 0.08) 0%, transparent 65%);
+    background: radial-gradient(circle, rgba(0, 155, 220, 0.1) 0%, transparent 65%);
 }
 
 .p4u-login-bg-orb--bottom {
@@ -162,7 +164,7 @@ body.path-login #region-main-box {
     background: #fff;
     border-radius: 1rem;
     border: 1px solid var(--p4u-warm-200);
-    box-shadow: 0 20px 40px -16px rgba(72, 30, 91, 0.15);
+    box-shadow: 0 20px 40px -16px rgba(0, 128, 184, 0.15);
     padding: 2rem;
 }
 
@@ -255,8 +257,8 @@ body.path-login #region-main-box {
 
 .p4u-login-form .p4u-login-input:focus {
     background: #fff;
-    border-color: rgba(90, 37, 114, 0.45);
-    box-shadow: 0 0 0 0.2rem rgba(90, 37, 114, 0.15);
+    border-color: rgba(0, 155, 220, 0.45);
+    box-shadow: 0 0 0 0.2rem rgba(0, 155, 220, 0.15);
 }
 
 .p4u-login-form .p4u-login-link {
@@ -278,7 +280,7 @@ body.path-login #region-main-box {
     font-weight: 600;
     background: var(--p4u-brand-600);
     border-color: var(--p4u-brand-600);
-    box-shadow: 0 4px 16px -4px rgba(90, 37, 114, 0.25);
+    box-shadow: 0 4px 16px -4px rgba(0, 155, 220, 0.25);
 }
 
 .p4u-login-form .p4u-login-submit:hover,

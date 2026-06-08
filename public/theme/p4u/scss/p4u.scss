@@ -1,10 +1,12 @@
-// Diakonie Baden-Baden / Rastatt light palette (diakonie-bad-ra.de, local/p4u).
+// Diakonie Baden-Baden / Rastatt — primary blue + secondary purple (diakonie-bad-ra.de).
 :root {
-    --p4u-brand-50: #f4edf7;
-    --p4u-brand-100: #ded3e3;
-    --p4u-brand-500: #8c4b9e;
-    --p4u-brand-600: #5a2572;
-    --p4u-brand-700: #481e5b;
+    --p4u-brand-50: #e8f6fc;
+    --p4u-brand-100: #cceef9;
+    --p4u-brand-500: #33b0e3;
+    --p4u-brand-600: #009bdc;
+    --p4u-brand-700: #0080b8;
+    --p4u-secondary: #5a2572;
+    --p4u-secondary-dark: #481e5b;
     --p4u-accent: #faba00;
     --p4u-accent-dark: #ac9e00;
     --p4u-warm-50: #fdfbf9;
@@ -26,7 +28,7 @@ body::before {
     inset: 0;
     z-index: -2;
     pointer-events: none;
-    background-image: radial-gradient(circle at 1px 1px, rgba(90, 37, 114, 0.06) 0.9px, transparent 0);
+    background-image: radial-gradient(circle at 1px 1px, rgba(0, 155, 220, 0.06) 0.9px, transparent 0);
     background-size: 22px 22px;
 }
 
@@ -42,8 +44,8 @@ body::after {
 }
 
 // Boost primary colour alignment.
-$primary: #5a2572;
-$secondary: #8c4b9e;
+$primary: #009bdc;
+$secondary: #5a2572;
 
 .navbar.bg-primary,
 .btn-primary {

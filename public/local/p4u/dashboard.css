@@ -197,8 +197,8 @@ body#page-my-index .block_timeline {
 
 .p4u-dashboard-toolbar button:hover,
 .p4u-dashboard-toolbar input:focus {
-    border-color: #5A2572;
-    box-shadow: 0 0 0 .18rem rgba(90, 37, 114, .12);
+    border-color: #009BDC;
+    box-shadow: 0 0 0 .18rem rgba(0, 155, 220, .12);
     outline: 0;
 }
 
@@ -234,9 +234,9 @@ body#page-my-index .block_timeline {
     justify-content: center;
     min-height: 34px;
     padding: 7px 12px;
-    border: 1px solid #5A2572;
+    border: 1px solid #009BDC;
     border-radius: 6px;
-    color: #5A2572;
+    color: #009BDC;
     font-size: .84rem;
     font-weight: 800;
     text-decoration: none;
@@ -244,7 +244,7 @@ body#page-my-index .block_timeline {
 
 .p4u-dashboard-timeline-entry a:hover,
 .p4u-dashboard-course-action:hover {
-    background: #5A2572;
+    background: #009BDC;
     color: #fff;
     text-decoration: none;
 }
@@ -295,7 +295,7 @@ body#page-my-index .block_timeline {
 }
 
 .p4u-dashboard-more:hover {
-    background: #F4EDF7;
+    background: #E8F6FC;
     color: #481E5B;
 }
 
@@ -305,13 +305,13 @@ body#page-my-index .block_timeline {
 }
 
 .p4u-dashboard-course-main a {
-    color: #481E5B;
+    color: #009BDC;
     font-weight: 850;
     text-decoration: none;
 }
 
 .p4u-dashboard-course-main a:hover {
-    color: #5A2572;
+    color: #009BDC;
     text-decoration: underline;
 }
 
@@ -323,7 +323,7 @@ body#page-my-index .block_timeline {
 .p4u-dashboard-hero {
     margin: 24px 0 18px;
     padding: 26px;
-    border: 1px solid #DED3E3;
+    border: 1px solid #CCEEF9;
     border-radius: 10px;
     background: linear-gradient(135deg, #481E5B, #5A2572);
     color: #fff;
@@ -392,7 +392,7 @@ body#page-my-index .block_timeline {
 
 .p4u-dashboard-primary {
     background: #fff;
-    color: #5A2572;
+    color: #009BDC;
 }
 
 .p4u-dashboard-secondary {
@@ -463,8 +463,8 @@ body#page-my-index .block_timeline {
 }
 
 .p4u-dashboard-module.is-active {
-    border-color: #DED3E3;
-    background: #F4EDF7;
+    border-color: #CCEEF9;
+    background: #E8F6FC;
 }
 
 .p4u-dashboard-module small {
@@ -523,7 +523,7 @@ body#page-my-index .block_myoverview .dashboard-card:hover {
 
 body#page-my-index .block_myoverview .dashboard-card-img {
     min-height: 86px;
-    background: linear-gradient(135deg, #F4EDF7, #5A2572) !important;
+    background: linear-gradient(135deg, #E8F6FC, #5A2572) !important;
 }
 
 body#page-my-index .block_timeline .no-overflow {
@@ -531,33 +531,33 @@ body#page-my-index .block_timeline .no-overflow {
 }
 
 body#page-my-index a:not(.nav-link):not(.navbar-brand):not(.dropdown-item) {
-    color: #5A2572;
+    color: #009BDC;
 }
 
 body#page-my-index a:not(.nav-link):not(.navbar-brand):not(.dropdown-item):hover {
-    color: #481E5B;
+    color: #0080B8;
 }
 
 body#page-my-index .btn-primary {
-    border-color: #5A2572;
-    background: #5A2572;
+    border-color: #009BDC;
+    background: #009BDC;
 }
 
 body#page-my-index .btn-primary:hover,
 body#page-my-index .btn-primary:focus {
-    border-color: #481E5B;
-    background: #481E5B;
+    border-color: #0080B8;
+    background: #0080B8;
 }
 
 body#page-my-index .btn-outline-primary {
-    border-color: #5A2572;
-    color: #5A2572;
+    border-color: #009BDC;
+    color: #009BDC;
 }
 
 body#page-my-index .btn-outline-primary:hover,
 body#page-my-index .btn-outline-primary:focus {
-    border-color: #5A2572;
-    background: #5A2572;
+    border-color: #009BDC;
+    background: #009BDC;
     color: #fff;
 }
 
@@ -575,15 +575,15 @@ body#page-my-index .calendar-controls .current,
 body#page-my-index .maincalendar .calendarmonth td.today .day-number-circle,
 body#page-my-index .block_calendar_month .today .day-number-circle,
 body#page-my-index .block_calendar_month .today a {
-    background-color: #5A2572 !important;
-    border-color: #5A2572 !important;
+    background-color: #009BDC !important;
+    border-color: #009BDC !important;
     color: #fff !important;
 }
 
 body#page-my-index .block_calendar_month .arrow,
 body#page-my-index .block_calendar_month .arrow_link,
 body#page-my-index .block_calendar_month .footer a {
-    color: #5A2572 !important;
+    color: #009BDC !important;
 }
 
 @media (max-width: 900px) {

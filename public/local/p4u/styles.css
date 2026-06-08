@@ -1,7 +1,9 @@
 .p4u-shell {
-    --p4u-brand: #5A2572;
-    --p4u-brand-dark: #481E5B;
-    --p4u-soft: #F4EDF7;
+    --p4u-brand: #009BDC;
+    --p4u-brand-dark: #0080B8;
+    --p4u-secondary: #5A2572;
+    --p4u-secondary-dark: #481E5B;
+    --p4u-soft: #E8F6FC;
     --p4u-accent: #FABA00;
     --p4u-accent-dark: #AC9E00;
     --p4u-border: #E8E4DF;

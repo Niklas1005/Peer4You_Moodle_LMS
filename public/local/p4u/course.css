@@ -168,13 +168,13 @@ body#page-course-view-topics .activity-item {
 }
 
 body#page-course-view-topics .activityname a {
-    color: #5A2572;
+    color: #009BDC;
     font-weight: 850;
     text-decoration: none;
 }
 
 body#page-course-view-topics .activityname a:hover {
-    color: #481E5B;
+    color: #0080B8;
     text-decoration: none;
 }
 
@@ -195,33 +195,33 @@ body#page-course-view-topics .btn {
 }
 
 body#page-course-view-topics a:not(.nav-link):not(.navbar-brand):not(.dropdown-item) {
-    color: #5A2572;
+    color: #009BDC;
 }
 
 body#page-course-view-topics a:not(.nav-link):not(.navbar-brand):not(.dropdown-item):hover {
-    color: #481E5B;
+    color: #0080B8;
 }
 
 body#page-course-view-topics .btn-primary {
-    border-color: #5A2572;
-    background: #5A2572;
+    border-color: #009BDC;
+    background: #009BDC;
 }
 
 body#page-course-view-topics .btn-primary:hover,
 body#page-course-view-topics .btn-primary:focus {
-    border-color: #481E5B;
-    background: #481E5B;
+    border-color: #0080B8;
+    background: #0080B8;
 }
 
 body#page-course-view-topics .btn-outline-primary {
-    border-color: #5A2572;
-    color: #5A2572;
+    border-color: #009BDC;
+    color: #009BDC;
 }
 
 body#page-course-view-topics .btn-outline-primary:hover,
 body#page-course-view-topics .btn-outline-primary:focus {
-    border-color: #5A2572;
-    background: #5A2572;
+    border-color: #009BDC;
+    background: #009BDC;
     color: #fff;
 }
 

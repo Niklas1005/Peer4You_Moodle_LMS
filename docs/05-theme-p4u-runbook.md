@@ -47,15 +47,24 @@ grep plugin->version /var/www/html/public/theme/p4u/version.php
 ```
 
 ## Diakonie colour tokens (light mode, diakonie-bad-ra.de)
-- Brand primary: `#5A2572` (`--p4u-brand-600`)
-- Brand hover/depth: `#481E5B` (`--p4u-brand-700`)
-- Brand mid: `#8C4B9E` (`--p4u-brand-500`)
-- Soft tint: `#F4EDF7` (`--p4u-brand-50`), border tint `#DED3E3` (`--p4u-brand-100`)
-- Accent gold: `#FABA00` (`--p4u-accent`)
-- Warm surfaces: `#FDFBF9`, `#F5F0EB`, `#E8E4DF`
-- Text base: `#333333` (`--p4u-ink`), muted `#6B7280`
+
+| Token | Hex | Verwendung |
+|-------|-----|------------|
+| `--p4u-brand-600` | `#009BDC` | Primary — Buttons, Links, Fokus |
+| `--p4u-brand-700` | `#0080B8` | Primary hover / Tiefe |
+| `--p4u-brand-500` | `#33B0E3` | Primary mid |
+| `--p4u-brand-50` | `#E8F6FC` | Primary soft tint (Hintergründe) |
+| `--p4u-brand-100` | `#CCEEF9` | Primary border tint |
+| `--p4u-secondary` | `#5A2572` | Secondary — Navbar, Karten-Gradienten, Akzente |
+| `--p4u-secondary-dark` | `#481E5B` | Secondary hover / Navbar-Tiefe |
+| `--p4u-accent` | `#FABA00` | Tertiary gold — Navbar-Streifen, Badges |
+| `--p4u-accent-dark` | `#AC9E00` | Gold hover |
+| `--p4u-warm-50/100/200` | `#FDFBF9` / `#F5F0EB` / `#E8E4DF` | Warme Flächen |
+| `--p4u-ink` | `#333333` | Fließtext |
+| `--p4u-text-muted` | `#6B7280` | Sekundärtext |
+
 - Typography: `"DM Sans", system-ui, -apple-system, sans-serif`
-- Login background: light warm gradient (`--p4u-warm-50` → white → `--p4u-brand-50`)
+- Login background: light warm gradient (`--p4u-warm-50` → white → `--p4u-brand-50`); Muster/Orbs Blau + Lila + Gold
 
 ## Login Page
 
