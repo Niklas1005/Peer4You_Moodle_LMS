@@ -1,0 +1,41 @@
+{{!
+    @template core/login_layout
+
+    Centered login card on P4U brand gradient (overrides Boost split-screen).
+
+    Context variables required for this template:
+    * output - The core renderer output object (provides main_content).
+}}
+<div id="page-content" class="p4u-login-page">
+    <div class="p4u-login-bg" aria-hidden="true">
+        <div class="p4u-login-bg-gradient"></div>
+        <div class="p4u-login-bg-pattern"></div>
+        <div class="p4u-login-bg-orb p4u-login-bg-orb--top"></div>
+        <div class="p4u-login-bg-orb p4u-login-bg-orb--bottom"></div>
+    </div>
+
+    <div class="p4u-login-center">
+        <div class="p4u-login-card p4u-login-animate-in">
+            <div class="p4u-login-brand">
+                <div class="p4u-login-brand-icon" aria-hidden="true">
+                    <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round">
+                        <path d="M20 21v-2a4 4 0 00-4-4H8a4 4 0 00-4 4v2"/>
+                        <circle cx="12" cy="7" r="4"/>
+                    </svg>
+                </div>
+                <h1 class="p4u-login-title">{{#str}}loginbrandtitle, theme_p4u{{/str}}</h1>
+                <p class="p4u-login-tagline">{{#str}}logintagline, theme_p4u{{/str}}</p>
+            </div>
+
+            <div id="region-main" class="p4u-login-main">
+                <div id="region-main-box">
+                    <div class="login-container">
+                        {{{ output.main_content }}}
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <p class="p4u-login-diakonie">{{#str}}logindiakonie, theme_p4u{{/str}}</p>
+    </div>
+</div>

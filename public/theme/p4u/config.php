@@ -90,7 +90,6 @@ $THEME->layouts = [
         'defaultregion' => 'side-pre',
     ],
     'login' => [
-        'theme' => 'boost',
         'file' => 'login.php',
         'regions' => [],
         'options' => ['langmenu' => true],

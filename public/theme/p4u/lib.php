@@ -37,6 +37,8 @@ function theme_p4u_get_main_scss_content($theme): string {
     $scss .= file_get_contents($CFG->dirroot . '/theme/boost/scss/preset/default.scss');
     $scss .= "\n";
     $scss .= file_get_contents($CFG->dirroot . '/theme/p4u/scss/p4u.scss');
+    $scss .= "\n";
+    $scss .= file_get_contents($CFG->dirroot . '/theme/p4u/scss/login.scss');
 
     return $scss;
 }

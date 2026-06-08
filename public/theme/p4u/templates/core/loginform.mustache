@@ -1,0 +1,190 @@
+{{!
+    @template core/loginform
+
+    P4U-styled login form — preserves all Moodle login features.
+}}
+<div class="loginform p4u-login-form">
+    {{#maintenance}}
+        <div class="alert alert-danger login-maintenance" role="alert">
+            {{{maintenance}}}
+        </div>
+    {{/maintenance}}
+    {{#error}}
+        <div class="alert alert-danger" id="loginerrormessage" role="alert">
+            {{#errortitle}}<strong class="d-block mb-1">{{errortitle}}</strong>{{/errortitle}}
+            {{error}}
+        </div>
+    {{/error}}
+    {{#info}}
+        <div class="alert alert-info" id="logininfomessage" role="status">{{info}}</div>
+    {{/info}}
+    {{#showloginform}}
+        <form class="login-form" action="{{loginurl}}" method="post" id="login">
+            <input id="anchor" type="hidden" name="anchor" value="">
+            <script>document.getElementById('anchor').value = location.hash;</script>
+            <input type="hidden" name="logintoken" value="{{logintoken}}">
+            <div class="login-form-username mb-3">
+                <label for="username" class="form-label p4u-login-label">
+                    {{^canloginbyemail}}
+                        {{#str}} username {{/str}}
+                    {{/canloginbyemail}}
+                    {{#canloginbyemail}}
+                        {{#str}} usernameemail {{/str}}
+                    {{/canloginbyemail}}
+                </label>
+                <input type="text" name="username" id="username" {{!
+                    !}}class="form-control p4u-login-input" {{!
+                    !}}value="{{username}}" {{!
+                    !}}placeholder="{{^canloginbyemail}}{{#str}}enterusername{{/str}}{{/canloginbyemail}}{{!
+                    !}}{{#canloginbyemail}}{{#str}}loginenterusernameoremail{{/str}}{{/canloginbyemail}}" {{!
+                    !}}autocomplete="username">
+            </div>
+            <div class="login-form-password mb-3">
+                <label for="password" class="form-label p4u-login-label">{{#str}} password {{/str}}</label>
+                <input type="password" name="password" id="password" value="" {{!
+                    !}}class="form-control p4u-login-input" {{!
+                    !}}placeholder="{{#str}}loginenterpassword{{/str}}" {{!
+                    !}}autocomplete="current-password">
+            </div>
+            <div class="text-end mb-3">
+                <a class="p4u-login-link" href="{{forgotpasswordurl}}">{{#str}}loginforgotpassword{{/str}}</a>
+            </div>
+            {{#recaptcha}}
+                <div class="login-form-recaptcha mb-3">
+                    {{{recaptcha}}}
+                </div>
+            {{/recaptcha}}
+            <div class="login-form-submit mb-3">
+                <button class="btn btn-primary w-100 p4u-login-submit" type="submit" id="loginbtn">{{#str}}login{{/str}}</button>
+            </div>
+        </form>
+    {{/showloginform}}
+    {{#hasauthinstructions}}
+        <div class="small mb-3 p4u-login-instructions">
+            {{{instructions}}}
+        </div>
+    {{/hasauthinstructions}}
+    {{^hasauthinstructions}}
+        {{#cansignup}}
+            <div class="text-center p4u-login-signup mb-3">
+                {{#instructions}}
+                    <span class="text-muted me-1">{{{instructions}}}</span>
+                {{/instructions}}
+                <a class="p4u-login-signup-link" href="{{signupurl}}">
+                    {{#str}}loginstartsignup{{/str}}
+                    <svg class="p4u-login-signup-arrow" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
+                </a>
+            </div>
+        {{/cansignup}}
+        {{^cansignup}}
+            {{#instructions}}
+                <p class="small mb-3 p4u-login-instructions">{{{instructions}}}</p>
+            {{/instructions}}
+        {{/cansignup}}
+    {{/hasauthinstructions}}
+    {{#hasauthinstructions}}
+        {{#cansignup}}
+            <div class="text-center p4u-login-signup mb-3">
+                <a class="p4u-login-signup-link" href="{{signupurl}}">
+                    {{#str}}loginstartsignup{{/str}}
+                    <svg class="p4u-login-signup-arrow" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
+                </a>
+            </div>
+        {{/cansignup}}
+    {{/hasauthinstructions}}
+    {{#hasidentityproviders}}
+        <div class="login-separator my-4">{{#str}}loginseparatoror{{/str}}</div>
+    {{/hasidentityproviders}}
+    {{^hasidentityproviders}}
+        {{#canloginasguest}}
+            <div class="login-separator my-4">{{#str}}loginseparatoror{{/str}}</div>
+        {{/canloginasguest}}
+    {{/hasidentityproviders}}
+    {{#hasidentityproviders}}
+        <div class="login-identityproviders">
+            {{#identityproviders}}
+                <a class="btn login-identityprovider-btn btn-outline-secondary mb-3" href="{{url}}">
+                    {{#iconurl}}
+                        <img src="{{iconurl}}" alt="" width="24" height="24"/>
+                    {{/iconurl}}
+                    {{#str}}loginwith, core, {{name}}{{/str}}
+                </a>
+            {{/identityproviders}}
+        </div>
+    {{/hasidentityproviders}}
+    {{#canloginasguest}}
+        <form action="{{loginurl}}" method="post" id="guestlogin" class="mb-4">
+            <input type="hidden" name="logintoken" value="{{logintoken}}">
+            <input type="hidden" name="username" value="guest" />
+            <input type="hidden" name="password" value="guest" />
+            <button class="btn btn-outline-secondary login-identityprovider-btn w-100" type="submit" id="loginguestbtn">
+                <i class="fa fa-user me-2" aria-hidden="true"></i>{{#str}}loginasguest{{/str}}
+            </button>
+        </form>
+    {{/canloginasguest}}
+    {{#languagemenu}}
+        <div class="login-languagemenu d-flex justify-content-center my-4">
+            {{>core/action_menu}}
+        </div>
+    {{/languagemenu}}
+    <div class="login-cookiesnotice text-center">
+        <button type="button" class="btn btn-link p-0 p4u-login-cookies" {{!
+        }} data-modal="alert"{{!
+        }} data-modal-title-str='["cookiesenabled", "core"]' {{!
+        }} data-modal-content-str='["cookiesenabled_help_html", "core"]'{{!
+        }}>{{#str}}cookiesnotice{{/str}}</button>
+    </div>
+</div>
+
+{{#js}}
+    {{^error}}
+        {{#autofocusform}}
+            require(['core_form/events'], function(FormEvent) {
+                function autoFocus() {
+                    const userNameField = document.getElementById('username');
+                    const passwordField = document.getElementById('password');
+                    if (userNameField && userNameField.value.length == 0) {
+                        userNameField.focus();
+                    } else if (passwordField) {
+                        passwordField.focus();
+                    }
+                }
+                autoFocus();
+                window.addEventListener(FormEvent.eventTypes.fieldStructureChanged, autoFocus);
+            });
+        {{/autofocusform}}
+    {{/error}}
+    require(['core/pending'], function(Pending) {
+        const errorMessageDiv = document.getElementById('loginerrormessage');
+        const infoMessageDiv = document.getElementById('logininfomessage');
+        const errorMessage = errorMessageDiv?.textContent.trim();
+        const infoMessage = infoMessageDiv?.textContent.trim();
+        if (errorMessage || infoMessage) {
+            const pendingJS = new Pending('login-move-focus');
+            const usernameField = document.getElementById('username');
+            setTimeout(function() {
+                if (errorMessage && usernameField) {
+                    usernameField.focus();
+                }
+                if (errorMessage) {
+                    errorMessageDiv.innerHTML += "&nbsp;";
+                }
+                if (infoMessage) {
+                    infoMessageDiv.innerHTML += "&nbsp;";
+                }
+                pendingJS.resolve();
+            }, 500);
+        }
+    });
+    {{#togglepassword}}
+        require(['core/togglesensitive'], function(ToggleSensitive) {
+            ToggleSensitive.init("password", {{smallscreensonly}});
+        });
+    {{/togglepassword}}
+    require(['core_form/submit'], function(Submit) {
+        Submit.init("loginbtn");
+        {{#canloginasguest}}
+            Submit.init("loginguestbtn");
+        {{/canloginasguest}}
+    });
+{{/js}}
