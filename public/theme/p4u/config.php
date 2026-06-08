@@ -79,7 +79,7 @@ $THEME->layouts = [
         'options' => ['nonavbar' => true],
     ],
     'mydashboard' => [
-        'file' => 'mydashboard.php',
+        'file' => 'drawers.php',
         'regions' => ['side-pre'],
         'defaultregion' => 'side-pre',
         'options' => ['nonavbar' => true, 'langmenu' => true],

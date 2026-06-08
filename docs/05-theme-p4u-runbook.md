@@ -27,15 +27,35 @@ This runbook documents how to operate and evolve the prototype-aligned Moodle fr
   - `templates/core/loginform.mustache`
   - `scss/login.scss`
 
-## Prototype Token Mapping
-- Brand primary: `#009BDC` (`--p4u-brand-600`)
-- Brand hover/depth: `#0080B8` (`--p4u-brand-700`)
-- Light accent: `#E8F7FD` (`--p4u-brand-50`)
+## Container paths (Coolify / Docker)
+
+Apache `DocumentRoot` is `/var/www/html/public` — Moodle `dirroot` is **`/var/www/html/public`**, not `/var/www/html`.
+
+| What | Path in `web` container |
+|------|-------------------------|
+| Moodle code (themes, login, …) | `/var/www/html/public/` |
+| Theme P4U | `/var/www/html/public/theme/p4u/` |
+| CLI scripts | `/var/www/html/admin/cli/` (repo root; loads config → `public`) |
+| Repo root (docker, docs, …) | `/var/www/html/` — **no** `theme/` here |
+
+Verify login theme files after deploy:
+
+```bash
+grep -A4 "'login'" /var/www/html/public/theme/p4u/config.php
+ls -la /var/www/html/public/theme/p4u/layout/login.php
+grep plugin->version /var/www/html/public/theme/p4u/version.php
+```
+
+## Diakonie colour tokens (light mode, diakonie-bad-ra.de)
+- Brand primary: `#5A2572` (`--p4u-brand-600`)
+- Brand hover/depth: `#481E5B` (`--p4u-brand-700`)
+- Brand mid: `#8C4B9E` (`--p4u-brand-500`)
+- Soft tint: `#F4EDF7` (`--p4u-brand-50`), border tint `#DED3E3` (`--p4u-brand-100`)
+- Accent gold: `#FABA00` (`--p4u-accent`)
 - Warm surfaces: `#FDFBF9`, `#F5F0EB`, `#E8E4DF`
-- Text base: `#1E1B2E`
-- Typography baseline: `"DM Sans", system-ui, -apple-system, sans-serif`
-- Display/headings (login): `"Outfit", system-ui, sans-serif`
-- Login background gradient: `#004768` → `#0A1929` → `#0E2A3E`
+- Text base: `#333333` (`--p4u-ink`), muted `#6B7280`
+- Typography: `"DM Sans", system-ui, -apple-system, sans-serif`
+- Login background: light warm gradient (`--p4u-warm-50` → white → `--p4u-brand-50`)
 
 ## Login Page
 
@@ -52,9 +72,12 @@ After login template/CSS changes:
 ```bash
 docker compose exec -T web php /var/www/html/admin/cli/upgrade.php --non-interactive
 docker compose exec -T web php /var/www/html/admin/cli/purge_caches.php
+docker compose exec -T web php /var/www/html/admin/cli/build_theme_css.php --themes=p4u
 ```
 
-Validation: open `/login/index.php` logged out — centered card, no split-screen, Diakonie footer text below card.
+Login styles live in `scss/login.scss` (SCSS pipeline) **and** `style/p4u.css` (static `$THEME->sheets` fallback). If only templates render but login looks unstyled, purge caches and rebuild theme CSS; the static sheet must include `.p4u-login-*` rules.
+
+Validation: open `/login/index.php` logged out — light Diakonie background, centered white card, styled inputs/buttons, Diakonie footer text below card.
 
 ## Enable / Re-Enable Theme
 Run in project root:
@@ -75,7 +98,8 @@ docker compose exec -T web php /var/www/html/admin/cli/purge_caches.php
 
 ## Dashboard/Frontpage Composition Notes
 - Frontpage content remains Moodle-driven via `{{{ output.main_content }}}` and can be composed in Site Administration.
-- Dashboard content remains Moodle block/activity driven and is framed with prototype-aligned wrapper sections.
+- Dashboard (`/my/`) uses **Boost drawers** layout (`drawers.php`) — standard Moodle blocks and `block_myoverview`, no custom `mydashboard` overlay.
+- `local_p4u` dashboard JS overlay is disabled; block styling via `local/p4u/dashboard.css` remains optional.
 - To adapt widgets quickly, prefer block placement/configuration before adding custom plugin logic.
 
 ## Validation Checklist

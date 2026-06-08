@@ -1,9 +1,10 @@
-// P4U login page — prototype-aligned centered card on brand gradient.
+// P4U login page — Diakonie light branding, centered card.
 
 $p4u-login-ease-out: cubic-bezier(0.23, 1, 0.32, 1);
 
-body.pagelayout-login {
-    background: #0a1929;
+body.pagelayout-login,
+body.path-login {
+    background: var(--p4u-warm-50);
     min-height: 100vh;
 
     &::before,
@@ -51,14 +52,19 @@ body.pagelayout-login {
 .p4u-login-bg-gradient {
     position: absolute;
     inset: 0;
-    background: linear-gradient(160deg, #004768 0%, #0a1929 40%, #0e2a3e 70%, #0a1929 100%);
+    background: linear-gradient(
+        165deg,
+        var(--p4u-warm-50) 0%,
+        #fff 35%,
+        var(--p4u-brand-50) 100%
+    );
 }
 
 .p4u-login-bg-pattern {
     position: absolute;
     inset: 0;
-    opacity: 0.4;
-    background-image: url("data:image/svg+xml,%3Csvg width='24' height='24' viewBox='0 0 24 24' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath d='M11 0h2v24h-2zM0 11h24v2H0z' fill='%23009BDC' fill-opacity='.03'/%3E%3C/svg%3E");
+    opacity: 0.5;
+    background-image: url("data:image/svg+xml,%3Csvg width='24' height='24' viewBox='0 0 24 24' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath d='M11 0h2v24h-2zM0 11h24v2H0z' fill='%235a2572' fill-opacity='.04'/%3E%3C/svg%3E");
 }
 
 .p4u-login-bg-orb {
@@ -66,19 +72,19 @@ body.pagelayout-login {
     border-radius: 50%;
 
     &--top {
-        top: 15%;
-        left: 20%;
-        width: 500px;
-        height: 500px;
-        background: radial-gradient(circle, rgba(0, 155, 220, 0.15) 0%, transparent 65%);
+        top: 10%;
+        left: 15%;
+        width: 420px;
+        height: 420px;
+        background: radial-gradient(circle, rgba(90, 37, 114, 0.08) 0%, transparent 65%);
     }
 
     &--bottom {
-        bottom: 10%;
-        right: 15%;
-        width: 400px;
-        height: 400px;
-        background: radial-gradient(circle, rgba(0, 128, 184, 0.1) 0%, transparent 65%);
+        bottom: 5%;
+        right: 10%;
+        width: 360px;
+        height: 360px;
+        background: radial-gradient(circle, rgba(250, 186, 0, 0.12) 0%, transparent 65%);
     }
 }
 
@@ -92,8 +98,8 @@ body.pagelayout-login {
 .p4u-login-card {
     background: #fff;
     border-radius: 1rem;
-    border: 1px solid rgba(255, 255, 255, 0.8);
-    box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.3);
+    border: 1px solid var(--p4u-warm-200);
+    box-shadow: 0 20px 40px -16px rgba(72, 30, 91, 0.15);
     padding: 2rem;
 
     @media (min-width: 576px) {
@@ -137,28 +143,28 @@ body.pagelayout-login {
 
 .p4u-login-title {
     margin: 0;
-    font-family: "Outfit", system-ui, sans-serif;
+    font-family: "DM Sans", system-ui, sans-serif;
     font-size: 1.875rem;
     font-weight: 800;
     letter-spacing: -0.025em;
-    color: #111827;
+    color: var(--p4u-ink);
     line-height: 1.15;
 }
 
 .p4u-login-tagline {
     margin: 0.375rem 0 0;
     font-size: 0.875rem;
-    font-weight: 300;
-    color: #9ca3af;
+    font-weight: 400;
+    color: var(--p4u-text-muted);
 }
 
 .p4u-login-diakonie {
     margin: 1.5rem 0 0;
     text-align: center;
-    font-size: 0.6rem;
+    font-size: 0.65rem;
     text-transform: uppercase;
-    letter-spacing: 0.15em;
-    color: rgba(255, 255, 255, 0.25);
+    letter-spacing: 0.12em;
+    color: var(--p4u-text-muted);
 }
 
 .p4u-login-form {
@@ -167,15 +173,15 @@ body.pagelayout-login {
         font-weight: 700;
         text-transform: uppercase;
         letter-spacing: 0.08em;
-        color: #6b7280;
+        color: var(--p4u-text-muted);
         margin-bottom: 0.375rem;
     }
 
     .p4u-login-input {
         padding: 0.75rem 1rem;
         border-radius: 0.75rem;
-        border-color: #e5e7eb;
-        background: rgba(249, 250, 251, 0.5);
+        border-color: var(--p4u-warm-200);
+        background: var(--p4u-warm-50);
         font-size: 0.875rem;
         box-shadow: none;
 
@@ -184,25 +190,25 @@ body.pagelayout-login {
         }
 
         &:hover {
-            background: rgba(249, 250, 251, 0.5);
+            background: var(--p4u-warm-50);
         }
 
         &:focus {
-            background: rgba(249, 250, 251, 0.5);
-            border-color: rgba(0, 155, 220, 0.6);
-            box-shadow: 0 0 0 0.2rem rgba(45, 176, 227, 0.25);
+            background: #fff;
+            border-color: rgba(90, 37, 114, 0.45);
+            box-shadow: 0 0 0 0.2rem rgba(90, 37, 114, 0.15);
         }
     }
 
     .toggle-sensitive-wrapper .toggle-sensitive-btn {
-        --bs-btn-bg: rgba(249, 250, 251, 0.5);
-        --bs-btn-border-color: #e5e7eb;
-        --bs-btn-hover-bg: rgba(249, 250, 251, 0.5);
-        --bs-btn-hover-border-color: #e5e7eb;
-        --bs-btn-active-bg: rgba(249, 250, 251, 0.5);
-        --bs-btn-active-border-color: #e5e7eb;
+        --bs-btn-bg: var(--p4u-warm-50);
+        --bs-btn-border-color: var(--p4u-warm-200);
+        --bs-btn-hover-bg: var(--p4u-warm-50);
+        --bs-btn-hover-border-color: var(--p4u-warm-200);
+        --bs-btn-active-bg: var(--p4u-warm-50);
+        --bs-btn-active-border-color: var(--p4u-warm-200);
         border-inline-start: none;
-        color: #6b7280;
+        color: var(--p4u-text-muted);
     }
 
     .p4u-login-link {
@@ -224,7 +230,7 @@ body.pagelayout-login {
         font-weight: 600;
         background: var(--p4u-brand-600);
         border-color: var(--p4u-brand-600);
-        box-shadow: 0 4px 16px -4px rgba(0, 155, 220, 0.25);
+        box-shadow: 0 4px 16px -4px rgba(90, 37, 114, 0.25);
 
         &:hover,
         &:focus {
@@ -260,7 +266,7 @@ body.pagelayout-login {
         display: flex;
         align-items: center;
         gap: 0.75rem;
-        color: #6b7280;
+        color: var(--p4u-text-muted);
         font-size: 0.875rem;
         text-transform: uppercase;
         letter-spacing: 0.08em;
@@ -269,7 +275,7 @@ body.pagelayout-login {
         &::after {
             content: "";
             flex: 1;
-            border-top: 1px solid #e5e7eb;
+            border-top: 1px solid var(--p4u-warm-200);
         }
     }
 
@@ -277,23 +283,23 @@ body.pagelayout-login {
         width: 100%;
         border-radius: 0.75rem;
         background: #fff;
-        border-color: #d1d5db;
-        color: #6b7280;
+        border-color: var(--p4u-warm-200);
+        color: var(--p4u-text-muted);
 
         &:hover,
         &:focus {
-            background: #f9fafb;
-            border-color: #9ca3af;
+            background: var(--p4u-warm-50);
+            border-color: var(--p4u-brand-100);
         }
     }
 
     .p4u-login-cookies {
         font-size: 0.875rem;
-        color: #6b7280;
+        color: var(--p4u-text-muted);
 
         &:hover,
         &:focus {
-            color: #4b5563;
+            color: var(--p4u-ink);
         }
     }
 

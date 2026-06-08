@@ -1,13 +1,17 @@
+// Diakonie Baden-Baden / Rastatt light palette (diakonie-bad-ra.de, local/p4u).
 :root {
-    --p4u-brand-50: #e8f7fd;
-    --p4u-brand-100: #c5ebf9;
-    --p4u-brand-500: #1aaae4;
-    --p4u-brand-600: #009bdc;
-    --p4u-brand-700: #0080b8;
+    --p4u-brand-50: #f4edf7;
+    --p4u-brand-100: #ded3e3;
+    --p4u-brand-500: #8c4b9e;
+    --p4u-brand-600: #5a2572;
+    --p4u-brand-700: #481e5b;
+    --p4u-accent: #faba00;
+    --p4u-accent-dark: #ac9e00;
     --p4u-warm-50: #fdfbf9;
     --p4u-warm-100: #f5f0eb;
     --p4u-warm-200: #e8e4df;
-    --p4u-ink: #1e1b2e;
+    --p4u-ink: #333333;
+    --p4u-text-muted: #6b7280;
 }
 
 body {
@@ -22,7 +26,7 @@ body::before {
     inset: 0;
     z-index: -2;
     pointer-events: none;
-    background-image: radial-gradient(circle at 1px 1px, rgba(179, 175, 175, 0.18) 0.9px, transparent 0);
+    background-image: radial-gradient(circle at 1px 1px, rgba(90, 37, 114, 0.06) 0.9px, transparent 0);
     background-size: 22px 22px;
 }
 
@@ -32,175 +36,32 @@ body::after {
     inset: 0;
     z-index: -1;
     pointer-events: none;
-    background-image: radial-gradient(circle at center, #fff991 0%, transparent 70%);
-    opacity: 0.22;
+    background-image: radial-gradient(circle at center, rgba(250, 186, 0, 0.12) 0%, transparent 70%);
+    opacity: 0.35;
     mix-blend-mode: multiply;
 }
 
-.p4u-shell {
-    width: min(1200px, calc(100% - 2rem));
-    margin: 0 auto;
+// Boost primary colour alignment.
+$primary: #5a2572;
+$secondary: #8c4b9e;
+
+.navbar.bg-primary,
+.btn-primary {
+    background-color: var(--p4u-brand-600) !important;
+    border-color: var(--p4u-brand-600) !important;
 }
 
-.p4u-header {
-    position: sticky;
-    top: 0;
-    z-index: 20;
-    backdrop-filter: blur(8px);
-    border-bottom: 1px solid rgba(232, 228, 223, 0.7);
-    background: rgba(255, 255, 255, 0.9);
+.btn-primary:hover,
+.btn-primary:focus {
+    background-color: var(--p4u-brand-700) !important;
+    border-color: var(--p4u-brand-700) !important;
 }
 
-.p4u-header-inner {
-    min-height: 4rem;
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-}
-
-.p4u-brand {
-    display: inline-flex;
-    align-items: center;
-    gap: 0.75rem;
-    text-decoration: none;
-}
-
-.p4u-brand-mark {
+a {
     color: var(--p4u-brand-600);
-    font-weight: 800;
-    font-size: 1.2rem;
-    letter-spacing: -0.03em;
 }
 
-.p4u-brand-text {
-    color: #5f5a73;
-    font-size: 0.75rem;
-    text-transform: uppercase;
-    letter-spacing: 0.12em;
-    border-left: 1px solid var(--p4u-warm-200);
-    padding-left: 0.65rem;
-}
-
-.p4u-header-menu {
-    display: flex;
-    align-items: center;
-    gap: 0.75rem;
-}
-
-.p4u-main {
-    padding: 2.8rem 0 2rem;
-}
-
-.p4u-hero {
-    margin-bottom: 1.8rem;
-}
-
-.p4u-section-label {
-    margin-bottom: 0.55rem;
-    color: var(--p4u-brand-600);
-    font-size: 0.72rem;
-    font-weight: 700;
-    letter-spacing: 0.14em;
-    text-transform: uppercase;
-}
-
-.p4u-hero-title {
-    margin: 0;
-    color: #111;
-    font-size: clamp(2rem, 2.2vw + 1rem, 3rem);
-    line-height: 0.98;
-    font-weight: 800;
-    letter-spacing: -0.03em;
-}
-
-.p4u-hero-subtitle {
-    margin-top: 0.6rem;
-    color: #77708a;
-    font-size: 1rem;
-}
-
-.p4u-grid {
-    display: grid;
-    grid-template-columns: repeat(12, minmax(0, 1fr));
-    gap: 1rem;
-    margin-bottom: 1.4rem;
-}
-
-.p4u-grid .p4u-card:first-child {
-    grid-column: span 5;
-}
-
-.p4u-grid .p4u-card:last-child {
-    grid-column: span 7;
-}
-
-.p4u-card {
-    border: 1px solid rgba(232, 228, 223, 0.9);
-    border-radius: 0.9rem;
-    background: #fff;
-    padding: 1.2rem 1.3rem;
-    box-shadow: 0 10px 24px -20px rgba(0, 0, 0, 0.35);
-}
-
-.p4u-card-gradient {
-    border-color: transparent;
-    color: #fff;
-    background: linear-gradient(135deg, var(--p4u-brand-700), var(--p4u-brand-600) 48%, #006490);
-}
-
-.p4u-card-eyebrow {
-    margin-bottom: 0.35rem;
-    font-size: 0.69rem;
-    font-weight: 700;
-    text-transform: uppercase;
-    letter-spacing: 0.13em;
-    color: inherit;
-    opacity: 0.8;
-}
-
-.p4u-card-title {
-    margin: 0;
-    font-size: 1.25rem;
-    line-height: 1.2;
-    font-weight: 800;
-}
-
-.p4u-card-text {
-    margin: 0.55rem 0 0;
-    font-size: 0.92rem;
-    line-height: 1.5;
-    color: #5d5770;
-}
-
-.p4u-card-gradient .p4u-card-text {
-    color: rgba(255, 255, 255, 0.86);
-}
-
-.p4u-content {
-    border-radius: 0.9rem;
-    border: 1px solid rgba(232, 228, 223, 0.9);
-    background: #fff;
-    padding: 1.2rem;
-}
-
-.p4u-blocks .block {
-    border-radius: 0.75rem;
-    border: 1px solid rgba(197, 235, 249, 0.7);
-}
-
-.p4u-card-empty {
-    display: flex;
-    flex-direction: column;
-    justify-content: center;
-}
-
-@media (max-width: 991px) {
-    .p4u-grid .p4u-card:first-child,
-    .p4u-grid .p4u-card:last-child {
-        grid-column: span 12;
-    }
-
-    .p4u-content {
-        padding: 1rem;
-    }
+a:hover,
+a:focus {
+    color: var(--p4u-brand-700);
 }

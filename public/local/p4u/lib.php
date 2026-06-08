@@ -70,10 +70,6 @@ function local_p4u_before_standard_html_head(): string {
 function local_p4u_before_footer(): string {
     global $CFG;
 
-    $html = '';
-    if (local_p4u_is_dashboard_page()) {
-        $jsurl = $CFG->wwwroot . '/local/p4u/dashboard.js';
-        $html .= '<script src="' . s($jsurl) . '"></script>';
-    }
-    return $html;
+    // Dashboard overlay JS disabled: use standard Moodle /my/ blocks (theme_p4u drawers layout).
+    return '';
 }
