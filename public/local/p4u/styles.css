@@ -137,6 +137,28 @@
     font-size: 1.05rem;
 }
 
+.p4u-completed-banner {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    max-width: 820px;
+    margin-top: 16px;
+    padding: 12px 14px;
+    border: 1px solid #D6B64C;
+    border-radius: 8px;
+    background: #FFFBEB;
+    color: #481E5B;
+}
+
+.p4u-completed-banner strong {
+    font-weight: 900;
+}
+
+.p4u-completed-banner span {
+    color: #5B5366;
+    font-size: .92rem;
+}
+
 .p4u-journey {
     display: flex;
     flex-wrap: wrap;

@@ -29,11 +29,17 @@ $PAGE->requires->js(new moodle_url('/local/p4u/module1.js'));
 
 echo $OUTPUT->header();
 ?>
-<div class="p4u-shell" data-complete-url="<?php echo (new moodle_url('/local/p4u/complete_module.php', ['courseid' => $course->id, 'module' => 1, 'sesskey' => sesskey()]))->out(false); ?>">
+<div class="p4u-shell"
+     data-complete-url="<?php echo (new moodle_url('/local/p4u/complete_module.php', ['courseid' => $course->id, 'module' => 1, 'action' => 'complete', 'sesskey' => sesskey()]))->out(false); ?>"
+     data-status-url="<?php echo (new moodle_url('/local/p4u/complete_module.php', ['courseid' => $course->id, 'module' => 1, 'action' => 'status']))->out(false); ?>">
     <header class="p4u-module-hero">
         <p class="p4u-label">Modul 1</p>
         <h1>Einf&uuml;hrung &amp; Rollenverst&auml;ndnis</h1>
         <p>Du verstehst deine Rolle als Peer, erkennst klare Grenzen und wendest das Gelernte in einem Fallbeispiel an.</p>
+        <div class="p4u-completed-banner p4u-hidden" id="p4u-completed-banner" aria-live="polite">
+            <strong>Modul bereits abgeschlossen</strong>
+            <span>Du kannst die Inhalte jederzeit wiederholen oder direkt zum Kurs zur&uuml;ckkehren.</span>
+        </div>
         <div class="p4u-journey" aria-label="Lernpfad">
             <span>Einstieg</span>
             <span>Grundlagen</span>

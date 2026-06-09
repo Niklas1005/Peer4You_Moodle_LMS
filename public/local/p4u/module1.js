@@ -74,10 +74,41 @@
         return localStorage.getItem(completionKey) === '1';
     }
 
+    function setCompletionUi(completed) {
+        document.querySelector('.p4u-shell')?.classList.toggle('is-completed', completed);
+        byId('p4u-completed-banner')?.classList.toggle('p4u-hidden', !completed);
+        if (completed) {
+            byId('p4u-quiz-state').textContent = 'Bereits bestanden';
+        }
+    }
+
     function markModuleCompleted() {
         localStorage.setItem(completionKey, '1');
-        document.querySelector('.p4u-shell')?.classList.add('is-completed');
+        setCompletionUi(true);
         syncMoodleCompletion();
+    }
+
+    function loadMoodleCompletionStatus() {
+        const statusUrl = document.querySelector('.p4u-shell')?.dataset.statusUrl;
+        if (!statusUrl) {
+            setCompletionUi(isModuleCompleted());
+            return;
+        }
+
+        fetch(statusUrl, {
+            method: 'GET',
+            credentials: 'same-origin'
+        })
+            .then(response => response.json())
+            .then(data => {
+                if (data && data.ok && data.completed) {
+                    localStorage.setItem(completionKey, '1');
+                    setCompletionUi(true);
+                } else {
+                    setCompletionUi(isModuleCompleted());
+                }
+            })
+            .catch(() => setCompletionUi(isModuleCompleted()));
     }
 
     function syncMoodleCompletion() {
@@ -97,7 +128,7 @@
                 }
             })
             .catch(() => {
-                // The visual module completion stays valid even if Moodle completion sync is unavailable.
+                // The in-module completion state remains visible even if Moodle sync is temporarily unavailable.
             });
     }
 
@@ -440,11 +471,7 @@
         initPracticeChoice();
         initCaseChoice();
         initQuiz();
-        if (isModuleCompleted()) {
-            byId('p4u-completion')?.classList.remove('p4u-hidden');
-            byId('p4u-quiz-state').textContent = 'Bereits bestanden';
-            document.querySelector('.p4u-shell')?.classList.add('is-completed');
-        }
+        loadMoodleCompletionStatus();
         updateProgress(0);
         updateQuizNav();
     });
