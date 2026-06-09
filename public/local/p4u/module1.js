@@ -77,6 +77,28 @@
     function markModuleCompleted() {
         localStorage.setItem(completionKey, '1');
         document.querySelector('.p4u-shell')?.classList.add('is-completed');
+        syncMoodleCompletion();
+    }
+
+    function syncMoodleCompletion() {
+        const completeUrl = document.querySelector('.p4u-shell')?.dataset.completeUrl;
+        if (!completeUrl) {
+            return;
+        }
+
+        fetch(completeUrl, {
+            method: 'POST',
+            credentials: 'same-origin'
+        })
+            .then(response => response.json())
+            .then(data => {
+                if (data && data.ok) {
+                    byId('p4u-quiz-state').textContent = 'Bestanden und im Kurs markiert';
+                }
+            })
+            .catch(() => {
+                // The visual module completion stays valid even if Moodle completion sync is unavailable.
+            });
     }
 
     function updateQuizNav() {
