@@ -39,13 +39,15 @@ $modules = [
         'summary' => '<p>Rolle verstehen, Grenzen erkennen und das Wissen im Abschlussquiz pruefen.</p>',
         'legacy' => ['Modul 1: Einfuehrung & Rollenverstaendnis'],
         'url' => '/local/p4u/module1.php',
+        'completion' => 'view',
     ],
     2 => [
         'sectionname' => 'Modul 2: Finanzwissen',
-        'activityname' => 'Finanzwissen vorbereiten',
-        'summary' => '<p>Geplant: Finanzgrundlagen, Konsum, digitale Kostenfallen und Schuldenrisiken.</p>',
-        'legacy' => ['Modul 2: Finanzwissen'],
-        'url' => '/local/p4u/module_placeholder.php?module=2',
+        'activityname' => 'Interaktives Lernmodul Finanzwissen starten',
+        'summary' => '<p>Finanzgrundlagen, Zinsen, Kreditrisiken, Budgetplan und Schuldnerberatung interaktiv erarbeiten.</p>',
+        'legacy' => ['Modul 2: Finanzwissen', 'Finanzwissen vorbereiten'],
+        'url' => '/local/p4u/module2.php',
+        'completion' => 'view',
     ],
     3 => [
         'sectionname' => 'Modul 3: Kommunikation und Gespraechsfuehrung',
@@ -63,10 +65,11 @@ $modules = [
     ],
     5 => [
         'sectionname' => 'Modul 5: Krisen erkennen und weiterverweisen',
-        'activityname' => 'Krisenmodul vorbereiten',
-        'summary' => '<p>Geplant: Warnsignale, Rollengrenzen und Weitervermittlung.</p>',
-        'legacy' => ['Modul 5: Krisen erkennen & weiterverweisen'],
-        'url' => '/local/p4u/module_placeholder.php?module=5',
+        'activityname' => 'Interaktives Lernmodul Krisen erkennen starten',
+        'summary' => '<p>Warnsignale erkennen, Peer-Rolle abgrenzen und passende Weiterverweisung ueben.</p>',
+        'legacy' => ['Modul 5: Krisen erkennen & weiterverweisen', 'Krisenmodul vorbereiten'],
+        'url' => '/local/p4u/module5.php',
+        'completion' => 'view',
     ],
     6 => [
         'sectionname' => 'Modul 6: Abschluss und Zertifikat',
@@ -88,7 +91,7 @@ function p4u_training_get_course(int $courseid, string $shortname): stdClass {
     return get_course($course->id);
 }
 
-function p4u_training_moduleinfo(stdClass $course, int $sectionnum, string $name, string $introhtml): stdClass {
+function p4u_training_moduleinfo(stdClass $course, int $sectionnum, string $name, string $introhtml, string $completion = 'manual'): stdClass {
     global $DB;
 
     $moduleid = $DB->get_field('modules', 'id', ['name' => 'url'], MUST_EXIST);
@@ -110,8 +113,8 @@ function p4u_training_moduleinfo(stdClass $course, int $sectionnum, string $name
     $mi->visibleoncoursepage = 1;
     $mi->groupmode = NOGROUPS;
     $mi->groupingid = 0;
-    $mi->completion = COMPLETION_TRACKING_MANUAL;
-    $mi->completionview = 0;
+    $mi->completion = $completion === 'view' ? COMPLETION_TRACKING_AUTOMATIC : COMPLETION_TRACKING_MANUAL;
+    $mi->completionview = $completion === 'view' ? 1 : 0;
     $mi->completionexpected = 0;
     $mi->availabilityconditionsjson = null;
     $mi->showdescription = 1;
@@ -147,11 +150,14 @@ function p4u_training_update_or_add_url(stdClass $course, int $sectionnum, array
         $DB->set_field('url', 'externalurl', $externalurl, ['id' => $cm->instance]);
         $DB->set_field('url', 'intro', $module['summary'], ['id' => $cm->instance]);
         $DB->set_field('url', 'introformat', FORMAT_HTML, ['id' => $cm->instance]);
+        $completion = ($module['completion'] ?? 'manual') === 'view' ? COMPLETION_TRACKING_AUTOMATIC : COMPLETION_TRACKING_MANUAL;
+        $DB->set_field('course_modules', 'completion', $completion, ['id' => $cm->id]);
+        $DB->set_field('course_modules', 'completionview', $completion === COMPLETION_TRACKING_AUTOMATIC ? 1 : 0, ['id' => $cm->id]);
         mtrace("  = Updated {$module['activityname']}");
         return;
     }
 
-    $mi = p4u_training_moduleinfo($course, $sectionnum, $module['activityname'], $module['summary']);
+    $mi = p4u_training_moduleinfo($course, $sectionnum, $module['activityname'], $module['summary'], $module['completion'] ?? 'manual');
     $mi->externalurl = $externalurl;
 
     $result = add_moduleinfo($mi, $course);

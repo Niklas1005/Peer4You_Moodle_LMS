@@ -29,11 +29,28 @@ $PAGE->requires->js(new moodle_url('/local/p4u/module1.js'));
 
 echo $OUTPUT->header();
 ?>
-<div class="p4u-shell">
+<div class="p4u-shell"
+     data-complete-url="<?php echo (new moodle_url('/local/p4u/complete_module.php', ['courseid' => $course->id, 'module' => 1, 'action' => 'complete', 'sesskey' => sesskey()]))->out(false); ?>"
+     data-status-url="<?php echo (new moodle_url('/local/p4u/complete_module.php', ['courseid' => $course->id, 'module' => 1, 'action' => 'status']))->out(false); ?>">
     <header class="p4u-module-hero">
         <p class="p4u-label">Modul 1</p>
         <h1>Einf&uuml;hrung &amp; Rollenverst&auml;ndnis</h1>
         <p>Du verstehst deine Rolle als Peer, erkennst klare Grenzen und wendest das Gelernte in einem Fallbeispiel an.</p>
+        <div class="p4u-status-card" aria-live="polite">
+            <div>
+                <span>Status</span>
+                <strong id="p4u-status-label">Offen</strong>
+            </div>
+            <div>
+                <span>Quizversuche</span>
+                <strong id="p4u-status-attempts">0</strong>
+            </div>
+            <div>
+                <span>Bestanden</span>
+                <strong id="p4u-status-passed">0</strong>
+            </div>
+            <p id="p4u-status-note">Schlie&szlig;e das Quiz ab, um Modul 1 im Kurs als erledigt zu markieren.</p>
+        </div>
         <div class="p4u-journey" aria-label="Lernpfad">
             <span>Einstieg</span>
             <span>Grundlagen</span>
@@ -336,12 +353,14 @@ echo $OUTPUT->header();
                 </div>
                 <div class="p4u-result" id="p4u-quiz-result" aria-live="polite"></div>
                 <div class="p4u-completion p4u-hidden" id="p4u-completion">
+                    <p class="p4u-completion-kicker">Abschluss erreicht</p>
                     <h3>Modul 1 abgeschlossen</h3>
-                    <p>Du kennst jetzt die Grundidee der Peer-Beratung, die wichtigsten Grenzen deiner Rolle und passende n&auml;chste Schritte in einem Fallbeispiel.</p>
+                    <p>Du hast das Abschlussquiz bestanden und kennst jetzt die Grundidee der Peer-Beratung, die wichtigsten Grenzen deiner Rolle und passende n&auml;chste Schritte in einem Fallbeispiel.</p>
                     <div class="p4u-reflection">
                         <strong>Kurze Reflexion</strong>
                         <p>Was nimmst du dir f&uuml;r deine erste Peer-Beratung mit?</p>
                     </div>
+                    <p class="p4u-section-note">Wenn die Aktivit&auml;tsverfolgung im Kurs aktiviert ist, wird der Moodle-Link nach dem &Ouml;ffnen des Lernmoduls als erledigt gewertet.</p>
                     <div class="p4u-controls">
                         <a class="p4u-primary p4u-linkbutton" href="<?php echo (new moodle_url('/course/view.php', ['id' => $course->id]))->out(false); ?>">Zur&uuml;ck zum Kurs</a>
                     </div>
