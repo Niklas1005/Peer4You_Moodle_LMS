@@ -42,28 +42,39 @@ body#page-course-view-topics .navbar.fixed-top .moremenu .nav-link {
 
 body#page-course-view-topics .navbar.fixed-top .primary-navigation .nav-link:hover,
 body#page-course-view-topics .navbar.fixed-top .navbar-nav .nav-link:hover,
-body#page-course-view-topics .navbar.fixed-top .moremenu .nav-link:hover,
-body#page-course-view-topics .navbar.fixed-top .moremenu .nav-link:focus {
+body#page-course-view-topics .navbar.fixed-top .moremenu .nav-link:hover {
     background: #0080B8 !important;
     color: #fff !important;
     border-bottom-color: rgba(255, 255, 255, .4) !important;
 }
 
+body#page-course-view-topics .navbar.fixed-top .primary-navigation .nav-link,
+body#page-course-view-topics .navbar.fixed-top .navbar-nav .nav-link,
+body#page-course-view-topics .navbar.fixed-top .moremenu .nav-link {
+    border-bottom: 2px solid transparent !important;
+    box-shadow: none !important;
+}
+
 body#page-course-view-topics .navbar.fixed-top .primary-navigation .nav-link.active,
 body#page-course-view-topics .navbar.fixed-top .navbar-nav .nav-link.active,
 body#page-course-view-topics .navbar.fixed-top .moremenu .nav-link.active {
-    border-radius: 6px;
-    background: #fff !important;
-    color: #0080B8 !important;
+    border-radius: 4px 4px 0 0;
+    background: rgba(255, 255, 255, .18) !important;
+    color: #fff !important;
+    border-bottom-color: #fff !important;
+    font-weight: 700;
 }
 
 body#page-course-view-topics .navbar.fixed-top .primary-navigation .nav-link.active:hover,
 body#page-course-view-topics .navbar.fixed-top .navbar-nav .nav-link.active:hover,
-body#page-course-view-topics .navbar.fixed-top .moremenu .nav-link.active:hover,
-body#page-course-view-topics .navbar.fixed-top .moremenu .nav-link.active:focus {
-    background: #fff !important;
-    color: #0080B8 !important;
-    border-bottom-color: #009BDC !important;
+body#page-course-view-topics .navbar.fixed-top .moremenu .nav-link.active:hover {
+    background: rgba(255, 255, 255, .24) !important;
+    color: #fff !important;
+}
+
+body#page-course-view-topics .navbar.fixed-top .moremenu .nav-link:focus:not(:focus-visible) {
+    box-shadow: none !important;
+    outline: none !important;
 }
 
 body#page-course-view-topics .navbar.fixed-top .btn,
@@ -248,8 +259,8 @@ body#page-course-view-topics .form-control:focus,
 body#page-course-view-topics .form-select:focus,
 body#page-course-view-topics .custom-select:focus,
 body#page-course-view-topics .btn:focus {
-    border-color: #AD92B9;
-    box-shadow: 0 0 0 .2rem rgba(90, 37, 114, .16);
+    border-color: #009BDC;
+    box-shadow: 0 0 0 .125rem rgba(0, 155, 220, .2);
 }
 
 body#page-course-view-topics .course-section:nth-of-type(1) {

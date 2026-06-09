@@ -66,6 +66,10 @@ function theme_p4u_get_pre_scss($theme): string {
         $scss .= "\$behatsite: true;\n";
     }
 
+    // Thinner Bootstrap focus rings site-wide.
+    $scss .= "\$focus-ring-width: 0.125rem;\n";
+    $scss .= "\$focus-ring-opacity: 0.2;\n";
+
     return $scss;
 }
 
