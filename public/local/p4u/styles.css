@@ -505,6 +505,124 @@
     margin: -4px 0 10px;
 }
 
+.p4u-deep-dive {
+    margin: 14px 0 18px;
+    border: 1px solid #DED3E3;
+    border-radius: 8px;
+    background: linear-gradient(135deg, #fff, #FDFBF9);
+    box-shadow: 0 10px 24px rgba(90, 37, 114, .05);
+    overflow: hidden;
+}
+
+.p4u-deep-dive summary {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    padding: 14px 16px;
+    color: var(--p4u-brand-dark);
+    cursor: pointer;
+    font-weight: 900;
+}
+
+.p4u-deep-dive summary::before {
+    content: "+";
+    width: 24px;
+    height: 24px;
+    display: grid;
+    place-items: center;
+    border-radius: 999px;
+    background: var(--p4u-soft);
+    color: var(--p4u-brand-dark);
+    font-size: 1rem;
+    line-height: 1;
+}
+
+.p4u-deep-dive[open] summary::before {
+    content: "-";
+}
+
+.p4u-deep-dive-label {
+    display: inline-flex;
+    margin: 0 16px 10px;
+    padding: 4px 8px;
+    border-radius: 999px;
+    background: var(--p4u-accent);
+    color: var(--p4u-brand-dark);
+    font-size: .68rem;
+    font-weight: 900;
+    letter-spacing: .08em;
+    text-transform: uppercase;
+}
+
+.p4u-deep-dive p,
+.p4u-deep-dive ul {
+    margin: 0;
+    padding: 0 16px 16px;
+    color: #4B5563;
+}
+
+.p4u-deep-dive ul {
+    padding-left: 32px;
+}
+
+.p4u-process {
+    display: grid;
+    grid-template-columns: repeat(5, minmax(0, 1fr));
+    gap: 12px;
+    padding: 0 16px 16px;
+}
+
+.p4u-process div {
+    position: relative;
+    min-height: 132px;
+    padding: 14px;
+    border: 1px solid #DED3E3;
+    border-radius: 8px;
+    background: #fff;
+}
+
+.p4u-process div:not(:last-child)::after {
+    content: ">";
+    position: absolute;
+    top: 50%;
+    right: -12px;
+    transform: translateY(-50%);
+    width: 20px;
+    height: 20px;
+    display: grid;
+    place-items: center;
+    border-radius: 999px;
+    background: var(--p4u-accent);
+    color: var(--p4u-brand-dark);
+    font-size: .8rem;
+    font-weight: 900;
+    z-index: 1;
+}
+
+.p4u-process span {
+    width: 28px;
+    height: 28px;
+    display: grid;
+    place-items: center;
+    margin-bottom: 10px;
+    border-radius: 999px;
+    background: var(--p4u-soft);
+    color: var(--p4u-brand-dark);
+    font-weight: 900;
+}
+
+.p4u-process strong {
+    display: block;
+    color: var(--p4u-brand-dark);
+    font-weight: 900;
+}
+
+.p4u-process p {
+    padding: 0;
+    margin-top: 6px;
+    font-size: .86rem;
+}
+
 .p4u-goals,
 .p4u-recap,
 .p4u-completion {
@@ -529,6 +647,77 @@
     text-align: center;
     font-weight: 800;
     color: var(--p4u-brand-dark);
+}
+
+.p4u-calculator {
+    border-color: #DED3E3;
+    background: linear-gradient(135deg, #fff, var(--p4u-soft));
+}
+
+.p4u-tool-head {
+    margin-bottom: 14px;
+}
+
+.p4u-tool-head .p4u-label {
+    margin: 0 0 4px;
+}
+
+.p4u-tool-head h3 {
+    margin: 0;
+    color: var(--p4u-brand-dark);
+}
+
+.p4u-calculator label {
+    display: block;
+    margin-bottom: 10px;
+}
+
+.p4u-calculator-row {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    flex-wrap: wrap;
+}
+
+.p4u-calculator-row input {
+    width: 140px;
+    min-height: 42px;
+    padding: 8px 10px;
+    border: 1px solid #DED3E3;
+    border-radius: 8px;
+    background: #fff;
+    color: var(--p4u-brand-dark);
+    font: inherit;
+    font-weight: 800;
+}
+
+.p4u-calc-results {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(160px, 1fr));
+    gap: 10px;
+    margin-top: 16px;
+}
+
+.p4u-calc-results div {
+    padding: 14px;
+    border: 1px solid rgba(90, 37, 114, .18);
+    border-radius: 8px;
+    background: #fff;
+    box-shadow: 0 10px 20px rgba(90, 37, 114, .06);
+}
+
+.p4u-calc-results span {
+    display: block;
+    color: #6B7280;
+    font-size: .82rem;
+    font-weight: 800;
+}
+
+.p4u-calc-results strong {
+    display: block;
+    margin-top: 4px;
+    color: var(--p4u-brand-dark);
+    font-size: 1.25rem;
 }
 
 .p4u-steps {
@@ -1048,6 +1237,21 @@
 
     .p4u-status-card {
         grid-template-columns: 1fr;
+    }
+
+    .p4u-process {
+        grid-template-columns: 1fr;
+    }
+
+    .p4u-process div {
+        min-height: 0;
+    }
+
+    .p4u-process div:not(:last-child)::after {
+        top: auto;
+        right: 50%;
+        bottom: -14px;
+        transform: translateX(50%) rotate(90deg);
     }
 
     .p4u-flash-topbar,
