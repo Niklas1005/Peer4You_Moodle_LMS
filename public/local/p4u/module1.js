@@ -3,6 +3,7 @@
     const sectionLabels = ['Einstieg', 'Grundlagen', 'Rolle kl\u00e4ren', 'Zuordnung', 'Praxisimpuls', 'Fallbeispiel', 'Abschlussquiz'];
     const requiredBeforeQuiz = ['intro', 'flashcards', 'roles', 'exercise', 'video', 'casestudy'];
     const completionKey = 'p4u-module1-completed';
+    const statsKey = 'p4u-module1-quiz-stats';
     const visited = new Set(['intro']);
 
     const flashcards = [
@@ -74,12 +75,66 @@
         return localStorage.getItem(completionKey) === '1';
     }
 
+    function getQuizStats() {
+        try {
+            return JSON.parse(localStorage.getItem(statsKey)) || {attempts: 0, passed: 0};
+        } catch (error) {
+            return {attempts: 0, passed: 0};
+        }
+    }
+
+    function saveQuizStats(stats) {
+        localStorage.setItem(statsKey, JSON.stringify(stats));
+    }
+
+    function recordQuizAttempt(passed) {
+        const stats = getQuizStats();
+        stats.attempts++;
+        if (passed) {
+            stats.passed++;
+        }
+        saveQuizStats(stats);
+        updateStatusSummary(isModuleCompleted() || passed);
+    }
+
+    function updateStatusSummary(completed = isModuleCompleted()) {
+        const stats = getQuizStats();
+        byId('p4u-status-label').textContent = completed ? 'Abgeschlossen' : 'Offen';
+        byId('p4u-status-attempts').textContent = String(stats.attempts);
+        byId('p4u-status-passed').textContent = String(stats.passed);
+        byId('p4u-status-note').textContent = completed
+            ? 'Modul 1 ist abgeschlossen. Du kannst die Inhalte trotzdem jederzeit wiederholen.'
+            : 'Schlie\u00dfe das Quiz ab, um Modul 1 im Kurs als erledigt zu markieren.';
+    }
+
     function setCompletionUi(completed) {
         document.querySelector('.p4u-shell')?.classList.toggle('is-completed', completed);
-        byId('p4u-completed-banner')?.classList.toggle('p4u-hidden', !completed);
+        updateStatusSummary(completed);
+        updateCourseIndexStatus(completed);
         if (completed) {
             byId('p4u-quiz-state').textContent = 'Bereits bestanden';
         }
+    }
+
+    function addCourseIndexBadge(link, label, state) {
+        const item = link.closest('li, .courseindex-item, .courseindex-link, .activity-item, div') || link;
+        item.querySelectorAll('.p4u-index-status').forEach(existing => existing.remove());
+
+        const badge = document.createElement('span');
+        badge.className = 'p4u-index-status is-' + state;
+        badge.textContent = label;
+        link.insertAdjacentElement('afterend', badge);
+    }
+
+    function updateCourseIndexStatus(completed) {
+        document.querySelectorAll('#courseindex a, .courseindex a, [data-region="courseindex"] a').forEach(link => {
+            const label = (link.textContent || '').trim();
+            if (label.includes('Interaktives Lernmodul starten')) {
+                addCourseIndexBadge(link, completed ? 'Abgeschlossen' : 'In Bearbeitung', completed ? 'done' : 'active');
+            } else if (label.includes('vorbereiten')) {
+                addCourseIndexBadge(link, 'Offen', 'open');
+            }
+        });
     }
 
     function markModuleCompleted() {
@@ -401,7 +456,9 @@
         document.querySelectorAll('.p4u-quiz button').forEach(option => option.disabled = true);
 
         const percent = Math.round((correctGroups / groups.length) * 100);
-        if (percent >= 60) {
+        const passed = percent >= 60;
+        recordQuizAttempt(passed);
+        if (passed) {
             result.innerHTML = '<strong>Bestanden: ' + percent + ' %</strong><span>Modul 1 ist abgeschlossen. Du siehst unten eine kurze Zusammenfassung und kannst bei Bedarf trotzdem einen neuen Versuch starten.</span>';
             result.classList.add('good');
             byId('p4u-completion').classList.remove('p4u-hidden');
@@ -471,6 +528,7 @@
         initPracticeChoice();
         initCaseChoice();
         initQuiz();
+        updateStatusSummary();
         loadMoodleCompletionStatus();
         updateProgress(0);
         updateQuizNav();

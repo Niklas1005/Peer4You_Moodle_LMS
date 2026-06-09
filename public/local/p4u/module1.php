@@ -36,9 +36,20 @@ echo $OUTPUT->header();
         <p class="p4u-label">Modul 1</p>
         <h1>Einf&uuml;hrung &amp; Rollenverst&auml;ndnis</h1>
         <p>Du verstehst deine Rolle als Peer, erkennst klare Grenzen und wendest das Gelernte in einem Fallbeispiel an.</p>
-        <div class="p4u-completed-banner p4u-hidden" id="p4u-completed-banner" aria-live="polite">
-            <strong>Modul bereits abgeschlossen</strong>
-            <span>Du kannst die Inhalte jederzeit wiederholen oder direkt zum Kurs zur&uuml;ckkehren.</span>
+        <div class="p4u-status-card" aria-live="polite">
+            <div>
+                <span>Status</span>
+                <strong id="p4u-status-label">Offen</strong>
+            </div>
+            <div>
+                <span>Quizversuche</span>
+                <strong id="p4u-status-attempts">0</strong>
+            </div>
+            <div>
+                <span>Bestanden</span>
+                <strong id="p4u-status-passed">0</strong>
+            </div>
+            <p id="p4u-status-note">Schlie&szlig;e das Quiz ab, um Modul 1 im Kurs als erledigt zu markieren.</p>
         </div>
         <div class="p4u-journey" aria-label="Lernpfad">
             <span>Einstieg</span>
