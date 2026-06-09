@@ -4,7 +4,7 @@ body#page-course-view-topics {
 
 body#page-course-view-topics .navbar.fixed-top {
     min-height: 64px;
-    border-bottom: 4px solid #FABA00;
+    border-bottom: none;
     background: #009BDC !important;
     box-shadow: 0 10px 24px rgba(0, 128, 184, .22);
 }
@@ -18,33 +18,52 @@ body#page-course-view-topics .navbar.fixed-top .navbar-brand {
 }
 
 body#page-course-view-topics .navbar.fixed-top .navbar-brand::before {
-    content: "P4U";
-    display: inline-grid;
-    place-items: center;
-    width: 48px;
-    height: 40px;
+    display: none !important;
+    content: none !important;
+}
+
+body#page-course-view-topics .navbar.fixed-top .navbar-brand img {
+    max-height: 40px;
+    width: auto;
+    background: #fff;
+    padding: 6px 10px;
     border-radius: 6px;
-    background: #FABA00;
-    color: #5A2572;
-    font-size: .95rem;
-    font-weight: 950;
-    letter-spacing: .02em;
 }
 
 body#page-course-view-topics .navbar.fixed-top .primary-navigation .nav-link,
-body#page-course-view-topics .navbar.fixed-top .navbar-nav .nav-link {
+body#page-course-view-topics .navbar.fixed-top .navbar-nav .nav-link,
+body#page-course-view-topics .navbar.fixed-top .moremenu .nav-link {
     min-height: 42px;
     display: inline-flex;
     align-items: center;
-    color: rgba(255, 255, 255, .88) !important;
+    color: rgba(255, 255, 255, .92) !important;
     font-weight: 800;
 }
 
+body#page-course-view-topics .navbar.fixed-top .primary-navigation .nav-link:hover,
+body#page-course-view-topics .navbar.fixed-top .navbar-nav .nav-link:hover,
+body#page-course-view-topics .navbar.fixed-top .moremenu .nav-link:hover,
+body#page-course-view-topics .navbar.fixed-top .moremenu .nav-link:focus {
+    background: #0080B8 !important;
+    color: #fff !important;
+    border-bottom-color: rgba(255, 255, 255, .4) !important;
+}
+
 body#page-course-view-topics .navbar.fixed-top .primary-navigation .nav-link.active,
-body#page-course-view-topics .navbar.fixed-top .navbar-nav .nav-link.active {
+body#page-course-view-topics .navbar.fixed-top .navbar-nav .nav-link.active,
+body#page-course-view-topics .navbar.fixed-top .moremenu .nav-link.active {
     border-radius: 6px;
-    background: #fff;
+    background: #fff !important;
     color: #0080B8 !important;
+}
+
+body#page-course-view-topics .navbar.fixed-top .primary-navigation .nav-link.active:hover,
+body#page-course-view-topics .navbar.fixed-top .navbar-nav .nav-link.active:hover,
+body#page-course-view-topics .navbar.fixed-top .moremenu .nav-link.active:hover,
+body#page-course-view-topics .navbar.fixed-top .moremenu .nav-link.active:focus {
+    background: #fff !important;
+    color: #0080B8 !important;
+    border-bottom-color: #009BDC !important;
 }
 
 body#page-course-view-topics .navbar.fixed-top .btn,
