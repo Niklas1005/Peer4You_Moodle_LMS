@@ -336,12 +336,14 @@ echo $OUTPUT->header();
                 </div>
                 <div class="p4u-result" id="p4u-quiz-result" aria-live="polite"></div>
                 <div class="p4u-completion p4u-hidden" id="p4u-completion">
+                    <p class="p4u-completion-kicker">Abschluss erreicht</p>
                     <h3>Modul 1 abgeschlossen</h3>
-                    <p>Du kennst jetzt die Grundidee der Peer-Beratung, die wichtigsten Grenzen deiner Rolle und passende n&auml;chste Schritte in einem Fallbeispiel.</p>
+                    <p>Du hast das Abschlussquiz bestanden und kennst jetzt die Grundidee der Peer-Beratung, die wichtigsten Grenzen deiner Rolle und passende n&auml;chste Schritte in einem Fallbeispiel.</p>
                     <div class="p4u-reflection">
                         <strong>Kurze Reflexion</strong>
                         <p>Was nimmst du dir f&uuml;r deine erste Peer-Beratung mit?</p>
                     </div>
+                    <p class="p4u-section-note">Wenn die Aktivit&auml;tsverfolgung im Kurs aktiviert ist, wird der Moodle-Link nach dem &Ouml;ffnen des Lernmoduls als erledigt gewertet.</p>
                     <div class="p4u-controls">
                         <a class="p4u-primary p4u-linkbutton" href="<?php echo (new moodle_url('/course/view.php', ['id' => $course->id]))->out(false); ?>">Zur&uuml;ck zum Kurs</a>
                     </div>

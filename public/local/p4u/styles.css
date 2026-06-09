@@ -900,6 +900,25 @@
     border-radius: 8px;
     margin-top: 18px;
     padding: 18px;
+    background: linear-gradient(135deg, #F4EDF7, #fff);
+    box-shadow: 0 16px 34px rgba(90, 37, 114, .08);
+}
+
+.p4u-completion-kicker {
+    display: inline-flex;
+    margin: 0 0 8px;
+    padding: 5px 9px;
+    border-radius: 999px;
+    background: var(--p4u-accent);
+    color: var(--p4u-brand-dark);
+    font-size: .72rem;
+    font-weight: 900;
+    letter-spacing: .08em;
+    text-transform: uppercase;
+}
+
+.p4u-shell.is-completed .p4u-module-hero {
+    border-color: #D6B64C;
 }
 
 .p4u-reflection {

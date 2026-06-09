@@ -2,6 +2,7 @@
     const sections = ['intro', 'flashcards', 'roles', 'exercise', 'video', 'casestudy', 'quiz'];
     const sectionLabels = ['Einstieg', 'Grundlagen', 'Rolle kl\u00e4ren', 'Zuordnung', 'Praxisimpuls', 'Fallbeispiel', 'Abschlussquiz'];
     const requiredBeforeQuiz = ['intro', 'flashcards', 'roles', 'exercise', 'video', 'casestudy'];
+    const completionKey = 'p4u-module1-completed';
     const visited = new Set(['intro']);
 
     const flashcards = [
@@ -62,10 +63,20 @@
         byId('p4u-progress-label').textContent = sectionLabels[index] + ' \u00b7 Station ' + (index + 1) + ' von ' + sections.length;
         byId('p4u-progress-fill').style.width = pct + '%';
         byId('p4u-progress-pct').textContent = pct + ' %';
+        document.querySelector('.p4u-shell')?.classList.toggle('is-completed', isModuleCompleted());
     }
 
     function isQuizUnlocked() {
         return requiredBeforeQuiz.every(id => visited.has(id));
+    }
+
+    function isModuleCompleted() {
+        return localStorage.getItem(completionKey) === '1';
+    }
+
+    function markModuleCompleted() {
+        localStorage.setItem(completionKey, '1');
+        document.querySelector('.p4u-shell')?.classList.add('is-completed');
     }
 
     function updateQuizNav() {
@@ -342,6 +353,7 @@
             result.classList.add('good');
             byId('p4u-completion').classList.remove('p4u-hidden');
             byId('p4u-quiz-state').textContent = 'Bestanden';
+            markModuleCompleted();
         } else {
             result.innerHTML = '<strong>Noch nicht bestanden: ' + percent + ' %</strong><span>Du brauchst mindestens 60 %. Schau dir die Hinweise bei den Fragen an und starte danach einen neuen Versuch.</span>';
             result.classList.add('bad');
@@ -406,6 +418,11 @@
         initPracticeChoice();
         initCaseChoice();
         initQuiz();
+        if (isModuleCompleted()) {
+            byId('p4u-completion')?.classList.remove('p4u-hidden');
+            byId('p4u-quiz-state').textContent = 'Bereits bestanden';
+            document.querySelector('.p4u-shell')?.classList.add('is-completed');
+        }
         updateProgress(0);
         updateQuizNav();
     });
