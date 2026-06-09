@@ -65,10 +65,11 @@ $modules = [
     ],
     5 => [
         'sectionname' => 'Modul 5: Krisen erkennen und weiterverweisen',
-        'activityname' => 'Krisenmodul vorbereiten',
-        'summary' => '<p>Geplant: Warnsignale, Rollengrenzen und Weitervermittlung.</p>',
-        'legacy' => ['Modul 5: Krisen erkennen & weiterverweisen'],
-        'url' => '/local/p4u/module_placeholder.php?module=5',
+        'activityname' => 'Interaktives Lernmodul Krisen erkennen starten',
+        'summary' => '<p>Warnsignale erkennen, Peer-Rolle abgrenzen und passende Weiterverweisung ueben.</p>',
+        'legacy' => ['Modul 5: Krisen erkennen & weiterverweisen', 'Krisenmodul vorbereiten'],
+        'url' => '/local/p4u/module5.php',
+        'completion' => 'view',
     ],
     6 => [
         'sectionname' => 'Modul 6: Abschluss und Zertifikat',
