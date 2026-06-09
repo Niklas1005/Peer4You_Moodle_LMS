@@ -67,3 +67,34 @@ a:hover,
 a:focus {
     color: var(--p4u-brand-700);
 }
+
+// Global top navbar — primary blue (Diakonie #009BDC).
+.navbar.fixed-top,
+nav.navbar.bg-primary {
+    background-color: var(--p4u-brand-600) !important;
+    border-bottom: 4px solid var(--p4u-accent);
+    box-shadow: 0 10px 24px rgba(0, 128, 184, 0.22);
+}
+
+.navbar.fixed-top .navbar-brand {
+    color: #fff !important;
+}
+
+.navbar.fixed-top .primary-navigation .nav-link,
+.navbar.fixed-top .navbar-nav .nav-link {
+    color: rgba(255, 255, 255, 0.88) !important;
+}
+
+.navbar.fixed-top .primary-navigation .nav-link.active,
+.navbar.fixed-top .navbar-nav .nav-link.active {
+    background: #fff !important;
+    color: var(--p4u-brand-700) !important;
+    border-radius: 6px;
+}
+
+.navbar.fixed-top .btn,
+.navbar.fixed-top .icon,
+.navbar.fixed-top .usertext,
+.navbar.fixed-top .dropdown-toggle {
+    color: #fff !important;
+}

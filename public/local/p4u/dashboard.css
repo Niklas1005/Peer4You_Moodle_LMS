@@ -5,8 +5,8 @@ body#page-my-index {
 body#page-my-index .navbar.fixed-top {
     min-height: 64px;
     border-bottom: 4px solid #FABA00;
-    background: #481E5B !important;
-    box-shadow: 0 10px 24px rgba(72, 30, 91, .18);
+    background: #009BDC !important;
+    box-shadow: 0 10px 24px rgba(0, 128, 184, .22);
 }
 
 body#page-my-index .navbar.fixed-top .navbar-brand {
@@ -25,7 +25,7 @@ body#page-my-index .navbar.fixed-top .navbar-brand::before {
     height: 40px;
     border-radius: 6px;
     background: #FABA00;
-    color: #481E5B;
+    color: #5A2572;
     font-size: .95rem;
     font-weight: 950;
     letter-spacing: .02em;
@@ -44,7 +44,7 @@ body#page-my-index .navbar.fixed-top .primary-navigation .nav-link.active,
 body#page-my-index .navbar.fixed-top .navbar-nav .nav-link.active {
     border-radius: 6px;
     background: #fff;
-    color: #481E5B !important;
+    color: #0080B8 !important;
 }
 
 body#page-my-index .navbar.fixed-top .btn,

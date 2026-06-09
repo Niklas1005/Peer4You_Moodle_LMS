@@ -11,6 +11,6 @@
 
 defined('MOODLE_INTERNAL') || die();
 
-$plugin->version = 2026051000;
+$plugin->version = 2026060911;
 $plugin->requires = 2026041000;
 $plugin->component = 'local_p4u';

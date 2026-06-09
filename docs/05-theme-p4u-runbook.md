@@ -50,12 +50,12 @@ grep plugin->version /var/www/html/public/theme/p4u/version.php
 
 | Token | Hex | Verwendung |
 |-------|-----|------------|
-| `--p4u-brand-600` | `#009BDC` | Primary — Buttons, Links, Fokus |
+| `--p4u-brand-600` | `#009BDC` | Primary — **Navbar**, Buttons, Links, Fokus |
 | `--p4u-brand-700` | `#0080B8` | Primary hover / Tiefe |
 | `--p4u-brand-500` | `#33B0E3` | Primary mid |
 | `--p4u-brand-50` | `#E8F6FC` | Primary soft tint (Hintergründe) |
 | `--p4u-brand-100` | `#CCEEF9` | Primary border tint |
-| `--p4u-secondary` | `#5A2572` | Secondary — Navbar, Karten-Gradienten, Akzente |
+| `--p4u-secondary` | `#5A2572` | Secondary — P4U-Badge auf Gold, Akzente (nicht Navbar-Hintergrund) |
 | `--p4u-secondary-dark` | `#481E5B` | Secondary hover / Navbar-Tiefe |
 | `--p4u-accent` | `#FABA00` | Tertiary gold — Navbar-Streifen, Badges |
 | `--p4u-accent-dark` | `#AC9E00` | Gold hover |
