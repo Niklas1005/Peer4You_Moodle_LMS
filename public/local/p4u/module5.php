@@ -25,6 +25,7 @@ $PAGE->set_pagelayout('incourse');
 $PAGE->set_title('P4U Modul 5');
 $PAGE->set_heading('Modul 5: Krisen erkennen und weiterverweisen');
 $PAGE->requires->css(new moodle_url('/local/p4u/styles.css'));
+$PAGE->requires->js(new moodle_url('/local/p4u/module-progress.js'));
 $PAGE->requires->js(new moodle_url('/local/p4u/module5.js'));
 
 echo $OUTPUT->header();

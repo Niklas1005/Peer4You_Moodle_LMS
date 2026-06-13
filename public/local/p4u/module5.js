@@ -4,12 +4,19 @@
     const requiredBeforeQuiz = ['intro', 'signals', 'role', 'referral', 'emergency', 'case'];
     const completionKey = 'p4u-module5-completed';
     const statsKey = 'p4u-module5-quiz-stats';
-    const visited = new Set(['intro']);
+
+    const progress = P4UProgress.create({
+        moduleNumber: 5,
+        sections,
+        gatedSections: ['signals', 'referral', 'case'],
+        onRestore: restoreModuleExtra,
+        collectExtra: collectModuleExtra,
+    });
+    const visited = progress.getVisited();
 
     let dragged = null;
     let quizAttempt = 1;
     let quizSubmitted = false;
-    let furthestSectionIndex = 0;
 
     function byId(id) {
         return document.getElementById(id);
@@ -62,7 +69,10 @@
             return;
         }
 
-        fetch(completeUrl, {credentials: 'same-origin'})
+        fetch(completeUrl, {
+            method: 'POST',
+            credentials: 'same-origin'
+        })
             .then(response => response.json())
             .catch(() => null);
     }
@@ -120,21 +130,18 @@
             return;
         }
 
+        if (!progress.canAccessSection(id)) {
+            showMessage('Bitte schlie\u00dfe die vorherige Station ab, bevor du hier weitermachst.');
+            return;
+        }
+
         document.querySelectorAll('.p4u-section').forEach(section => section.classList.remove('active'));
         byId('p4u-sec-' + id)?.classList.add('active');
 
-        const currentIndex = sections.indexOf(id);
-        furthestSectionIndex = Math.max(furthestSectionIndex, currentIndex);
-
-        document.querySelectorAll('.p4u-nav button').forEach(button => {
-            button.classList.toggle('active', button.dataset.target === id);
-            const targetIndex = sections.indexOf(button.dataset.target);
-            button.classList.toggle('visited', targetIndex >= 0 && targetIndex < furthestSectionIndex);
-        });
-
-        visited.add(id);
+        progress.recordSectionEnter(id);
+        progress.updateNav(id);
         updateQuizNav();
-        updateProgress(currentIndex);
+        updateProgress(sections.indexOf(id));
         window.scrollTo({top: 0, behavior: 'smooth'});
     }
 
@@ -177,6 +184,7 @@
             if (correct.length === items.length) {
                 result.textContent = 'Richtig: Du hast die Warnsignale passend eingeordnet.';
                 result.classList.add('good');
+                progress.completeGatedSection('signals');
             } else {
                 result.textContent = 'Noch nicht ganz: Pruefe besonders rechtliche und psychische Warnsignale nochmal.';
                 result.classList.add('bad');
@@ -192,7 +200,7 @@
         });
     }
 
-    function initChoiceCards(selector, feedbackId) {
+    function initChoiceCards(selector, feedbackId, gateSectionId) {
         const feedback = byId(feedbackId);
         document.querySelectorAll(selector + ' button').forEach(button => {
             button.addEventListener('click', () => {
@@ -201,6 +209,9 @@
                 feedback.textContent = button.dataset.feedback;
                 feedback.classList.toggle('good', button.dataset.correct === 'true');
                 feedback.classList.toggle('bad', button.dataset.correct !== 'true');
+                if (gateSectionId) {
+                    progress.completeGatedSection(gateSectionId);
+                }
             });
         });
     }
@@ -245,6 +256,7 @@
             result.classList.add('warning');
             return;
         }
+        progress.completeGatedSection('referral');
         if (correct.length === cases.length) {
             result.textContent = 'Sehr gut: Du hast fuer alle Situationen eine passende Weiterverweisung gewaehlt.';
             result.classList.add('good');
@@ -270,6 +282,7 @@
                     group.querySelectorAll('button').forEach(button => button.classList.remove('selected'));
                     option.classList.add('selected');
                 }
+                progress.persist();
             });
         });
 
@@ -353,6 +366,7 @@
         }
 
         result.scrollIntoView({behavior: 'smooth', block: 'center'});
+        progress.persist();
     }
 
     function updateQuestionFeedback(group, isCorrect, isAnswered) {
@@ -385,6 +399,117 @@
         byId('p4u-completion').classList.add('p4u-hidden');
         byId('p4u-quiz-state').textContent = 'Neuer Versuch bereit';
         updateQuizAttemptLabel();
+        progress.persist();
+    }
+
+    function collectModuleExtra() {
+        const signalPlacements = {};
+        document.querySelectorAll('.p4u-drag').forEach(item => {
+            const zone = item.closest('.p4u-dropzone');
+            signalPlacements[item.dataset.zone + ':' + item.textContent.trim()] = zone ? zone.dataset.zone : 'bank';
+        });
+
+        const referralSelections = {};
+        document.querySelectorAll('.p4u-referral-case').forEach((caseBlock, index) => {
+            const selected = caseBlock.querySelector('button.selected');
+            if (selected) {
+                referralSelections[index] = selected.dataset.feedback;
+            }
+        });
+
+        const caseBtn = document.querySelector('.p4u-practice-options button.selected');
+        const quizSelections = {};
+        document.querySelectorAll('.p4u-quiz').forEach((group, index) => {
+            const selected = Array.from(group.querySelectorAll('button.selected')).map(button => button.textContent.trim());
+            if (selected.length) {
+                quizSelections[index] = selected;
+            }
+        });
+
+        return {
+            signalPlacements,
+            referralSelections,
+            caseFeedback: caseBtn ? caseBtn.dataset.feedback : null,
+            quizAttempt,
+            quizSubmitted,
+            quizSelections,
+        };
+    }
+
+    function restoreModuleExtra(extra) {
+        if (extra.signalPlacements) {
+            Object.entries(extra.signalPlacements).forEach(([itemKey, zoneId]) => {
+                const zoneKey = itemKey.split(':')[0];
+                const items = Array.from(document.querySelectorAll('.p4u-drag'));
+                const item = items.find(node => node.dataset.zone === zoneKey);
+                if (!item) {
+                    return;
+                }
+                if (zoneId === 'bank') {
+                    const source = document.querySelector('.p4u-dropgrid .p4u-card:first-child');
+                    source?.appendChild(item);
+                    return;
+                }
+                const zone = document.querySelector('.p4u-dropzone[data-zone="' + zoneId + '"]');
+                zone?.appendChild(item);
+            });
+        }
+        if (extra.referralSelections) {
+            const cases = Array.from(document.querySelectorAll('.p4u-referral-case'));
+            Object.entries(extra.referralSelections).forEach(([index, feedbackText]) => {
+                const caseBlock = cases[Number(index)];
+                if (!caseBlock) {
+                    return;
+                }
+                caseBlock.querySelectorAll('button').forEach(button => {
+                    if (button.dataset.feedback === feedbackText) {
+                        button.classList.add('selected');
+                        const feedback = caseBlock.querySelector('.p4u-case-feedback');
+                        if (feedback) {
+                            feedback.textContent = feedbackText;
+                            feedback.classList.toggle('good', button.dataset.correct === 'true');
+                            feedback.classList.toggle('bad', button.dataset.correct !== 'true');
+                        }
+                    }
+                });
+            });
+        }
+        if (extra.caseFeedback) {
+            document.querySelectorAll('.p4u-practice-options button').forEach(button => {
+                if (button.dataset.feedback === extra.caseFeedback) {
+                    button.classList.add('selected');
+                    const feedback = byId('p4u-case-feedback');
+                    if (feedback) {
+                        feedback.textContent = extra.caseFeedback;
+                        feedback.classList.toggle('good', button.dataset.correct === 'true');
+                        feedback.classList.toggle('bad', button.dataset.correct !== 'true');
+                    }
+                }
+            });
+        }
+        if (typeof extra.quizAttempt === 'number') {
+            quizAttempt = extra.quizAttempt;
+        }
+        if (extra.quizSubmitted) {
+            quizSubmitted = true;
+            byId('p4u-submit-quiz').disabled = true;
+            byId('p4u-retry-quiz')?.classList.remove('p4u-hidden');
+            document.querySelectorAll('.p4u-quiz button').forEach(option => option.disabled = true);
+        }
+        if (extra.quizSelections) {
+            document.querySelectorAll('.p4u-quiz').forEach((group, index) => {
+                const saved = extra.quizSelections[index];
+                if (!saved) {
+                    return;
+                }
+                group.querySelectorAll('button').forEach(button => {
+                    if (saved.includes(button.textContent.trim())) {
+                        button.classList.add('selected');
+                    }
+                });
+            });
+        }
+        updateReferralResult();
     }
 
     function updateQuizAttemptLabel() {
@@ -401,12 +526,13 @@
 
         initSignalDragDrop();
         initChoiceCards('.p4u-role-options', 'p4u-role-feedback');
-        initChoiceCards('.p4u-practice-options', 'p4u-case-feedback');
+        initChoiceCards('.p4u-practice-options', 'p4u-case-feedback', 'case');
         initReferralChoices();
         initQuiz();
         updateStatusSummary();
         loadMoodleCompletionStatus();
-        updateProgress(0);
-        updateQuizNav();
+        progress.load();
+        updateQuizAttemptLabel();
+        showSection(progress.getCurrentSection());
     });
 })();

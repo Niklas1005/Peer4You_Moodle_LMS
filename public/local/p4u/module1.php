@@ -25,6 +25,7 @@ $PAGE->set_pagelayout('incourse');
 $PAGE->set_title('P4U Modul 1');
 $PAGE->set_heading('Modul 1: Einfuehrung & Rollenverstaendnis');
 $PAGE->requires->css(new moodle_url('/local/p4u/styles.css'));
+$PAGE->requires->js(new moodle_url('/local/p4u/module-progress.js'));
 $PAGE->requires->js(new moodle_url('/local/p4u/module1.js'));
 
 echo $OUTPUT->header();

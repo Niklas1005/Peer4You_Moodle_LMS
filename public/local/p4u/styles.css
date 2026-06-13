@@ -306,6 +306,11 @@
     opacity: .55;
 }
 
+.p4u-nav button.nav-locked:not(.active) {
+    opacity: .55;
+    cursor: not-allowed;
+}
+
 .p4u-content {
     min-height: 620px;
 }

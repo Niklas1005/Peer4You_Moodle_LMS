@@ -4,7 +4,6 @@
     const requiredBeforeQuiz = ['intro', 'everyday', 'interest', 'credit', 'budget', 'counseling'];
     const completionKey = 'p4u-module2-completed';
     const statsKey = 'p4u-module2-quiz-stats';
-    const visited = new Set(['intro']);
 
     const flashcards = [
         {
@@ -29,11 +28,19 @@
         }
     ];
 
+    const progress = P4UProgress.create({
+        moduleNumber: 2,
+        sections,
+        gatedSections: ['credit', 'budget', 'counseling'],
+        onRestore: restoreModuleExtra,
+        collectExtra: collectModuleExtra,
+    });
+    const visited = progress.getVisited();
+
     let flashIndex = 0;
     let dragged = null;
     let quizAttempt = 1;
     let quizSubmitted = false;
-    let furthestSectionIndex = 0;
 
     function byId(id) {
         return document.getElementById(id);
@@ -45,21 +52,18 @@
             return;
         }
 
+        if (!progress.canAccessSection(id)) {
+            showMessage('Bitte schlie\u00dfe die vorherige Station ab, bevor du hier weitermachst.');
+            return;
+        }
+
         document.querySelectorAll('.p4u-section').forEach(section => section.classList.remove('active'));
         byId('p4u-sec-' + id)?.classList.add('active');
 
-        const currentIndex = sections.indexOf(id);
-        furthestSectionIndex = Math.max(furthestSectionIndex, currentIndex);
-
-        document.querySelectorAll('.p4u-nav button').forEach(button => {
-            button.classList.toggle('active', button.dataset.target === id);
-            const targetIndex = sections.indexOf(button.dataset.target);
-            button.classList.toggle('visited', targetIndex >= 0 && targetIndex < furthestSectionIndex);
-        });
-
-        visited.add(id);
+        progress.recordSectionEnter(id);
+        progress.updateNav(id);
         updateQuizNav();
-        updateProgress(currentIndex);
+        updateProgress(sections.indexOf(id));
         window.scrollTo({top: 0, behavior: 'smooth'});
     }
 
@@ -201,7 +205,10 @@
             byId('p4u-yearly-cost').textContent = Math.round(weekly * 48) + ' EUR';
         };
 
-        input.addEventListener('input', render);
+        input.addEventListener('input', () => {
+            render();
+            progress.persist();
+        });
         render();
     }
 
@@ -228,10 +235,12 @@
         byId('p4u-flash-prev')?.addEventListener('click', () => {
             flashIndex = Math.max(0, flashIndex - 1);
             renderFlashcard();
+            progress.persist();
         });
         byId('p4u-flash-next')?.addEventListener('click', () => {
             flashIndex = Math.min(flashcards.length - 1, flashIndex + 1);
             renderFlashcard();
+            progress.persist();
         });
         renderFlashcard();
     }
@@ -297,6 +306,7 @@
             byId('p4u-drag-next').disabled = true;
         } else if (correct === total) {
             byId('p4u-drag-next').disabled = false;
+            progress.completeGatedSection('budget');
             showMessage('Alles richtig. Du kannst weitergehen.');
         } else {
             byId('p4u-drag-next').disabled = true;
@@ -313,7 +323,7 @@
         byId('p4u-drag-next').disabled = true;
     }
 
-    function initChoiceCards(selector, feedbackId, revealId) {
+    function initChoiceCards(selector, feedbackId, revealId, gateSectionId) {
         document.querySelectorAll(selector + ' button').forEach(option => {
             option.addEventListener('click', () => {
                 const isCorrect = option.dataset.correct === 'true';
@@ -329,6 +339,9 @@
 
                 if (revealId) {
                     byId(revealId)?.classList.remove('p4u-hidden');
+                }
+                if (gateSectionId) {
+                    progress.completeGatedSection(gateSectionId);
                 }
             });
         });
@@ -354,6 +367,7 @@
                     group.querySelectorAll('button').forEach(button => button.classList.remove('selected'));
                     option.classList.add('selected');
                 }
+                progress.persist();
             });
         });
 
@@ -439,6 +453,7 @@
         }
 
         result.scrollIntoView({behavior: 'smooth', block: 'center'});
+        progress.persist();
     }
 
     function updateQuestionFeedback(group, isCorrect, isAnswered) {
@@ -474,7 +489,110 @@
         byId('p4u-completion').classList.add('p4u-hidden');
         byId('p4u-quiz-state').textContent = 'Neuer Versuch bereit';
         updateQuizAttemptLabel();
+        progress.persist();
         showMessage('Neuer Quiz-Versuch gestartet.');
+    }
+
+    function restoreChoiceButton(selector, feedbackText, feedbackId, revealId) {
+        if (!feedbackText) {
+            return;
+        }
+        document.querySelectorAll(selector + ' button').forEach(button => {
+            if (button.dataset.feedback !== feedbackText) {
+                return;
+            }
+            const isCorrect = button.dataset.correct === 'true';
+            button.classList.add('selected', isCorrect ? 'correct' : 'incorrect');
+            const feedback = byId(feedbackId);
+            if (feedback) {
+                feedback.textContent = feedbackText;
+                feedback.classList.toggle('good', isCorrect);
+                feedback.classList.toggle('bad', !isCorrect);
+            }
+            if (revealId) {
+                byId(revealId)?.classList.remove('p4u-hidden');
+            }
+        });
+    }
+
+    function collectModuleExtra() {
+        const dragPlacements = {};
+        document.querySelectorAll('.p4u-draggable').forEach(card => {
+            const zone = card.closest('.p4u-dropzone');
+            dragPlacements[card.dataset.id] = zone ? zone.dataset.accept : 'bank';
+        });
+        const practiceBtn = document.querySelector('.p4u-practice-options button.selected');
+        const caseBtn = document.querySelector('.p4u-case-options button.selected');
+        const quizSelections = {};
+        document.querySelectorAll('.p4u-quiz').forEach((group, index) => {
+            const selected = Array.from(group.querySelectorAll('button.selected')).map(button => button.textContent.trim());
+            if (selected.length) {
+                quizSelections[index] = selected;
+            }
+        });
+
+        return {
+            flashIndex,
+            weeklyCost: byId('p4u-weekly-cost')?.value || '',
+            dragPlacements,
+            dragNextEnabled: Boolean(byId('p4u-drag-next') && !byId('p4u-drag-next').disabled),
+            practiceFeedback: practiceBtn ? practiceBtn.dataset.feedback : null,
+            caseFeedback: caseBtn ? caseBtn.dataset.feedback : null,
+            quizAttempt,
+            quizSubmitted,
+            quizSelections,
+        };
+    }
+
+    function restoreModuleExtra(extra) {
+        if (typeof extra.flashIndex === 'number') {
+            flashIndex = Math.min(Math.max(0, extra.flashIndex), flashcards.length - 1);
+        }
+        if (extra.weeklyCost && byId('p4u-weekly-cost')) {
+            byId('p4u-weekly-cost').value = extra.weeklyCost;
+            byId('p4u-weekly-cost').dispatchEvent(new Event('input'));
+        }
+        if (extra.dragPlacements) {
+            Object.entries(extra.dragPlacements).forEach(([cardId, zoneKey]) => {
+                const card = document.querySelector('.p4u-draggable[data-id="' + cardId + '"]');
+                if (!card) {
+                    return;
+                }
+                if (zoneKey === 'bank') {
+                    byId('p4u-card-bank')?.appendChild(card);
+                    return;
+                }
+                const zone = document.querySelector('.p4u-dropzone[data-accept="' + zoneKey + '"]');
+                zone?.appendChild(card);
+            });
+        }
+        if (extra.dragNextEnabled && byId('p4u-drag-next')) {
+            byId('p4u-drag-next').disabled = false;
+        }
+        restoreChoiceButton('.p4u-practice-options', extra.practiceFeedback, 'p4u-practice-feedback', 'p4u-practice-reveal');
+        restoreChoiceButton('.p4u-case-options', extra.caseFeedback, 'p4u-case-feedback');
+        if (typeof extra.quizAttempt === 'number') {
+            quizAttempt = extra.quizAttempt;
+        }
+        if (extra.quizSubmitted) {
+            quizSubmitted = true;
+            byId('p4u-submit-quiz').disabled = true;
+            byId('p4u-retry-quiz')?.classList.remove('p4u-hidden');
+            document.querySelectorAll('.p4u-quiz button').forEach(option => option.disabled = true);
+        }
+        if (extra.quizSelections) {
+            document.querySelectorAll('.p4u-quiz').forEach((group, index) => {
+                const saved = extra.quizSelections[index];
+                if (!saved) {
+                    return;
+                }
+                group.querySelectorAll('button').forEach(button => {
+                    if (saved.includes(button.textContent.trim())) {
+                        button.classList.add('selected');
+                    }
+                });
+            });
+        }
     }
 
     function updateQuizAttemptLabel() {
@@ -492,12 +610,14 @@
         initCalculator();
         initFlashcards();
         initDragDrop();
-        initChoiceCards('.p4u-practice-options', 'p4u-practice-feedback', 'p4u-practice-reveal');
-        initChoiceCards('.p4u-case-options', 'p4u-case-feedback');
+        initChoiceCards('.p4u-practice-options', 'p4u-practice-feedback', 'p4u-practice-reveal', 'credit');
+        initChoiceCards('.p4u-case-options', 'p4u-case-feedback', null, 'counseling');
         initQuiz();
         updateStatusSummary();
         loadMoodleCompletionStatus();
-        updateProgress(0);
-        updateQuizNav();
+        progress.load();
+        renderFlashcard();
+        updateQuizAttemptLabel();
+        showSection(progress.getCurrentSection());
     });
 })();

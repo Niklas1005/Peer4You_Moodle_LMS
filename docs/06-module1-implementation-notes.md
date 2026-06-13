@@ -34,12 +34,16 @@ Modul 1 is the first interactive learning module for the Peer4You Moodle trainin
 
 ## Known Implementation Gaps
 - Quiz results are not yet written to the Moodle gradebook.
-- Completion is currently visual and not persisted as Moodle activity completion.
+- Station progress is persisted in **browser localStorage** (`module-progress.js`); optional server-side sync not implemented.
 - Video content still needs the final media file.
 - Module content should be reviewed by the training/domain team before rollout.
+
+## Modules 2 and 5
+
+M2 and M5 follow the same pattern as Modul 1 (`module2.php/js`, `module5.php/js`, shared `module-progress.js`). See `09-interactive-modules-architecture.md`.
 
 ## Focus For Next Iteration
 - Finalize wording and examples in Modul 1.
 - Replace the video section with the final media asset or a short scripted clip.
-- Decide whether Moodle gradebook/completion integration is required for the next milestone.
-- Only start Modul 2 after Modul 1 has been reviewed as the reference pattern.
+- Optional: server-side progress via Moodle `user_preference` for cross-device handoff.
+- M3/M4/M6: replace placeholders when Seeker content arrives.

@@ -56,8 +56,8 @@ grep plugin->version /var/www/html/public/theme/p4u/version.php
 | `--p4u-brand-50` | `#E8F6FC` | Primary soft tint (Hintergründe) |
 | `--p4u-brand-100` | `#CCEEF9` | Primary border tint |
 | `--p4u-secondary` | `#5A2572` | Secondary — P4U-Badge auf Gold, Akzente (nicht Navbar-Hintergrund) |
-| `--p4u-secondary-dark` | `#481E5B` | Secondary hover / Navbar-Tiefe |
-| `--p4u-accent` | `#FABA00` | Tertiary gold — Navbar-Streifen, Badges |
+| `--p4u-secondary-dark` | `#481E5B` | Secondary hover / Akzent-Tiefe |
+| `--p4u-accent` | `#FABA00` | Tertiary gold — Badges, Edit-Mode-Toggle |
 | `--p4u-accent-dark` | `#AC9E00` | Gold hover |
 | `--p4u-warm-50/100/200` | `#FDFBF9` / `#F5F0EB` / `#E8E4DF` | Warme Flächen |
 | `--p4u-ink` | `#333333` | Fließtext |
@@ -87,6 +87,15 @@ docker compose exec -T web php /var/www/html/admin/cli/build_theme_css.php --the
 Login styles live in `scss/login.scss` (SCSS pipeline) **and** `style/p4u.css` (static `$THEME->sheets` fallback). If only templates render but login looks unstyled, purge caches and rebuild theme CSS; the static sheet must include `.p4u-login-*` rules.
 
 Validation: open `/login/index.php` logged out — light Diakonie background, centered white card, styled inputs/buttons, Diakonie footer text below card.
+
+## Navbar (global)
+
+- Background: `--p4u-brand-600` (`#009BDC`) — set in `p4u.scss` and mirrored in `local/p4u/styles.css` (page-specific sheets must not override with purple).
+- **No** legacy P4U `::before` text badge; **no** gold bottom stripe on navbar.
+- **Logo:** Upload in Moodle admin (Appearance → Logos). CSS pads `.navbar-brand img` with white background for blue-on-blue Diakonie wordmarks.
+- **Active tab:** light transparent tint + white underline (not full-height white pill).
+- **Hover:** darker blue `#0080B8`; keyboard focus via `:focus-visible` only.
+- **Form focus / autocomplete:** thinner rings (`0.125rem`); role picker tags use 1px outline.
 
 ## Enable / Re-Enable Theme
 Run in project root:
