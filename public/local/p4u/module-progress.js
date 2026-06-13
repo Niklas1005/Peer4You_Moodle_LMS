@@ -8,6 +8,14 @@
 (function(global) {
     'use strict';
 
+    const MODULE_ACTIVITY_LABELS = {
+        1: 'Interaktives Lernmodul starten',
+        2: 'Interaktives Lernmodul Finanzwissen starten',
+        5: 'Interaktives Lernmodul Krisen erkennen starten',
+    };
+
+    let saveTimer = null;
+
     /**
      * @param {object} config
      * @param {number} config.moduleNumber
@@ -15,6 +23,7 @@
      * @param {string[]} [config.gatedSections]
      * @param {function} [config.onRestore]
      * @param {function} [config.collectExtra]
+     * @param {function} [config.getQuizStats]
      */
     function create(config) {
         const {
@@ -23,12 +32,52 @@
             gatedSections = [],
             onRestore = null,
             collectExtra = null,
+            getQuizStats = null,
         } = config;
 
-        const progressKey = 'p4u-module' + moduleNumber + '-progress';
+        const shell = document.querySelector('.p4u-shell');
+        const userId = shell?.dataset.userId || '0';
+        const progressUrl = shell?.dataset.progressUrl || '';
+        const progressKey = 'p4u-u' + userId + '-module' + moduleNumber + '-progress';
         const visited = new Set(['intro']);
         const gated = new Set(gatedSections);
         let currentSection = 'intro';
+
+        function buildProgressPayload() {
+            return {
+                visited: Array.from(visited),
+                currentSection,
+                extra: collectExtra ? collectExtra() : {},
+            };
+        }
+
+        function applyProgressPayload(data) {
+            if (!data || typeof data !== 'object') {
+                return false;
+            }
+
+            if (Array.isArray(data.visited)) {
+                visited.clear();
+                data.visited.forEach(id => {
+                    if (sections.includes(id)) {
+                        visited.add(id);
+                    }
+                });
+                if (!visited.has('intro')) {
+                    visited.add('intro');
+                }
+            }
+
+            if (data.currentSection && sections.includes(data.currentSection)) {
+                currentSection = data.currentSection;
+            }
+
+            if (onRestore && data.extra) {
+                onRestore(data.extra);
+            }
+
+            return true;
+        }
 
         function load() {
             try {
@@ -36,41 +85,76 @@
                 if (!raw) {
                     return false;
                 }
-
-                const data = JSON.parse(raw);
-                if (Array.isArray(data.visited)) {
-                    visited.clear();
-                    data.visited.forEach(id => {
-                        if (sections.includes(id)) {
-                            visited.add(id);
-                        }
-                    });
-                    if (!visited.has('intro')) {
-                        visited.add('intro');
-                    }
-                }
-
-                if (data.currentSection && sections.includes(data.currentSection)) {
-                    currentSection = data.currentSection;
-                }
-
-                if (onRestore && data.extra) {
-                    onRestore(data.extra);
-                }
-
-                return true;
+                return applyProgressPayload(JSON.parse(raw));
             } catch (error) {
                 return false;
             }
         }
 
+        function persistLocal() {
+            localStorage.setItem(progressKey, JSON.stringify(buildProgressPayload()));
+        }
+
+        function persistRemote() {
+            if (!progressUrl) {
+                return;
+            }
+
+            if (saveTimer) {
+                clearTimeout(saveTimer);
+            }
+
+            saveTimer = setTimeout(() => {
+                const body = {
+                    progress: buildProgressPayload(),
+                };
+
+                if (typeof getQuizStats === 'function') {
+                    body.quizStats = getQuizStats();
+                }
+
+                fetch(progressUrl + '&action=save', {
+                    method: 'POST',
+                    credentials: 'same-origin',
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
+                    body: JSON.stringify(body),
+                }).catch(() => {
+                    // Local cache remains available if the server is temporarily unreachable.
+                });
+            }, 400);
+        }
+
         function persist() {
-            const payload = {
-                visited: Array.from(visited),
-                currentSection,
-                extra: collectExtra ? collectExtra() : {},
-            };
-            localStorage.setItem(progressKey, JSON.stringify(payload));
+            persistLocal();
+            persistRemote();
+        }
+
+        async function loadRemote() {
+            if (!progressUrl) {
+                return null;
+            }
+
+            try {
+                const response = await fetch(progressUrl + '&action=get', {
+                    method: 'GET',
+                    credentials: 'same-origin',
+                });
+                const data = await response.json();
+                if (!data || !data.ok) {
+                    return null;
+                }
+
+                if (data.progress) {
+                    applyProgressPayload(data.progress);
+                    persistLocal();
+                }
+
+                return data;
+            } catch (error) {
+                return null;
+            }
         }
 
         function isGatedSection(id) {
@@ -142,6 +226,7 @@
 
         return {
             load,
+            loadRemote,
             persist,
             isGatedSection,
             canAccessSection,
@@ -154,5 +239,50 @@
         };
     }
 
-    global.P4UProgress = {create};
+    function clearCourseIndexBadges() {
+        document.querySelectorAll('.p4u-index-status').forEach(badge => badge.remove());
+    }
+
+    function addCourseIndexBadge(link, label, state) {
+        const item = link.closest('li, .courseindex-item, .courseindex-link, .activity-item, div') || link;
+        item.querySelectorAll('.p4u-index-status').forEach(existing => existing.remove());
+
+        const badge = document.createElement('span');
+        badge.className = 'p4u-index-status is-' + state;
+        badge.textContent = label;
+        link.insertAdjacentElement('afterend', badge);
+    }
+
+    /**
+     * Show a single custom badge only when the module is completed.
+     *
+     * @param {number} moduleNumber
+     * @param {boolean} completed
+     */
+    function updateCourseIndexStatus(moduleNumber, completed) {
+        const needle = MODULE_ACTIVITY_LABELS[moduleNumber];
+        if (!needle) {
+            return;
+        }
+
+        document.querySelectorAll('#courseindex a, .courseindex a, [data-region="courseindex"] a').forEach(link => {
+            const label = (link.textContent || '').trim();
+            const item = link.closest('li, .courseindex-item, .courseindex-link, .activity-item, div') || link;
+            item.querySelectorAll('.p4u-index-status').forEach(existing => existing.remove());
+
+            if (!label.includes(needle)) {
+                return;
+            }
+
+            if (completed) {
+                addCourseIndexBadge(link, 'Abgeschlossen', 'done');
+            }
+        });
+    }
+
+    global.P4UProgress = {
+        create,
+        updateCourseIndexStatus,
+        clearCourseIndexBadges,
+    };
 })(window);

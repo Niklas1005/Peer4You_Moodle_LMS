@@ -12,4 +12,5 @@
 defined('MOODLE_INTERNAL') || die();
 
 $string['pluginname'] = 'Peers for You';
-$string['privacy:metadata'] = 'The Peers for You local plugin does not store personal data.';
+$string['privacy:metadata:progress'] = 'Stores per-user interactive module station progress (visited sections and learning state).';
+$string['privacy:metadata:quizstats'] = 'Stores per-user quiz attempt and pass counts for interactive modules.';

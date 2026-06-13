@@ -167,7 +167,33 @@ body.path-login {
     color: var(--p4u-text-muted);
 }
 
+.p4u-login-main,
+.login-container {
+    width: 100%;
+}
+
 .p4u-login-form {
+    width: 100%;
+
+    .login-form {
+        width: 100%;
+    }
+
+    .login-form-username,
+    .login-form-password,
+    .toggle-sensitive-wrapper {
+        width: 100%;
+    }
+
+    .p4u-login-input,
+    .login-form .form-control {
+        width: 100%;
+    }
+
+    .d-flex > .form-control {
+        width: 100%;
+    }
+
     .p4u-login-label {
         font-size: 0.7rem;
         font-weight: 700;

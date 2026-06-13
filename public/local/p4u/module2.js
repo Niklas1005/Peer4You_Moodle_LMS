@@ -2,8 +2,12 @@
     const sections = ['intro', 'everyday', 'interest', 'credit', 'budget', 'counseling', 'quiz'];
     const sectionLabels = ['Einstieg', 'Alltag', 'Zinsen', 'Kredite', 'Budgetplan', 'Beratung', 'Abschlussquiz'];
     const requiredBeforeQuiz = ['intro', 'everyday', 'interest', 'credit', 'budget', 'counseling'];
-    const completionKey = 'p4u-module2-completed';
-    const statsKey = 'p4u-module2-quiz-stats';
+    const MODULE_NUMBER = 2;
+
+    function storageKey(suffix) {
+        const userId = document.querySelector('.p4u-shell')?.dataset.userId || '0';
+        return 'p4u-u' + userId + '-module' + MODULE_NUMBER + '-' + suffix;
+    }
 
     const flashcards = [
         {
@@ -29,11 +33,12 @@
     ];
 
     const progress = P4UProgress.create({
-        moduleNumber: 2,
+        moduleNumber: MODULE_NUMBER,
         sections,
         gatedSections: ['credit', 'budget', 'counseling'],
         onRestore: restoreModuleExtra,
         collectExtra: collectModuleExtra,
+        getQuizStats,
     });
     const visited = progress.getVisited();
 
@@ -80,19 +85,36 @@
     }
 
     function isModuleCompleted() {
-        return localStorage.getItem(completionKey) === '1';
+        return localStorage.getItem(storageKey('completed')) === '1';
     }
 
     function getQuizStats() {
         try {
-            return JSON.parse(localStorage.getItem(statsKey)) || {attempts: 0, passed: 0};
+            return JSON.parse(localStorage.getItem(storageKey('quiz-stats'))) || {attempts: 0, passed: 0};
         } catch (error) {
             return {attempts: 0, passed: 0};
         }
     }
 
-    function saveQuizStats(stats) {
-        localStorage.setItem(statsKey, JSON.stringify(stats));
+    function saveQuizStats(stats, syncRemote = true) {
+        localStorage.setItem(storageKey('quiz-stats'), JSON.stringify(stats));
+        if (syncRemote) {
+            progress.persist();
+        }
+    }
+
+    function applyRemoteState(remote) {
+        if (remote && remote.quizStats) {
+            saveQuizStats(remote.quizStats, false);
+        }
+
+        if ((remote && remote.completed) || isModuleCompleted()) {
+            localStorage.setItem(storageKey('completed'), '1');
+            setCompletionUi(true);
+            return;
+        }
+
+        setCompletionUi(false);
     }
 
     function recordQuizAttempt(passed) {
@@ -118,38 +140,17 @@
     function setCompletionUi(completed) {
         document.querySelector('.p4u-shell')?.classList.toggle('is-completed', completed);
         updateStatusSummary(completed);
+        P4UProgress.updateCourseIndexStatus(MODULE_NUMBER, completed);
         if (completed) {
             byId('p4u-quiz-state').textContent = 'Bereits bestanden';
         }
     }
 
     function markModuleCompleted() {
-        localStorage.setItem(completionKey, '1');
+        localStorage.setItem(storageKey('completed'), '1');
         setCompletionUi(true);
         syncMoodleCompletion();
-    }
-
-    function loadMoodleCompletionStatus() {
-        const statusUrl = document.querySelector('.p4u-shell')?.dataset.statusUrl;
-        if (!statusUrl) {
-            setCompletionUi(isModuleCompleted());
-            return;
-        }
-
-        fetch(statusUrl, {
-            method: 'GET',
-            credentials: 'same-origin'
-        })
-            .then(response => response.json())
-            .then(data => {
-                if (data && data.ok && data.completed) {
-                    localStorage.setItem(completionKey, '1');
-                    setCompletionUi(true);
-                } else {
-                    setCompletionUi(isModuleCompleted());
-                }
-            })
-            .catch(() => setCompletionUi(isModuleCompleted()));
+        progress.persist();
     }
 
     function syncMoodleCompletion() {
@@ -599,7 +600,7 @@
         byId('p4u-quiz-attempt').textContent = 'Versuch ' + quizAttempt;
     }
 
-    document.addEventListener('DOMContentLoaded', () => {
+    document.addEventListener('DOMContentLoaded', async () => {
         document.querySelectorAll('.p4u-nav button[data-target]').forEach(button => {
             button.addEventListener('click', () => showSection(button.dataset.target));
         });
@@ -613,9 +614,12 @@
         initChoiceCards('.p4u-practice-options', 'p4u-practice-feedback', 'p4u-practice-reveal', 'credit');
         initChoiceCards('.p4u-case-options', 'p4u-case-feedback', null, 'counseling');
         initQuiz();
-        updateStatusSummary();
-        loadMoodleCompletionStatus();
-        progress.load();
+
+        const remote = await progress.loadRemote();
+        if (!remote) {
+            progress.load();
+        }
+        applyRemoteState(remote);
         renderFlashcard();
         updateQuizAttemptLabel();
         showSection(progress.getCurrentSection());

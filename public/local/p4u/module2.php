@@ -31,6 +31,8 @@ $PAGE->requires->js(new moodle_url('/local/p4u/module2.js'));
 echo $OUTPUT->header();
 ?>
 <div class="p4u-shell"
+     data-user-id="<?php echo (int)$USER->id; ?>"
+     data-progress-url="<?php echo (new moodle_url('/local/p4u/module_state.php', ['courseid' => $course->id, 'module' => 2, 'sesskey' => sesskey()]))->out(false); ?>"
      data-complete-url="<?php echo (new moodle_url('/local/p4u/complete_module.php', ['courseid' => $course->id, 'module' => 2, 'action' => 'complete', 'sesskey' => sesskey()]))->out(false); ?>"
      data-status-url="<?php echo (new moodle_url('/local/p4u/complete_module.php', ['courseid' => $course->id, 'module' => 2, 'action' => 'status']))->out(false); ?>">
     <header class="p4u-module-hero">

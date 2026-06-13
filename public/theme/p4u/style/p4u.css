@@ -341,6 +341,34 @@ body.path-login #region-main-box {
     color: var(--p4u-text-muted);
 }
 
+.p4u-login-main,
+.login-container {
+    width: 100%;
+}
+
+.p4u-login-form {
+    width: 100%;
+}
+
+.p4u-login-form .login-form {
+    width: 100%;
+}
+
+.p4u-login-form .login-form-username,
+.p4u-login-form .login-form-password,
+.p4u-login-form .toggle-sensitive-wrapper {
+    width: 100%;
+}
+
+.p4u-login-form .p4u-login-input,
+.p4u-login-form .login-form .form-control {
+    width: 100%;
+}
+
+.p4u-login-form .d-flex > .form-control {
+    width: 100%;
+}
+
 .p4u-login-form .p4u-login-label {
     font-size: 0.7rem;
     font-weight: 700;

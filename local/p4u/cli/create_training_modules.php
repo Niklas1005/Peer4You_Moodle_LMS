@@ -39,7 +39,7 @@ $modules = [
         'summary' => '<p>Rolle verstehen, Grenzen erkennen und das Wissen im Abschlussquiz pruefen.</p>',
         'legacy' => ['Modul 1: Einfuehrung & Rollenverstaendnis'],
         'url' => '/local/p4u/module1.php',
-        'completion' => 'view',
+        'completion' => 'manual',
     ],
     2 => [
         'sectionname' => 'Modul 2: Finanzwissen',
@@ -47,7 +47,7 @@ $modules = [
         'summary' => '<p>Finanzgrundlagen, Zinsen, Kreditrisiken, Budgetplan und Schuldnerberatung interaktiv erarbeiten.</p>',
         'legacy' => ['Modul 2: Finanzwissen', 'Finanzwissen vorbereiten'],
         'url' => '/local/p4u/module2.php',
-        'completion' => 'view',
+        'completion' => 'manual',
     ],
     3 => [
         'sectionname' => 'Modul 3: Kommunikation und Gespraechsfuehrung',
@@ -69,7 +69,7 @@ $modules = [
         'summary' => '<p>Warnsignale erkennen, Peer-Rolle abgrenzen und passende Weiterverweisung ueben.</p>',
         'legacy' => ['Modul 5: Krisen erkennen & weiterverweisen', 'Krisenmodul vorbereiten'],
         'url' => '/local/p4u/module5.php',
-        'completion' => 'view',
+        'completion' => 'manual',
     ],
     6 => [
         'sectionname' => 'Modul 6: Abschluss und Zertifikat',

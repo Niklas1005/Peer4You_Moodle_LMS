@@ -2,15 +2,20 @@
     const sections = ['intro', 'signals', 'role', 'referral', 'emergency', 'case', 'quiz'];
     const sectionLabels = ['Einstieg', 'Warnsignale', 'Peer-Rolle', 'Weiterverweisen', 'Notfall', 'Fallbeispiel', 'Abschlussquiz'];
     const requiredBeforeQuiz = ['intro', 'signals', 'role', 'referral', 'emergency', 'case'];
-    const completionKey = 'p4u-module5-completed';
-    const statsKey = 'p4u-module5-quiz-stats';
+    const MODULE_NUMBER = 5;
+
+    function storageKey(suffix) {
+        const userId = document.querySelector('.p4u-shell')?.dataset.userId || '0';
+        return 'p4u-u' + userId + '-module' + MODULE_NUMBER + '-' + suffix;
+    }
 
     const progress = P4UProgress.create({
-        moduleNumber: 5,
+        moduleNumber: MODULE_NUMBER,
         sections,
         gatedSections: ['signals', 'referral', 'case'],
         onRestore: restoreModuleExtra,
         collectExtra: collectModuleExtra,
+        getQuizStats,
     });
     const visited = progress.getVisited();
 
@@ -22,26 +27,28 @@
         return document.getElementById(id);
     }
 
-    function readStats() {
+    function getQuizStats() {
         try {
-            return JSON.parse(localStorage.getItem(statsKey)) || {attempts: 0, passed: 0};
+            return JSON.parse(localStorage.getItem(storageKey('quiz-stats'))) || {attempts: 0, passed: 0};
         } catch (error) {
             return {attempts: 0, passed: 0};
         }
     }
 
-    function writeStats(stats) {
-        localStorage.setItem(statsKey, JSON.stringify(stats));
+    function saveQuizStats(stats, syncRemote = true) {
+        localStorage.setItem(storageKey('quiz-stats'), JSON.stringify(stats));
+        if (syncRemote) {
+            progress.persist();
+        }
     }
 
     function isModuleCompleted() {
-        return localStorage.getItem(completionKey) === '1';
+        return localStorage.getItem(storageKey('completed')) === '1';
     }
 
-    function updateStatusSummary() {
-        const stats = readStats();
-        const completed = isModuleCompleted();
-        byId('p4u-status-label').textContent = completed ? 'Abgeschlossen' : stats.attempts > 0 ? 'In Bearbeitung' : 'Offen';
+    function updateStatusSummary(completed = isModuleCompleted()) {
+        const stats = getQuizStats();
+        byId('p4u-status-label').textContent = completed ? 'Abgeschlossen' : 'Offen';
         byId('p4u-status-attempts').textContent = stats.attempts;
         byId('p4u-status-passed').textContent = stats.passed;
         byId('p4u-status-note').textContent = completed
@@ -50,19 +57,42 @@
         document.querySelector('.p4u-shell')?.classList.toggle('is-completed', completed);
     }
 
+    function setCompletionUi(completed) {
+        updateStatusSummary(completed);
+        P4UProgress.updateCourseIndexStatus(MODULE_NUMBER, completed);
+        if (completed) {
+            byId('p4u-quiz-state').textContent = 'Bereits bestanden';
+        }
+    }
+
+    function applyRemoteState(remote) {
+        if (remote && remote.quizStats) {
+            saveQuizStats(remote.quizStats, false);
+        }
+
+        if ((remote && remote.completed) || isModuleCompleted()) {
+            localStorage.setItem(storageKey('completed'), '1');
+            setCompletionUi(true);
+            return;
+        }
+
+        setCompletionUi(false);
+    }
+
     function recordQuizAttempt(passed) {
-        const stats = readStats();
+        const stats = getQuizStats();
         stats.attempts++;
         if (passed) {
             stats.passed++;
         }
-        writeStats(stats);
-        updateStatusSummary();
+        saveQuizStats(stats);
+        updateStatusSummary(isModuleCompleted() || passed);
     }
 
     function markModuleCompleted() {
-        localStorage.setItem(completionKey, '1');
-        updateStatusSummary();
+        localStorage.setItem(storageKey('completed'), '1');
+        setCompletionUi(true);
+        progress.persist();
 
         const completeUrl = document.querySelector('.p4u-shell')?.dataset.completeUrl;
         if (!completeUrl) {
@@ -74,21 +104,9 @@
             credentials: 'same-origin'
         })
             .then(response => response.json())
-            .catch(() => null);
-    }
-
-    function loadMoodleCompletionStatus() {
-        const statusUrl = document.querySelector('.p4u-shell')?.dataset.statusUrl;
-        if (!statusUrl) {
-            return;
-        }
-
-        fetch(statusUrl, {credentials: 'same-origin'})
-            .then(response => response.json())
             .then(data => {
-                if (data && data.completed) {
-                    localStorage.setItem(completionKey, '1');
-                    updateStatusSummary();
+                if (data && data.ok) {
+                    byId('p4u-quiz-state').textContent = 'Bestanden und im Kurs markiert';
                 }
             })
             .catch(() => null);
@@ -516,7 +534,7 @@
         byId('p4u-quiz-attempt').textContent = 'Versuch ' + quizAttempt;
     }
 
-    document.addEventListener('DOMContentLoaded', () => {
+    document.addEventListener('DOMContentLoaded', async () => {
         document.querySelectorAll('.p4u-nav button[data-target]').forEach(button => {
             button.addEventListener('click', () => showSection(button.dataset.target));
         });
@@ -529,9 +547,12 @@
         initChoiceCards('.p4u-practice-options', 'p4u-case-feedback', 'case');
         initReferralChoices();
         initQuiz();
-        updateStatusSummary();
-        loadMoodleCompletionStatus();
-        progress.load();
+
+        const remote = await progress.loadRemote();
+        if (!remote) {
+            progress.load();
+        }
+        applyRemoteState(remote);
         updateQuizAttemptLabel();
         showSection(progress.getCurrentSection());
     });
