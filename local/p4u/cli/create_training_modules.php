@@ -27,8 +27,8 @@ list($options) = cli_get_params(
 if (!empty($options['help'])) {
     echo "Create/update P4U modules 1-6 in Moodle.\n\n";
     echo "Options:\n";
-    echo "  --courseid=ID       Target course id. If omitted, course shortname P4U-TEST is reused.\n";
-    echo "  --shortname=NAME    Course shortname if no courseid is given.\n";
+    echo "  --courseid=ID       Target course id. If omitted, course shortname P4U-TEST is created or reused.\n";
+    echo "  --shortname=NAME    Course shortname if no courseid is given (default: P4U-TEST).\n";
     exit(0);
 }
 
@@ -80,15 +80,111 @@ $modules = [
     ],
 ];
 
-function p4u_training_get_course(int $courseid, string $shortname): stdClass {
+function p4u_training_get_or_create_course(int $courseid, string $shortname): stdClass {
     global $DB;
 
+    $shortname = clean_param($shortname, PARAM_ALPHANUMEXT);
+
     if ($courseid > 0) {
+        if (!$DB->record_exists('course', ['id' => $courseid])) {
+            cli_error("Course id {$courseid} not found. Omit --courseid to create/reuse shortname {$shortname}, or check Site administration → Courses.");
+        }
         return get_course($courseid);
     }
 
-    $course = $DB->get_record('course', ['shortname' => $shortname], '*', MUST_EXIST);
+    if ($course = $DB->get_record('course', ['shortname' => $shortname])) {
+        $updates = [];
+        if ($course->fullname !== 'Peers for You - Ausbildung') {
+            $updates['fullname'] = 'Peers for You - Ausbildung';
+        }
+        $expectedsummary = '<p>Ausbildungskurs für Peer-Berater:innen.</p>';
+        if ($course->summary !== $expectedsummary) {
+            $updates['summary'] = $expectedsummary;
+            $updates['summaryformat'] = FORMAT_HTML;
+        }
+        if ($updates) {
+            $updates['id'] = $course->id;
+            update_course((object)$updates);
+            $course = $DB->get_record('course', ['id' => $course->id], '*', MUST_EXIST);
+        }
+        mtrace("Using existing course: {$course->fullname} (id={$course->id})");
+        return get_course($course->id);
+    }
+
+    $categoryid = 1;
+    if (!$DB->record_exists('course_categories', ['id' => $categoryid])) {
+        $categoryid = (int)$DB->get_field('course_categories', 'id', [], IGNORE_MULTIPLE);
+    }
+    if ($categoryid <= 0) {
+        cli_error('No course category exists. Create a category in Moodle first.');
+    }
+
+    $data = (object)[
+        'fullname' => 'Peers for You - Ausbildung',
+        'shortname' => $shortname,
+        'category' => $categoryid,
+        'summary' => '<p>Ausbildungskurs für Peer-Berater:innen.</p>',
+        'summaryformat' => FORMAT_HTML,
+        'format' => 'topics',
+        'numsections' => 6,
+        'visible' => 1,
+        'enablecompletion' => 1,
+        'startdate' => time(),
+    ];
+
+    $course = create_course($data);
+    mtrace("Created course: {$course->fullname} (id={$course->id}, shortname={$shortname})");
     return get_course($course->id);
+}
+
+function p4u_training_enrol_admin_user(stdClass $course, stdClass $admin): void {
+    global $DB;
+
+    $manual = enrol_get_plugin('manual');
+    if (!$manual) {
+        mtrace('  ! Manual enrolment plugin is not available; dashboard course listing may stay empty.');
+        return;
+    }
+
+    $instances = enrol_get_instances($course->id, true);
+    $manualinstance = null;
+    foreach ($instances as $instance) {
+        if ($instance->enrol === 'manual') {
+            $manualinstance = $instance;
+            break;
+        }
+    }
+
+    if (!$manualinstance) {
+        $manual->add_default_instance($course);
+        $instances = enrol_get_instances($course->id, true);
+        foreach ($instances as $instance) {
+            if ($instance->enrol === 'manual') {
+                $manualinstance = $instance;
+                break;
+            }
+        }
+    }
+
+    if (!$manualinstance) {
+        mtrace('  ! Could not create a manual enrolment instance.');
+        return;
+    }
+
+    $context = context_course::instance($course->id);
+    $roleid = (int)$DB->get_field('role', 'id', ['shortname' => 'student']);
+    if ($roleid <= 0) {
+        $roleid = (int)$DB->get_field('role', 'id', ['shortname' => 'manager']);
+    }
+
+    if (!$DB->record_exists('user_enrolments', ['enrolid' => $manualinstance->id, 'userid' => $admin->id])) {
+        $manual->enrol_user($manualinstance, $admin->id, $roleid);
+        mtrace("  + Enrolled admin user {$admin->username} into course {$course->id}");
+    }
+
+    if ($roleid > 0 && !user_has_role_assignment($admin->id, $roleid, $context->id)) {
+        role_assign($roleid, $admin->id, $context->id);
+    }
 }
 
 function p4u_training_moduleinfo(stdClass $course, int $sectionnum, string $name, string $introhtml, string $completion = 'manual'): stdClass {
@@ -168,7 +264,8 @@ try {
     $admin = get_admin();
     \core\session\manager::set_user($admin);
 
-    $course = p4u_training_get_course((int)$options['courseid'], (string)$options['shortname']);
+    $course = p4u_training_get_or_create_course((int)$options['courseid'], (string)$options['shortname']);
+    p4u_training_enrol_admin_user($course, $admin);
 
     course_create_sections_if_missing($course, array_keys($modules));
 
