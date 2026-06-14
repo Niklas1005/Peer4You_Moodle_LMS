@@ -52,7 +52,7 @@ echo $OUTPUT->header();
                 <span>Bestanden</span>
                 <strong id="p4u-status-passed">0</strong>
             </div>
-            <p id="p4u-status-note">Schliesse das Quiz ab, um Modul 5 im Kurs als erledigt zu markieren.</p>
+            <p id="p4u-status-note">Schlie&szlig;e das Quiz ab, um Modul 5 im Kurs als erledigt zu markieren.</p>
         </div>
         <div class="p4u-journey" aria-label="Lernpfad">
             <span>Einstieg</span>
@@ -86,7 +86,7 @@ echo $OUTPUT->header();
             <section id="p4u-sec-intro" class="p4u-section active">
                 <p class="p4u-label">Station 1 &middot; Einstieg</p>
                 <h2>Warum dieses Modul wichtig ist</h2>
-                <p class="p4u-lead">In Peer-Beratung koennen finanzielle, rechtliche oder psychische Krisen sichtbar werden. Deine Aufgabe ist nicht, alles zu loesen, sondern richtig zu reagieren.</p>
+                <p class="p4u-lead">In Peer-Beratung k&ouml;nnen finanzielle, rechtliche oder psychische Krisen sichtbar werden. Deine Aufgabe ist nicht, alles zu l&ouml;sen, sondern richtig zu reagieren.</p>
                 <span class="p4u-pill">Dauer: ca. 10 Minuten</span>
                 <div class="p4u-card p4u-goals">
                     <h3>Nach diesem Modul kannst du</h3>
@@ -109,27 +109,27 @@ echo $OUTPUT->header();
                         <h3>Hinweise</h3>
                         <button class="p4u-drag" draggable="true" data-zone="finance">Mahnungen und Inkassoschreiben</button>
                         <button class="p4u-drag" draggable="true" data-zone="legal">Gerichtliches Schreiben oder Zwangsvollstreckung</button>
-                        <button class="p4u-drag" draggable="true" data-zone="mental">Rueckzug, Verzweiflung, Schlafprobleme</button>
+                        <button class="p4u-drag" draggable="true" data-zone="mental">R&uuml;ckzug, Verzweiflung, Schlafprobleme</button>
                         <button class="p4u-drag" draggable="true" data-zone="mental">Aussage: Ich sehe keinen Ausweg</button>
                         <button class="p4u-drag" draggable="true" data-zone="finance">Panik wegen offener Rechnungen</button>
-                        <button class="p4u-drag" draggable="true" data-zone="legal">Mietkuendigung</button>
+                        <button class="p4u-drag" draggable="true" data-zone="legal">Mietk&uuml;ndigung</button>
                     </div>
                     <div class="p4u-card p4u-dropzone" data-zone="finance">
                         <h3>Finanziell</h3>
-                        <p>Zahlungsrueckstaende, Mahnungen, Inkasso, drohende Pfaendung.</p>
+                        <p>Zahlungsr&uuml;ckst&auml;nde, Mahnungen, Inkasso, drohende Pf&auml;ndung.</p>
                     </div>
                     <div class="p4u-card p4u-dropzone" data-zone="legal">
                         <h3>Rechtlich</h3>
-                        <p>Kuendigung, gerichtliche Schreiben, Vollstreckung, hoher Druck.</p>
+                        <p>K&uuml;ndigung, gerichtliche Schreiben, Vollstreckung, hoher Druck.</p>
                     </div>
                     <div class="p4u-card p4u-dropzone" data-zone="mental">
                         <h3>Psychisch</h3>
-                        <p>Hoffnungslosigkeit, Rueckzug, Schlafprobleme, Suizidgedanken.</p>
+                        <p>Hoffnungslosigkeit, R&uuml;ckzug, Schlafprobleme, Suizidgedanken.</p>
                     </div>
                 </div>
                 <div class="p4u-controls">
-                    <button class="p4u-primary" id="p4u-check-signals">Antwort pruefen</button>
-                    <button class="p4u-secondary" id="p4u-reset-signals">Zuruecksetzen</button>
+                    <button class="p4u-primary" id="p4u-check-signals">Antwort pr&uuml;fen</button>
+                    <button class="p4u-secondary" id="p4u-reset-signals">Zur&uuml;cksetzen</button>
                 </div>
                 <div class="p4u-result" id="p4u-signals-result" aria-live="polite"></div>
                 <button class="p4u-primary" data-next="role">Weiter: Peer-Rolle</button>
@@ -142,39 +142,39 @@ echo $OUTPUT->header();
                 <div class="p4u-card p4u-casechoice">
                     <h3>Welche Reaktion passt zur Peer-Rolle?</h3>
                     <div class="p4u-role-options p4u-case-options">
-                        <button data-correct="false" data-feedback="Nicht passend: Diagnosen gehoeren nicht zur Peer-Rolle.">Du wirkst depressiv, ich glaube du hast eine Diagnose.</button>
-                        <button data-correct="true" data-feedback="Richtig: Ruhig bleiben, ernst nehmen und an passende Hilfe weiterleiten.">Das klingt sehr belastend. Ich hoere dir zu und wir schauen gemeinsam, welche Fachstelle jetzt passt.</button>
-                        <button data-correct="false" data-feedback="Nicht passend: Keine falschen Versprechen machen.">Ich verspreche dir, dass ich das Problem fuer dich loese.</button>
+                        <button data-correct="false" data-feedback="Nicht passend: Diagnosen geh&ouml;ren nicht zur Peer-Rolle.">Du wirkst depressiv, ich glaube du hast eine Diagnose.</button>
+                        <button data-correct="true" data-feedback="Richtig: Ruhig bleiben, ernst nehmen und an passende Hilfe weiterleiten.">Das klingt sehr belastend. Ich h&ouml;re dir zu und wir schauen gemeinsam, welche Fachstelle jetzt passt.</button>
+                        <button data-correct="false" data-feedback="Nicht passend: Keine falschen Versprechen machen.">Ich verspreche dir, dass ich das Problem f&uuml;r dich l&ouml;se.</button>
                     </div>
                     <p class="p4u-case-feedback" id="p4u-role-feedback" aria-live="polite"></p>
                 </div>
                 <details class="p4u-deep-dive">
                     <summary>Merksatz zur Rolle</summary>
                     <span class="p4u-deep-dive-label">Orientierung</span>
-                    <p>Peers hoeren zu, stabilisieren kurz, sortieren die naechsten Schritte und verweisen weiter. Sie stellen keine Diagnosen und uebernehmen keine komplexe Problembearbeitung.</p>
+                    <p>Peers h&ouml;ren zu, stabilisieren kurz, sortieren die n&auml;chsten Schritte und verweisen weiter. Sie stellen keine Diagnosen und &uuml;bernehmen keine komplexe Problembearbeitung.</p>
                 </details>
                 <button class="p4u-primary" data-next="referral">Weiter: Weiterverweisen</button>
             </section>
 
             <section id="p4u-sec-referral" class="p4u-section">
                 <p class="p4u-label">Station 4 &middot; Weiterverweisen</p>
-                <h2>Passende Anlaufstellen waehlen</h2>
-                <p class="p4u-lead">Gute Weiterverweisung ist konkret: Welche Stelle passt, wie erreicht man sie und was ist der naechste kleine Schritt?</p>
+                <h2>Passende Anlaufstellen w&auml;hlen</h2>
+                <p class="p4u-lead">Gute Weiterverweisung ist konkret: Welche Stelle passt, wie erreicht man sie und was ist der n&auml;chste kleine Schritt?</p>
                 <div class="p4u-referral-board">
                     <div class="p4u-tool-head">
-                        <p class="p4u-label">Uebung</p>
+                        <p class="p4u-label">&Uuml;bung</p>
                         <h3>Welche Weiterverweisung passt?</h3>
-                        <p>Waehle pro Situation die sinnvollste erste Anlaufstelle. Die Rueckmeldung erscheint direkt darunter.</p>
+                        <p>W&auml;hle pro Situation die sinnvollste erste Anlaufstelle. Die R&uuml;ckmeldung erscheint direkt darunter.</p>
                     </div>
                     <div class="p4u-referral-case">
                         <div class="p4u-referral-scenario">
                             <span>Fall 1</span>
-                            <strong>Viele Mahnungen, Inkasso und Angst vor Pfaendung</strong>
+                            <strong>Viele Mahnungen, Inkasso und Angst vor Pf&auml;ndung</strong>
                         </div>
                         <div class="p4u-referral-options">
                             <button data-correct="true" data-feedback="Richtig: Schuldnerberatung oder Verbraucherzentrale sind hier passende Fachstellen.">Schuldnerberatung / Verbraucherzentrale</button>
-                            <button data-correct="false" data-feedback="Nicht zuerst: Psychologische Hilfe kann ergaenzen, aber die Mahnungen brauchen fachliche Schuldenberatung.">Psychologische Beratung</button>
-                            <button data-correct="false" data-feedback="Nicht passend: Peers sollten keine rechtliche oder finanzielle Regulierung selbst uebernehmen.">Peer klaert das selbst</button>
+                            <button data-correct="false" data-feedback="Nicht zuerst: Psychologische Hilfe kann erg&auml;nzen, aber die Mahnungen brauchen fachliche Schuldenberatung.">Psychologische Beratung</button>
+                            <button data-correct="false" data-feedback="Nicht passend: Peers sollten keine rechtliche oder finanzielle Regulierung selbst &uuml;bernehmen.">Peer kl&auml;rt das selbst</button>
                         </div>
                         <p class="p4u-case-feedback" aria-live="polite"></p>
                     </div>
@@ -193,28 +193,28 @@ echo $OUTPUT->header();
                     <div class="p4u-referral-case">
                         <div class="p4u-referral-scenario">
                             <span>Fall 3</span>
-                            <strong>Gerichtliches Schreiben, Frist und grosse Unsicherheit</strong>
+                            <strong>Gerichtliches Schreiben, Frist und gro&szlig;e Unsicherheit</strong>
                         </div>
                         <div class="p4u-referral-options">
                             <button data-correct="false" data-feedback="Nicht passend: Ignorieren kann Fristen und Folgen verschlimmern.">Erstmal ignorieren</button>
-                            <button data-correct="true" data-feedback="Richtig: Verbraucherzentrale, rechtliche Beratung oder spezialisierte Fachberatung helfen bei Einordnung und naechsten Schritten.">Rechtliche Beratung / Verbraucherzentrale</button>
-                            <button data-correct="false" data-feedback="Nicht passend: Peers sollten keine Rechtsberatung leisten.">Peer erklaert die Rechtslage verbindlich</button>
+                            <button data-correct="true" data-feedback="Richtig: Verbraucherzentrale, rechtliche Beratung oder spezialisierte Fachberatung helfen bei Einordnung und n&auml;chsten Schritten.">Rechtliche Beratung / Verbraucherzentrale</button>
+                            <button data-correct="false" data-feedback="Nicht passend: Peers sollten keine Rechtsberatung leisten.">Peer erkl&auml;rt die Rechtslage verbindlich</button>
                         </div>
                         <p class="p4u-case-feedback" aria-live="polite"></p>
                     </div>
                     <div class="p4u-result" id="p4u-referral-result" aria-live="polite"></div>
                 </div>
-                <div class="p4u-referral-map" aria-label="Orientierung fuer Weiterverweisung">
+                <div class="p4u-referral-map" aria-label="Orientierung f&uuml;r Weiterverweisung">
                     <div><span>Schulden</span><strong>Schuldnerberatung</strong></div>
                     <div><span>Krise</span><strong>Krisendienst</strong></div>
                     <div><span>Recht</span><strong>Fachberatung</strong></div>
                 </div>
                 <div class="p4u-card p4u-recap">
-                    <h3>Regionale Hinweise aus der Praesentation</h3>
+                    <h3>Regionale Hinweise aus der Pr&auml;sentation</h3>
                     <ul>
-                        <li>Diakonisches Werk Baden-Baden/Rastatt: Schuldenpraevention und Schuldnerberatung.</li>
-                        <li>Landratsamt Landkreis Rastatt: Schuldnerberatung fuer berechtigte Einwohner:innen.</li>
-                        <li>Stadt Baden-Baden: Schuldnerberatung fuer berechtigte Einwohner:innen des Stadtkreises.</li>
+                        <li>Diakonisches Werk Baden-Baden/Rastatt: Schuldenpr&auml;vention und Schuldnerberatung.</li>
+                        <li>Landratsamt Landkreis Rastatt: Schuldnerberatung f&uuml;r berechtigte Einwohner:innen.</li>
+                        <li>Stadt Baden-Baden: Schuldnerberatung f&uuml;r berechtigte Einwohner:innen des Stadtkreises.</li>
                     </ul>
                 </div>
                 <button class="p4u-primary" data-next="emergency">Weiter: Notfall</button>
@@ -226,7 +226,7 @@ echo $OUTPUT->header();
                 <p class="p4u-lead">Bei akuter Gefahr geht es nicht mehr nur um Beratung. Dann braucht es schnelle Hilfe.</p>
                 <div class="p4u-process" aria-label="Vorgehen im akuten Fall">
                     <div><span>1</span><strong>Ruhig bleiben</strong><p>Die Person ernst nehmen und nicht allein lassen.</p></div>
-                    <div><span>2</span><strong>Klaeren</strong><p>Geht es um akute Gefahr fuer sich oder andere?</p></div>
+                    <div><span>2</span><strong>Kl&auml;ren</strong><p>Geht es um akute Gefahr f&uuml;r sich oder andere?</p></div>
                     <div><span>3</span><strong>Hilfe holen</strong><p>Notruf, Krisendienst oder erwachsene Ansprechperson einbeziehen.</p></div>
                     <div><span>4</span><strong>Weitergeben</strong><p>Situation dokumentieren und an Fachstelle verweisen.</p></div>
                     <div><span>5</span><strong>Abgrenzen</strong><p>Eigene Verantwortung und Belastung beachten.</p></div>
@@ -236,7 +236,7 @@ echo $OUTPUT->header();
                     <ul>
                         <li>Polizei: 110</li>
                         <li>Feuerwehr/Rettungsdienst: 112</li>
-                        <li>Aerztlicher Bereitschaftsdienst: 116 117</li>
+                        <li>&Auml;rztlicher Bereitschaftsdienst: 116 117</li>
                         <li>Telefonseelsorge: 0800 111 0 111 oder 0800 111 0 222</li>
                     </ul>
                 </div>
@@ -245,14 +245,14 @@ echo $OUTPUT->header();
 
             <section id="p4u-sec-case" class="p4u-section">
                 <p class="p4u-label">Station 6 &middot; Fallbeispiel</p>
-                <h2>Was waere der naechste gute Schritt?</h2>
-                <p class="p4u-lead">Eine ratsuchende Person schreibt: "Ich habe mehrere Mahnungen, schlafe kaum noch und weiss nicht mehr weiter."</p>
+                <h2>Was w&auml;re der n&auml;chste gute Schritt?</h2>
+                <p class="p4u-lead">Eine ratsuchende Person schreibt: "Ich habe mehrere Mahnungen, schlafe kaum noch und wei&szlig; nicht mehr weiter."</p>
                 <div class="p4u-card p4u-casechoice">
                     <h3>Wie reagierst du?</h3>
                     <div class="p4u-practice-options">
                         <button data-correct="false" data-feedback="Nicht passend: Das bagatellisiert die Belastung.">Das wird schon, ignorier die Briefe erstmal.</button>
-                        <button data-correct="true" data-feedback="Richtig: Du nimmst die Krise ernst, sortierst kurz und verweist an professionelle Hilfe.">Ich hoere dir zu. Mahnungen und Schlafprobleme sind ernst. Lass uns schauen, welche Beratung du heute kontaktieren kannst.</button>
-                        <button data-correct="false" data-feedback="Nicht passend: Peers verhandeln keine Schuldenregulierung.">Schick mir alle Glaeubiger, ich verhandele das fuer dich.</button>
+                        <button data-correct="true" data-feedback="Richtig: Du nimmst die Krise ernst, sortierst kurz und verweist an professionelle Hilfe.">Ich h&ouml;re dir zu. Mahnungen und Schlafprobleme sind ernst. Lass uns schauen, welche Beratung du heute kontaktieren kannst.</button>
+                        <button data-correct="false" data-feedback="Nicht passend: Peers verhandeln keine Schuldenregulierung.">Schick mir alle Gl&auml;ubiger, ich verhandele das f&uuml;r dich.</button>
                     </div>
                     <p class="p4u-case-feedback" id="p4u-case-feedback" aria-live="polite"></p>
                 </div>
@@ -262,14 +262,14 @@ echo $OUTPUT->header();
             <section id="p4u-sec-quiz" class="p4u-section">
                 <p class="p4u-label">Station 7 &middot; Abschlussquiz</p>
                 <h2>Quiz - Modul 5</h2>
-                <p class="p4u-lead">Pruefe, ob du Warnsignale und passende Weiterverweisung einordnen kannst. Mindestens 60 Prozent sind erforderlich.</p>
+                <p class="p4u-lead">Pr&uuml;fe, ob du Warnsignale und passende Weiterverweisung einordnen kannst. Mindestens 60 Prozent sind erforderlich.</p>
                 <div class="p4u-attemptbar">
                     <span id="p4u-quiz-attempt">Versuch 1</span>
                     <span id="p4u-quiz-state">Noch nicht abgeschlossen</span>
                 </div>
                 <div class="p4u-quiz" data-multi="true">
-                    <h3>1. Was koennen Anzeichen psychischer Krisen sein?</h3>
-                    <p class="p4u-hint">Mehrere Antworten moeglich.</p>
+                    <h3>1. Was k&ouml;nnen Anzeichen psychischer Krisen sein?</h3>
+                    <p class="p4u-hint">Mehrere Antworten m&ouml;glich.</p>
                     <button data-correct="true">Verzweiflung</button>
                     <button data-correct="true">Schlafprobleme</button>
                     <button data-correct="false">Einmalige gute Laune</button>
@@ -278,38 +278,38 @@ echo $OUTPUT->header();
                 </div>
                 <div class="p4u-quiz">
                     <h3>2. Was ist bei Mahnungen und Inkassoschreiben passend?</h3>
-                    <p class="p4u-hint">Eine Antwort auswaehlen.</p>
+                    <p class="p4u-hint">Eine Antwort ausw&auml;hlen.</p>
                     <button data-correct="false">Ignorieren, damit weniger Stress entsteht</button>
                     <button data-correct="true">Sensible Ansprache und Weiterverweisung an Schuldnerberatung</button>
                     <button data-correct="false">Selbst rechtliche Beratung geben</button>
                     <p class="p4u-question-feedback" data-success="Richtig: Mahnungen und Inkasso sind Hinweise auf professionelle Hilfe." data-error="Nicht passend: Peers ersetzen keine Schuldnerberatung."></p>
                 </div>
                 <div class="p4u-quiz">
-                    <h3>3. Was gehoert zur Peer-Rolle in Krisen?</h3>
-                    <p class="p4u-hint">Eine Antwort auswaehlen.</p>
-                    <button data-correct="true">Zuhoeren, stabilisieren, Orientierung geben und weiterverweisen</button>
+                    <h3>3. Was geh&ouml;rt zur Peer-Rolle in Krisen?</h3>
+                    <p class="p4u-hint">Eine Antwort ausw&auml;hlen.</p>
+                    <button data-correct="true">Zuh&ouml;ren, stabilisieren, Orientierung geben und weiterverweisen</button>
                     <button data-correct="false">Diagnosen stellen</button>
-                    <button data-correct="false">Komplexe Probleme allein loesen</button>
-                    <p class="p4u-question-feedback" data-success="Richtig: Das ist die passende Rollengrenze." data-error="Nicht ganz: Die Peer-Rolle bleibt unterstuetzend und klar abgegrenzt."></p>
+                    <button data-correct="false">Komplexe Probleme allein l&ouml;sen</button>
+                    <p class="p4u-question-feedback" data-success="Richtig: Das ist die passende Rollengrenze." data-error="Nicht ganz: Die Peer-Rolle bleibt unterst&uuml;tzend und klar abgegrenzt."></p>
                 </div>
                 <div class="p4u-quiz">
                     <h3>4. Wo findet man Informationen zu Krisentelefonen?</h3>
-                    <p class="p4u-hint">Eine Antwort auswaehlen.</p>
-                    <button data-correct="true">Online, zum Beispiel ueber telefonseelsorge.de</button>
-                    <button data-correct="false">Nur ueber private Chatgruppen</button>
+                    <p class="p4u-hint">Eine Antwort ausw&auml;hlen.</p>
+                    <button data-correct="true">Online, zum Beispiel &uuml;ber telefonseelsorge.de</button>
+                    <button data-correct="false">Nur &uuml;ber private Chatgruppen</button>
                     <button data-correct="false">Gar nicht, Krisentelefone gibt es nicht</button>
-                    <p class="p4u-question-feedback" data-success="Richtig: Telefonseelsorge und regionale Krisendienste sind online auffindbar." data-error="Nicht ganz: Krisentelefone sind online auffindbar, etwa ueber die Telefonseelsorge."></p>
+                    <p class="p4u-question-feedback" data-success="Richtig: Telefonseelsorge und regionale Krisendienste sind online auffindbar." data-error="Nicht ganz: Krisentelefone sind online auffindbar, etwa &uuml;ber die Telefonseelsorge."></p>
                 </div>
                 <div class="p4u-quiz">
-                    <h3>5. Bietet das Diakonische Werk Baden-Baden/Rastatt Einzelberatung fuer junge Menschen in finanziellen Schwierigkeiten an?</h3>
-                    <p class="p4u-hint">Eine Antwort auswaehlen.</p>
+                    <h3>5. Bietet das Diakonische Werk Baden-Baden/Rastatt Einzelberatung f&uuml;r junge Menschen in finanziellen Schwierigkeiten an?</h3>
+                    <p class="p4u-hint">Eine Antwort ausw&auml;hlen.</p>
                     <button data-correct="true">Ja</button>
                     <button data-correct="false">Nein</button>
-                    <button data-correct="false">Nur fuer Unternehmen</button>
-                    <p class="p4u-question-feedback" data-success="Richtig: Die Praesentation nennt Einzelberatung fuer junge Menschen." data-error="Nicht ganz: In den regionalen Angeboten wird Einzelberatung fuer junge Menschen genannt."></p>
+                    <button data-correct="false">Nur f&uuml;r Unternehmen</button>
+                    <p class="p4u-question-feedback" data-success="Richtig: Die Pr&auml;sentation nennt Einzelberatung f&uuml;r junge Menschen." data-error="Nicht ganz: In den regionalen Angeboten wird Einzelberatung f&uuml;r junge Menschen genannt."></p>
                 </div>
                 <div class="p4u-controls">
-                    <button class="p4u-primary" id="p4u-submit-quiz">Quiz abschliessen</button>
+                    <button class="p4u-primary" id="p4u-submit-quiz">Quiz abschlie&szlig;en</button>
                     <button class="p4u-secondary p4u-hidden" id="p4u-retry-quiz">Quiz neu versuchen</button>
                 </div>
                 <div class="p4u-result" id="p4u-quiz-result" aria-live="polite"></div>
@@ -319,10 +319,10 @@ echo $OUTPUT->header();
                     <p>Du hast das Abschlussquiz bestanden und kannst Krisenwarnsignale besser erkennen, deine Rolle abgrenzen und passend weiterverweisen.</p>
                     <div class="p4u-reflection">
                         <strong>Kurze Reflexion</strong>
-                        <p>Welche Warnsignale wuerdest du in einem Chat besonders ernst nehmen?</p>
+                        <p>Welche Warnsignale w&uuml;rdest du in einem Chat besonders ernst nehmen?</p>
                     </div>
                     <div class="p4u-controls">
-                        <a class="p4u-primary p4u-linkbutton" href="<?php echo (new moodle_url('/course/view.php', ['id' => $course->id]))->out(false); ?>">Zurueck zum Kurs</a>
+                        <a class="p4u-primary p4u-linkbutton" href="<?php echo (new moodle_url('/course/view.php', ['id' => $course->id]))->out(false); ?>">Zur&uuml;ck zum Kurs</a>
                     </div>
                 </div>
             </section>

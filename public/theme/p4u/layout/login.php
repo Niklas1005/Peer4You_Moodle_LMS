@@ -25,11 +25,13 @@
 defined('MOODLE_INTERNAL') || die();
 
 $bodyattributes = $OUTPUT->body_attributes();
+$loginlogourl = theme_p4u_get_login_logo_url($OUTPUT);
 
 $templatecontext = [
     'sitename' => format_string($SITE->shortname, true, ['context' => context_course::instance(SITEID), 'escape' => false]),
     'output' => $OUTPUT,
     'bodyattributes' => $bodyattributes,
+    'loginlogourl' => $loginlogourl,
 ];
 
 echo $OUTPUT->render_from_template('theme_p4u/login', $templatecontext);

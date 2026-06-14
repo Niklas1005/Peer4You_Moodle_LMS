@@ -24,6 +24,6 @@
 
 defined('MOODLE_INTERNAL') || die();
 
-$plugin->version = 2026060914;
+$plugin->version = 2026060915;
 $plugin->requires = 2026041000;
 $plugin->component = 'theme_p4u';

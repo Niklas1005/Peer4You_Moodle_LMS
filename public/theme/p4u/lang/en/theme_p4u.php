@@ -27,6 +27,6 @@ defined('MOODLE_INTERNAL') || die();
 $string['pluginname'] = 'P4U prototype theme';
 $string['choosereadme'] = 'P4U is a custom Moodle theme designed to align Moodle frontpage and dashboard with the SW implementation prototype.';
 $string['privacy:metadata'] = 'The P4U theme does not store any personal data.';
-$string['loginbrandtitle'] = 'Peers for You';
-$string['logintagline'] = 'Peer-Beratung beginnt hier.';
+$string['loginbrandtitle'] = 'Diakonie Baden-Baden und Rastatt';
+$string['logintagline'] = 'Wissen, das hilft – Menschen, die helfen.';
 $string['logindiakonie'] = 'Diakonisches Werk Baden-Baden / Rastatt';

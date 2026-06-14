@@ -12,7 +12,7 @@
     const flashcards = [
         {
             front: 'Zinsen',
-            back: 'Zinsen sind das Entgelt fuer geliehenes oder angelegtes Geld. Beim Sparen koennen sie helfen, bei Krediten kosten sie Geld.'
+            back: 'Zinsen sind das Entgelt f\u00fcr geliehenes oder angelegtes Geld. Beim Sparen k\u00f6nnen sie helfen, bei Krediten kosten sie Geld.'
         },
         {
             front: 'Dispozins',
@@ -24,11 +24,11 @@
         },
         {
             front: 'Zinseszins',
-            back: 'Zinsen werden erneut verzinst. Beim Sparen kann das helfen, bei Schulden kann es die Belastung erhoehen.'
+            back: 'Zinsen werden erneut verzinst. Beim Sparen kann das helfen, bei Schulden kann es die Belastung erh\u00f6hen.'
         },
         {
             front: 'Buy Now Pay Later',
-            back: 'Heute kaufen und spaeter zahlen fuehlt sich leicht an. Riskant wird es, wenn mehrere kleine Zahlungen, Mahngebuehren oder Verzugszinsen zusammenkommen.'
+            back: 'Heute kaufen und sp\u00e4ter zahlen f\u00fchlt sich leicht an. Riskant wird es, wenn mehrere kleine Zahlungen, Mahngeb\u00fchren oder Verzugszinsen zusammenkommen.'
         }
     ];
 

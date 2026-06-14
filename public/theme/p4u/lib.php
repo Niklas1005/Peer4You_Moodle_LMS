@@ -25,6 +25,16 @@
 defined('MOODLE_INTERNAL') || die();
 
 /**
+ * Login card logo URL — theme asset first, then Moodle admin logos.
+ *
+ * @param renderer_base $output Page renderer.
+ * @return string
+ */
+function theme_p4u_get_login_logo_url(renderer_base $output): string {
+    return $output->image_url('loginlogo', 'theme_p4u')->out(false);
+}
+
+/**
  * Returns the main SCSS content.
  *
  * @param theme_config $theme Theme configuration object.

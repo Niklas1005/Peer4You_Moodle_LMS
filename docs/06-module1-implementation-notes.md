@@ -5,7 +5,7 @@ Modul 1 is the first interactive learning module for the Peer4You Moodle trainin
 
 ## Current Learning Flow
 - External Peer4You dashboard opens the interactive Moodle module.
-- Modul 1 is shown as a guided learning path with seven stations: Einstieg, Grundlagen, Rolle klaeren, Rollencheck, Praxisimpuls, Fall anwenden, Abschlussquiz.
+- Modul 1 is shown as a guided learning path with seven stations: Einstieg, Grundlagen, Rolle klären, Rollencheck, Praxisimpuls, Fall anwenden, Abschlussquiz.
 - The quiz checks the whole module: basic knowledge, role boundaries, and application in the Marko case.
 - The quiz supports multiple attempts and gives direct feedback per question.
 

@@ -53,7 +53,7 @@
         byId('p4u-status-passed').textContent = stats.passed;
         byId('p4u-status-note').textContent = completed
             ? 'Dieses Modul wurde bereits bestanden. Du kannst es jederzeit wiederholen.'
-            : 'Schliesse das Quiz ab, um Modul 5 im Kurs als erledigt zu markieren.';
+            : 'Schlie\u00dfe das Quiz ab, um Modul 5 im Kurs als erledigt zu markieren.';
         document.querySelector('.p4u-shell')?.classList.toggle('is-completed', completed);
     }
 
@@ -204,7 +204,7 @@
                 result.classList.add('good');
                 progress.completeGatedSection('signals');
             } else {
-                result.textContent = 'Noch nicht ganz: Pruefe besonders rechtliche und psychische Warnsignale nochmal.';
+                result.textContent = 'Noch nicht ganz: Pr\u00fcfe besonders rechtliche und psychische Warnsignale nochmal.';
                 result.classList.add('bad');
             }
         });
@@ -276,10 +276,10 @@
         }
         progress.completeGatedSection('referral');
         if (correct.length === cases.length) {
-            result.textContent = 'Sehr gut: Du hast fuer alle Situationen eine passende Weiterverweisung gewaehlt.';
+            result.textContent = 'Sehr gut: Du hast f\u00fcr alle Situationen eine passende Weiterverweisung gew\u00e4hlt.';
             result.classList.add('good');
         } else {
-            result.textContent = 'Teilweise richtig: Schau dir die Rueckmeldungen an und pruefe, welche Fachstelle jeweils am besten passt.';
+            result.textContent = 'Teilweise richtig: Schau dir die R\u00fcckmeldungen an und pr\u00fcfe, welche Fachstelle jeweils am besten passt.';
             result.classList.add('bad');
         }
     }
@@ -355,7 +355,7 @@
         result.classList.remove('good', 'bad', 'warning');
         if (answeredGroups < groups.length) {
             const missing = groups.length - answeredGroups;
-            result.innerHTML = '<strong>Noch nicht abschliessbar</strong><span>Noch ' + missing + ' Frage(n) sind offen.</span>';
+            result.innerHTML = '<strong>Noch nicht abschlie\u00dfbar</strong><span>Noch ' + missing + ' Frage(n) sind offen.</span>';
             result.classList.add('warning');
             result.scrollIntoView({behavior: 'smooth', block: 'center'});
             return;

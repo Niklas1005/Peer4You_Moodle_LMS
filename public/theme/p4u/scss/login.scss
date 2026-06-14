@@ -128,27 +128,28 @@ body.path-login {
     margin-bottom: 2rem;
 }
 
-.p4u-login-brand-icon {
-    width: 4rem;
-    height: 4rem;
-    margin: 0 auto 1.25rem;
-    border-radius: 0.75rem;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    color: var(--p4u-brand-600);
-    background: var(--p4u-brand-50);
-    border: 1px solid var(--p4u-brand-100);
+.p4u-login-brand-logo {
+    margin: 0 auto 1rem;
+    max-width: 14rem;
+}
+
+.p4u-login-logo {
+    display: block;
+    width: 100%;
+    height: auto;
+    max-height: 4.25rem;
+    margin: 0 auto;
+    object-fit: contain;
 }
 
 .p4u-login-title {
     margin: 0;
     font-family: "DM Sans", system-ui, sans-serif;
-    font-size: 1.875rem;
+    font-size: 1.5rem;
     font-weight: 800;
-    letter-spacing: -0.025em;
+    letter-spacing: -0.02em;
     color: var(--p4u-ink);
-    line-height: 1.15;
+    line-height: 1.2;
 }
 
 .p4u-login-tagline {

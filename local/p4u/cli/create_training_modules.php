@@ -34,9 +34,9 @@ if (!empty($options['help'])) {
 
 $modules = [
     1 => [
-        'sectionname' => 'Modul 1: Einfuehrung & Rollenverstaendnis',
+        'sectionname' => 'Modul 1: Einführung & Rollenverständnis',
         'activityname' => 'Interaktives Lernmodul starten',
-        'summary' => '<p>Rolle verstehen, Grenzen erkennen und das Wissen im Abschlussquiz pruefen.</p>',
+        'summary' => '<p>Rolle verstehen, Grenzen erkennen und das Wissen im Abschlussquiz prüfen.</p>',
         'legacy' => ['Modul 1: Einfuehrung & Rollenverstaendnis'],
         'url' => '/local/p4u/module1.php',
         'completion' => 'manual',
@@ -50,10 +50,10 @@ $modules = [
         'completion' => 'manual',
     ],
     3 => [
-        'sectionname' => 'Modul 3: Kommunikation und Gespraechsfuehrung',
+        'sectionname' => 'Modul 3: Kommunikation und Gesprächsführung',
         'activityname' => 'Kommunikation vorbereiten',
-        'summary' => '<p>Geplant: aktives Zuhoeren, gute Fragen und Gespraechsstruktur.</p>',
-        'legacy' => ['Modul 3: Kommunikation & Gespraechsfuehrung'],
+        'summary' => '<p>Geplant: aktives Zuhören, gute Fragen und Gesprächsstruktur.</p>',
+        'legacy' => ['Modul 3: Kommunikation & Gespraechsfuehrung', 'Modul 3: Kommunikation und Gespraechsfuehrung'],
         'url' => '/local/p4u/module_placeholder.php?module=3',
     ],
     4 => [
@@ -66,7 +66,7 @@ $modules = [
     5 => [
         'sectionname' => 'Modul 5: Krisen erkennen und weiterverweisen',
         'activityname' => 'Interaktives Lernmodul Krisen erkennen starten',
-        'summary' => '<p>Warnsignale erkennen, Peer-Rolle abgrenzen und passende Weiterverweisung ueben.</p>',
+        'summary' => '<p>Warnsignale erkennen, Peer-Rolle abgrenzen und passende Weiterverweisung üben.</p>',
         'legacy' => ['Modul 5: Krisen erkennen & weiterverweisen', 'Krisenmodul vorbereiten'],
         'url' => '/local/p4u/module5.php',
         'completion' => 'manual',

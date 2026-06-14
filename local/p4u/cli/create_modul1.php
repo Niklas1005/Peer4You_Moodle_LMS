@@ -76,8 +76,8 @@ function p4u_get_or_create_course(int $courseid, string $shortname): stdClass {
         if ($course->fullname !== 'Peers for You - Ausbildung') {
             $updates['fullname'] = 'Peers for You - Ausbildung';
         }
-        if ($course->summary !== '<p>Ausbildungskurs fuer Peer-Berater:innen.</p>') {
-            $updates['summary'] = '<p>Ausbildungskurs fuer Peer-Berater:innen.</p>';
+        if ($course->summary !== '<p>Ausbildungskurs für Peer-Berater:innen.</p>') {
+            $updates['summary'] = '<p>Ausbildungskurs für Peer-Berater:innen.</p>';
             $updates['summaryformat'] = FORMAT_HTML;
         }
         if ($updates) {
@@ -101,7 +101,7 @@ function p4u_get_or_create_course(int $courseid, string $shortname): stdClass {
         'fullname' => 'Peers for You - Ausbildung',
         'shortname' => $shortname,
         'category' => $categoryid,
-        'summary' => '<p>Ausbildungskurs fuer Peer-Berater:innen.</p>',
+        'summary' => '<p>Ausbildungskurs für Peer-Berater:innen.</p>',
         'summaryformat' => FORMAT_HTML,
         'format' => 'topics',
         'numsections' => 6,
@@ -286,12 +286,18 @@ function p4u_remove_default_forums(stdClass $course): void {
 function p4u_add_interactive_link(stdClass $course, int $sectionnum): void {
     global $CFG, $DB;
 
-    $name = 'Modul 1: Einfuehrung & Rollenverstaendnis';
-    $legacyname = 'Interaktives Modul 1';
-    if ($legacycm = p4u_find_activity($course->id, $sectionnum, $legacyname)) {
-        $DB->set_field('url', 'name', $name, ['id' => $legacycm->instance]);
-        mtrace("  ~ Renamed url: {$legacyname} -> {$name}");
-        rebuild_course_cache($course->id, true);
+    $name = 'Modul 1: Einführung & Rollenverständnis';
+    $legacynames = [
+        'Interaktives Modul 1',
+        'Modul 1: Einfuehrung & Rollenverstaendnis',
+    ];
+    foreach ($legacynames as $legacyname) {
+        if ($legacycm = p4u_find_activity($course->id, $sectionnum, $legacyname)) {
+            $DB->set_field('url', 'name', $name, ['id' => $legacycm->instance]);
+            mtrace("  ~ Renamed url: {$legacyname} -> {$name}");
+            rebuild_course_cache($course->id, true);
+            return;
+        }
     }
     if (p4u_activity_exists($course->id, $sectionnum, $name)) {
         mtrace("  = Skip url: {$name} (already exists)");
@@ -331,11 +337,11 @@ $sectionsummary = <<<HTML
 HTML;
 
     course_update_section($course, $sectionrecord, [
-        'name' => 'Modul 1: Einfuehrung',
+        'name' => 'Modul 1: Einführung',
         'summary' => $sectionsummary,
         'summaryformat' => FORMAT_HTML,
     ]);
-    mtrace("Section {$targetsection} prepared: 'Modul 1: Einfuehrung'");
+    mtrace("Section {$targetsection} prepared: 'Modul 1: Einführung'");
 
     p4u_remove_default_forums($course);
     p4u_remove_static_module_pages($course, $targetsection);
