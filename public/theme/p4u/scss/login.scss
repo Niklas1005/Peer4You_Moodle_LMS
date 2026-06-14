@@ -130,16 +130,17 @@ body.path-login {
 
 .p4u-login-brand-logo {
     margin: 0 auto 1rem;
-    max-width: 14rem;
+    max-width: 16rem;
 }
 
 .p4u-login-logo {
     display: block;
     width: 100%;
     height: auto;
-    max-height: 4.25rem;
+    max-height: 4.75rem;
     margin: 0 auto;
     object-fit: contain;
+    mix-blend-mode: multiply;
 }
 
 .p4u-login-title {
