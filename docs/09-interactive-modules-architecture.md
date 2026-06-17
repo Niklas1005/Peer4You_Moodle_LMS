@@ -84,17 +84,45 @@ local/p4u/cli/
 2. Purge Moodle caches (`purge_caches.php`)
 3. Hard-refresh browser (localStorage is per-browser)
 
+## Module availability chain (2026-06-17)
+
+`local/p4u/cli/create_training_modules.php` calls `p4u_training_apply_availability_chain()` after creating/updating URL activities.
+
+| Mode | Chain | Notes |
+|------|-------|-------|
+| **Demo (current)** | M1 → M2 → M5 | M3/M4/M6 excluded (placeholder modules) |
+| **Production (target)** | M1 → M2 → M3 → M4 → M5 → M6 | Extend `$chain` when M3–M6 have real content |
+
+Unlock rule: Moodle **activity completion** on prerequisite module (= quiz passed at **≥60%** via `complete_module.php`).
+
+**Deploy:** Availability is stored in the **database** — after Git deploy, run:
+
+```bash
+php local/p4u/cli/create_training_modules.php
+php admin/cli/purge_caches.php
+```
+
+## Quiz `checkQuiz()` two-phase fix (2026-06-17)
+
+In `module1.js`, `module2.js`, `module5.js`:
+
+1. **Phase 1:** Count answered groups only; if incomplete → warning message, **no** `correct`/`incorrect` classes, early return.
+2. **Phase 2:** All groups answered → evaluate, reveal solutions, enforce 60% pass threshold.
+
+Fixes reviewer bug: green solution reveal on unanswered questions.
+
 ## Known limitations
 
 - Station progress cache is per-browser; authoritative copy is per-user in Moodle DB
 - M3/M4/M6 remain placeholders until Seeker delivers content
 - Quiz Type A (JS) vs Type B (Moodle Quiz) — manager decision still open
+- Demo availability skips M3/M4/M6; production chain pending content
 
 ## Deploy after progress changes
 
 1. Push Git → Coolify redeploy
 2. `php admin/cli/upgrade.php --non-interactive`
-3. `php local/p4u/cli/create_training_modules.php --courseid=2` (sets manual completion on M1/M2/M5)
+3. `php local/p4u/cli/create_training_modules.php` — creates/reuses course `P4U-TEST`, sections 1–6, URL activities (no fixed `--courseid` unless that course exists)
 4. `php admin/cli/purge_caches.php`
 
 ## Change log
@@ -102,3 +130,5 @@ local/p4u/cli/
 - **2026-06-09:** M2/M5 interactive modules merged; `complete_module.php` for Moodle completion sync
 - **2026-06-13:** `module-progress.js`; OK-badge fix; nav lock; gated sections; localStorage persistence
 - **2026-06-13:** `module_state.php` + user preferences; quiz-only Moodle completion; sidebar badge fix
+- **2026-06-13:** German umlaut consistency in p4u UI (module5 primary); `create_training_modules.php` get-or-create course + admin enrol
+- **2026-06-17:** `checkQuiz()` two-phase fix (M1/M2/M5); `p4u_training_apply_availability_chain()` demo M1→M2→M5

@@ -23,7 +23,14 @@
     const shell = document.createElement('section');
     shell.className = 'p4u-dashboard-shell';
     shell.innerHTML = [
-        '<h1>Dashboard</h1>',
+        '<div class="p4u-dashboard-hero">',
+        '<p class="p4u-dashboard-label">Peers for You &middot; Peer-Berater-Ausbildung</p>',
+        '<h1>Herzlich willkommen</h1>',
+        '<p>Hier findest du deine Schulungsmodule f&uuml;r die Peer-Schuldenberatung bei der Diakonie. Schlie&szlig;e die Module der Reihe nach ab und werde zertifizierter Peer-Berater.</p>',
+        '<div class="p4u-dashboard-actions">',
+        '<a class="p4u-dashboard-primary" href="' + moduleUrl + '">Schulung starten &rarr;</a>',
+        '</div>',
+        '</div>',
         '<section class="p4u-dashboard-panel p4u-dashboard-timeline">',
         '<div class="p4u-dashboard-panel-head">',
         '<h2>Zeitliste</h2>',

@@ -31,7 +31,7 @@ Each environment has its **own** MariaDB volume and **own** `moodledata` volume.
 | Part | Where it lives |
 |------|----------------|
 | Interactive UI (`module1.php`, `module1.js`, placeholders) | **Git** |
-| CLI skeleton (`create_modul1.php`, `create_training_modules.php`) | **Git** — run on each server to create sections/URL activities |
+| CLI skeleton (`create_modul1.php`, `create_training_modules.php`) | **Git** — run on each server to create sections/URL activities; `create_training_modules.php` **creates** course `P4U-TEST` if missing |
 | Wording, quiz banks, extra activities, enrolments, completion rules | **Database** (configure on company server, then export) |
 | PDFs/images attached in Moodle | **moodledata** (included in course `.mbz` backup when you include user/files) |
 

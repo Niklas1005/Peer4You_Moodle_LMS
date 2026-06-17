@@ -74,7 +74,10 @@ The login layout overrides Boost's split-screen via theme templates only (no cor
 - `layout/login.php` + `templates/login.mustache`: minimal page shell, no Boost footer.
 - `templates/core/login_layout.mustache`: centered white card on brand gradient with plus-pattern and glow orbs (aligned with `Dateien/entwuerfe_und_artefakte/prototype/index.html`).
 - `templates/core/loginform.mustache`: P4U form styling; Moodle features retained (forgot password, guest, OAuth/identity providers, cookies notice, language menu, signup).
-- `scss/login.scss`: `.pagelayout-login` background, `.p4u-login-card`, inputs/buttons; respects `prefers-reduced-motion`.
+- `templates/core/login_layout.mustache`: brand block with Diakonie wordmark (`pix/loginlogo.png`), tagline string; page title in `visually-hidden` h1 for accessibility (wordmark shows org name).
+- `pix/loginlogo.png`: source `Dateien/entwuerfe_und_artefakte/diakonie_baba-ra_logo_rz_rgb.png`; served via `theme_p4u_get_login_logo_url()` in `lib.php` / `layout/login.php`.
+- `lang/en/theme_p4u.php` + `lang/de/theme_p4u.php`: `loginbrandtitle`, `logintagline` (Diakonie branding).
+- `scss/login.scss`: `.pagelayout-login` background, `.p4u-login-card`, inputs/buttons (full-width form controls), logo sizing (`max-width: 16rem`, `mix-blend-mode: multiply` on RGB PNG); respects `prefers-reduced-motion`.
 
 After login template/CSS changes:
 
@@ -86,7 +89,7 @@ docker compose exec -T web php /var/www/html/admin/cli/build_theme_css.php --the
 
 Login styles live in `scss/login.scss` (SCSS pipeline) **and** `style/p4u.css` (static `$THEME->sheets` fallback). If only templates render but login looks unstyled, purge caches and rebuild theme CSS; the static sheet must include `.p4u-login-*` rules.
 
-Validation: open `/login/index.php` logged out — light Diakonie background, centered white card, styled inputs/buttons, Diakonie footer text below card.
+Validation: open `/login/index.php` logged out — light Diakonie background, centered white card, Diakonie wordmark + tagline, full-width inputs/buttons, Diakonie footer text below card.
 
 ## Navbar (global)
 
@@ -116,9 +119,12 @@ docker compose exec -T web php /var/www/html/admin/cli/purge_caches.php
 
 ## Dashboard/Frontpage Composition Notes
 - Frontpage content remains Moodle-driven via `{{{ output.main_content }}}` and can be composed in Site Administration.
-- Dashboard (`/my/`) uses **Boost drawers** layout (`drawers.php`) — standard Moodle blocks and `block_myoverview`, no custom `mydashboard` overlay.
-- `local_p4u` dashboard JS overlay is disabled; block styling via `local/p4u/dashboard.css` remains optional.
-- To adapt widgets quickly, prefer block placement/configuration before adding custom plugin logic.
+- Dashboard (`/my/`): `local_p4u/dashboard.js` prepends a **Peer4You hero** (welcome text, Diakonie context, CTA „Schulung starten“) to the main region; aligned with HTML prototype.
+- `templates/mydashboard.mustache`: hero subtitle „Dein Weg zum Peer-Berater — starte jetzt deine Ausbildung.“ (2026-06-17 review feedback).
+- Block styling via `local/p4u/dashboard.css`; standard Moodle blocks (`block_myoverview`) remain below the hero shell.
+- After dashboard template/JS changes: `purge_caches.php`; hard-refresh browser.
+
+Validation: logged-in user on `/my/` sees Peer4You label, welcome heading, CTA link to `module1.php`.
 
 ## Validation Checklist
 - Theme active: `admin/cli/cfg.php --name=theme` returns `p4u`.

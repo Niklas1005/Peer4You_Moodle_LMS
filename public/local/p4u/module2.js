@@ -384,19 +384,37 @@
         }
 
         const groups = document.querySelectorAll('.p4u-quiz');
-        let correctGroups = 0;
         let answeredGroups = 0;
 
+        // Phase 1: Vollständigkeit prüfen — kein Reveal bei offenen Fragen
         groups.forEach(group => {
             group.classList.remove('unanswered');
-            const options = Array.from(group.querySelectorAll('button'));
-            const selected = options.filter(option => option.classList.contains('selected'));
-            let groupCorrect = selected.length > 0;
+            const selected = group.querySelectorAll('button.selected');
             if (selected.length > 0) {
                 answeredGroups++;
             } else {
                 group.classList.add('unanswered');
             }
+        });
+
+        const result = byId('p4u-quiz-result');
+        result.classList.remove('good', 'bad', 'warning');
+        if (answeredGroups < groups.length) {
+            const missing = groups.length - answeredGroups;
+            result.innerHTML = missing === 1
+                ? '<strong>Noch nicht abschlie\u00dfbar</strong><span>Noch eine Frage ist offen. W\u00e4hle dort eine Antwort aus und schlie\u00dfe das Quiz dann ab.</span>'
+                : '<strong>Noch nicht abschlie\u00dfbar</strong><span>Noch ' + missing + ' Fragen sind offen. W\u00e4hle dort Antworten aus und schlie\u00dfe das Quiz dann ab.</span>';
+            result.classList.add('warning');
+            result.scrollIntoView({behavior: 'smooth', block: 'center'});
+            return;
+        }
+
+        // Phase 2: Alle Fragen beantwortet — jetzt auswerten und Lösungen zeigen
+        let correctGroups = 0;
+        groups.forEach(group => {
+            const options = Array.from(group.querySelectorAll('button'));
+            const selected = options.filter(option => option.classList.contains('selected'));
+            let groupCorrect = selected.length > 0;
 
             options.forEach(option => {
                 option.classList.remove('correct', 'incorrect');
@@ -418,18 +436,6 @@
             }
             updateQuestionFeedback(group, groupCorrect, selected.length > 0);
         });
-
-        const result = byId('p4u-quiz-result');
-        result.classList.remove('good', 'bad', 'warning');
-        if (answeredGroups < groups.length) {
-            const missing = groups.length - answeredGroups;
-            result.innerHTML = missing === 1
-                ? '<strong>Noch nicht abschlie\u00dfbar</strong><span>Noch eine Frage ist offen. W\u00e4hle dort eine Antwort aus und schlie\u00dfe das Quiz dann ab.</span>'
-                : '<strong>Noch nicht abschlie\u00dfbar</strong><span>Noch ' + missing + ' Fragen sind offen. W\u00e4hle dort Antworten aus und schlie\u00dfe das Quiz dann ab.</span>';
-            result.classList.add('warning');
-            result.scrollIntoView({behavior: 'smooth', block: 'center'});
-            return;
-        }
 
         quizSubmitted = true;
         byId('p4u-submit-quiz').disabled = true;

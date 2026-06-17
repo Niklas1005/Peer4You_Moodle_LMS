@@ -234,6 +234,59 @@ function p4u_training_find_activity(int $courseid, int $sectionnum, array $activ
     return null;
 }
 
+/**
+ * Apply sequential module availability chain.
+ *
+ * Demo chain: M1 → M2 → M5.
+ * M3, M4, M6 are placeholder modules without content and are excluded from the chain.
+ *
+ * TODO (production): Once M3, M4 and M6 receive real content, update the chain to
+ * 1 → 2 → 3 → 4 → 5 → 6 and re-run this script on the server.
+ * See: Notizen/Entwicklung To-Do.md
+ *
+ * @param stdClass              $course
+ * @param array<int,array>      $modules  The global $modules definition array
+ */
+function p4u_training_apply_availability_chain(stdClass $course, array $modules): void {
+    global $DB;
+
+    // [section that needs condition => section it must depend on]
+    $chain = [
+        2 => 1, // Modul 2 erst nach Abschluss Modul 1
+        5 => 2, // Modul 5 erst nach Abschluss Modul 2
+    ];
+
+    // Flush fast-modinfo cache so we get up-to-date cmids after add/update.
+    get_fast_modinfo($course->id, 0, true);
+
+    foreach ($chain as $targetSection => $prereqSection) {
+        $prereqNames = array_merge(
+            [$modules[$prereqSection]['activityname']],
+            $modules[$prereqSection]['legacy'] ?? []
+        );
+        $targetNames = array_merge(
+            [$modules[$targetSection]['activityname']],
+            $modules[$targetSection]['legacy'] ?? []
+        );
+
+        $prereqCm = p4u_training_find_activity($course->id, $prereqSection, $prereqNames);
+        $targetCm = p4u_training_find_activity($course->id, $targetSection, $targetNames);
+
+        if (!$prereqCm || !$targetCm) {
+            mtrace("  ! Availability chain: activity not found for section {$prereqSection} or {$targetSection}, skipping.");
+            continue;
+        }
+
+        $availability = json_encode([
+            'op'    => '&',
+            'c'     => [['type' => 'completion', 'cm' => (int)$prereqCm->id, 'e' => 1]],
+            'showc' => [true],
+        ]);
+        $DB->set_field('course_modules', 'availability', $availability, ['id' => $targetCm->id]);
+        mtrace("  = Modul {$targetSection} (cm={$targetCm->id}): gesperrt bis Abschluss Modul {$prereqSection} (cm={$prereqCm->id}).");
+    }
+}
+
 function p4u_training_update_or_add_url(stdClass $course, int $sectionnum, array $module): void {
     global $CFG, $DB;
 
@@ -278,6 +331,9 @@ try {
         ]);
         p4u_training_update_or_add_url($course, $sectionnum, $module);
     }
+
+    // Set sequential availability: M1 → M2 → M5 (M3, M4, M6 excluded — placeholders)
+    p4u_training_apply_availability_chain($course, $modules);
 
     rebuild_course_cache($course->id, true);
     mtrace("Done: P4U training modules created/updated in course {$course->id}.");

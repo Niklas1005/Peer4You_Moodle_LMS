@@ -34,9 +34,22 @@ Modul 1 is the first interactive learning module for the Peer4You Moodle trainin
 
 ## Known Implementation Gaps
 - Quiz results are not yet written to the Moodle gradebook.
-- Station progress is persisted in **browser localStorage** (`module-progress.js`); optional server-side sync not implemented.
+- Station progress is persisted **per user** in Moodle user preferences (`module_state.php`) with browser cache fallback — see `09-interactive-modules-architecture.md`.
 - Video content still needs the final media file.
 - Module content should be reviewed by the training/domain team before rollout.
+
+## Progress persistence (2026-06-13)
+
+| Layer | Mechanism |
+|-------|-----------|
+| Station progress | `module_state.php` GET/POST → `local_p4u_module{N}_progress` |
+| Quiz stats | Same API → `local_p4u_module{N}_quiz_stats` |
+| Module completion | `complete_module.php` after quiz pass; course activity **manual** completion |
+| UX | Sequential nav, gated interactive stations, sidebar badge only when completed |
+
+## Quiz `checkQuiz()` fix (2026-06-17)
+
+Reviewer feedback: submitting with unanswered questions revealed correct answers (green highlight). **Fix:** two-phase `checkQuiz()` in `module1.js` (and M2/M5): Phase 1 checks completeness only; Phase 2 evaluates and reveals after all questions answered. Pass threshold remains **60%**. See `09-interactive-modules-architecture.md`.
 
 ## Modules 2 and 5
 
@@ -45,5 +58,4 @@ M2 and M5 follow the same pattern as Modul 1 (`module2.php/js`, `module5.php/js`
 ## Focus For Next Iteration
 - Finalize wording and examples in Modul 1.
 - Replace the video section with the final media asset or a short scripted clip.
-- Optional: server-side progress via Moodle `user_preference` for cross-device handoff.
 - M3/M4/M6: replace placeholders when Seeker content arrives.
