@@ -1,4 +1,6 @@
 #!/bin/sh
+# Peer4You Web-Container: moodledata-Rechte, config.php aus Example, dann Apache.
+# MOODLE_SSL_PROXY in config.php für Reverse-Proxy (Coolify/Traefik) auf dem Referenzserver.
 set -e
 
 if [ ! -f /var/www/html/public/index.php ]; then

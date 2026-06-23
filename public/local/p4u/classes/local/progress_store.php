@@ -2,7 +2,10 @@
 // This file is part of Moodle - http://moodle.org/
 
 /**
- * User preference storage for P4U interactive module progress.
+ * Peer4You — Speichert Lernstationen-Fortschritt pro Nutzer in Moodle User Preferences.
+ *
+ * Wird von module_state.php (AJAX) und module-progress.js (Browser) genutzt.
+ * Autoritative Quelle ist die DB; localStorage dient nur als Offline-Cache.
  *
  * @package   local_p4u
  * @copyright 2026

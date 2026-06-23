@@ -1,3 +1,9 @@
+/**
+ * Peer4You — Hero-Banner und Schulungsübersicht auf dem Moodle-Dashboard (/my/).
+ *
+ * Fügt oberhalb der Standard-Blöcke eine Willkommenssektion mit CTA
+ * „Schulung starten“ ein (angelehnt an den HTML-Prototyp).
+ */
 (function() {
     const body = document.body;
     if (!body || body.id !== 'page-my-index') {

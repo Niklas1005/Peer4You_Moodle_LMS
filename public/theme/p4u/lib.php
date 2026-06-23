@@ -15,7 +15,10 @@
 // along with Moodle.  If not, see <http://www.gnu.org/licenses/>.
 
 /**
- * Theme helper functions for theme_p4u.
+ * Peer4You theme_p4u — SCSS-Pipeline, Login-Logo und Theme-Hilfsfunktionen.
+ *
+ * Erbt von Boost; lädt p4u.scss und login.scss in die Kompilierung.
+ * Keine Core-Änderungen — upgrade-sicheres Child-Theme.
  *
  * @package   theme_p4u
  * @copyright 2026

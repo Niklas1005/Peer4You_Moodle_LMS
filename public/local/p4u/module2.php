@@ -2,7 +2,10 @@
 // This file is part of Moodle - http://moodle.org/
 
 /**
- * Interactive Modul 2 learning page.
+ * Peer4You Modul 2 — Interaktive Lernseite (Finanzwissen).
+ *
+ * Stationen: Alltag, Zinsen, Kredite, Budget, Beratung, Abschlussquiz.
+ * Gated Sections müssen abgeschlossen sein, bevor das Quiz freigeschaltet wird.
  *
  * @package   local_p4u
  * @copyright 2026

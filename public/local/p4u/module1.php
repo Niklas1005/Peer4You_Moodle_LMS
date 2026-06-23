@@ -2,7 +2,10 @@
 // This file is part of Moodle - http://moodle.org/
 
 /**
- * Interactive Modul 1 learning page.
+ * Peer4You Modul 1 — Interaktive Lernseite (Einführung & Rollenverständnis).
+ *
+ * Rendert HTML-Stationen (Flashcards, Übungen, Fall, Quiz) und bindet module1.js ein.
+ * Fortschritt über module-progress.js; Abschluss erst nach Quiz ≥ 60 %.
  *
  * @package   local_p4u
  * @copyright 2026

@@ -2,7 +2,9 @@
 // This file is part of Moodle - http://moodle.org/
 
 /**
- * Interactive Modul 5 learning page.
+ * Peer4You Modul 5 — Interaktive Lernseite (Krisen erkennen & weiterverweisen).
+ *
+ * Stationen: Warnsignale, Peer-Rolle, Weiterverweisung, Notfall, Fall, Quiz.
  *
  * @package   local_p4u
  * @copyright 2026

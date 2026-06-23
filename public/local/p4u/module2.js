@@ -1,3 +1,7 @@
+/**
+ * Peer4You Modul 2 — Finanzwissen: Drag-Drop, Fallbeispiele, Abschlussquiz.
+ * Abschnitte sequenziell; gatedSections erfordern abgeschlossene Übung vor Fortschritt.
+ */
 (function() {
     const sections = ['intro', 'everyday', 'interest', 'credit', 'budget', 'counseling', 'quiz'];
     const sectionLabels = ['Einstieg', 'Alltag', 'Zinsen', 'Kredite', 'Budgetplan', 'Beratung', 'Abschlussquiz'];
@@ -35,6 +39,7 @@
     const progress = P4UProgress.create({
         moduleNumber: MODULE_NUMBER,
         sections,
+        // Gated: Kredit/Budget/Beratung erst nach abgeschlossener Übung.
         gatedSections: ['credit', 'budget', 'counseling'],
         onRestore: restoreModuleExtra,
         collectExtra: collectModuleExtra,

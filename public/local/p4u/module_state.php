@@ -2,7 +2,13 @@
 // This file is part of Moodle - http://moodle.org/
 
 /**
- * Reads or saves per-user P4U module progress and quiz stats.
+ * Peer4You — AJAX-API für Lernfortschritt und Quiz-Statistiken.
+ *
+ * Endpunkte (eingeloggt, Kurskontext):
+ *   GET  ?action=get  — lädt progress + quizStats + completed aus der DB
+ *   POST ?action=save — speichert JSON-Body in User Preferences (sesskey Pflicht)
+ *
+ * Wird von module-progress.js aufgerufen; autoritative Quelle ist MariaDB.
  *
  * @package   local_p4u
  * @copyright 2026

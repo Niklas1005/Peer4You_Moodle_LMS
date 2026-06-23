@@ -1,7 +1,11 @@
 #!/usr/bin/env php
 <?php
 /**
- * CLI script: Create/update the P4U training module structure in Moodle.
+ * Peer4You CLI — Kursstruktur für 6 Schulungsmodule anlegen oder aktualisieren.
+ *
+ * Legt pro Modul einen Kursabschnitt und eine URL-Aktivität an (moduleN.php).
+ * Wendet danach die Demo-Availability-Kette M1 → M2 → M5 an (Completion nach Quiz).
+ * Läuft gegen die Datenbank — nach Deploy auf jedem Server erneut ausführen.
  */
 
 define('CLI_SCRIPT', true);
@@ -250,7 +254,8 @@ function p4u_training_find_activity(int $courseid, int $sectionnum, array $activ
 function p4u_training_apply_availability_chain(stdClass $course, array $modules): void {
     global $DB;
 
-    // [section that needs condition => section it must depend on]
+    // Demo-Kette: nächstes Modul erst nach Activity Completion des Vorgängers (Quiz ≥ 60 %).
+    // Produktion: Kette auf M1→M2→M3→M4→M5→M6 erweitern, wenn Inhalte vorliegen.
     $chain = [
         2 => 1, // Modul 2 erst nach Abschluss Modul 1
         5 => 2, // Modul 5 erst nach Abschluss Modul 2

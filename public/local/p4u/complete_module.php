@@ -2,7 +2,11 @@
 // This file is part of Moodle - http://moodle.org/
 
 /**
- * Reads or marks completion for a P4U interactive module activity.
+ * Peer4You — Moodle Activity Completion nach bestandenem Quiz.
+ *
+ * Findet die URL-Aktivität des Moduls im Kurs und setzt manual completion,
+ * sobald der Lernende das JS-Quiz mit ≥ 60 % bestanden hat.
+ * Kein Abschluss beim bloßen Ansehen der Seite.
  *
  * @package   local_p4u
  * @copyright 2026

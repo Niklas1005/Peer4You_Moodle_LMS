@@ -1,3 +1,7 @@
+/**
+ * Peer4You Modul 5 — Krisenverweis: Warnsignale, Weiterverweisung, Abschlussquiz.
+ * Abschnitte sequenziell; gatedSections (signals, referral, case) vor Quiz-Freischaltung.
+ */
 (function() {
     const sections = ['intro', 'signals', 'role', 'referral', 'emergency', 'case', 'quiz'];
     const sectionLabels = ['Einstieg', 'Warnsignale', 'Peer-Rolle', 'Weiterverweisen', 'Notfall', 'Fallbeispiel', 'Abschlussquiz'];
@@ -12,6 +16,7 @@
     const progress = P4UProgress.create({
         moduleNumber: MODULE_NUMBER,
         sections,
+        // Gated: Warnsignale, Weiterverweisung und Fall vor Quiz-Freischaltung.
         gatedSections: ['signals', 'referral', 'case'],
         onRestore: restoreModuleExtra,
         collectExtra: collectModuleExtra,

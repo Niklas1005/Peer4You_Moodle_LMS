@@ -15,7 +15,10 @@
 // along with Moodle.  If not, see <http://www.gnu.org/licenses/>.
 
 /**
- * Theme configuration for theme_p4u.
+ * Peer4You theme_p4u — Layout-Zuordnung und Theme-Konfiguration.
+ *
+ * Mappt Seitentypen (login, frontpage, mydashboard, course) auf eigene Layout-Dateien.
+ * Parent-Theme: Boost. SCSS über theme_p4u_get_main_scss_content() in lib.php.
  *
  * @package   theme_p4u
  * @copyright 2026
@@ -79,6 +82,7 @@ $THEME->layouts = [
         'options' => ['nonavbar' => true],
     ],
     'mydashboard' => [
+        // Peer4You-Dashboard (/my/) — Drawers-Layout; Hero via local_p4u/dashboard.js.
         'file' => 'drawers.php',
         'regions' => ['side-pre'],
         'defaultregion' => 'side-pre',
@@ -90,6 +94,7 @@ $THEME->layouts = [
         'defaultregion' => 'side-pre',
     ],
     'login' => [
+        // Eigenes Login-Layout mit Diakonie-Branding (templates/login.mustache).
         'file' => 'login.php',
         'regions' => [],
         'options' => ['langmenu' => true],

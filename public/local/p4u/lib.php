@@ -2,7 +2,10 @@
 // This file is part of Moodle - http://moodle.org/
 
 /**
- * Output callbacks for local_p4u.
+ * Peer4You local_p4u — Moodle-Hooks und Hilfsfunktionen.
+ *
+ * Registriert seitenabhängige Stylesheets (Dashboard, Kursansicht) über
+ * before_standard_html_head. Die interaktiven Module selbst liegen in moduleN.php/js.
  *
  * @package   local_p4u
  * @copyright 2026
@@ -38,6 +41,7 @@ function local_p4u_is_training_course_page(): bool {
         return false;
     }
 
+    // Schulungskurs — courseid ist serverabhängig; Referenzserver nutzt id=2.
     return $PAGE->pagetype === 'course-view-topics'
         && (int)$PAGE->course->id === 2;
 }

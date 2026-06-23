@@ -13,6 +13,12 @@ This documentation is maintained for a professional Moodle implementation and ha
 - `07-coolify-hetzner-handoff.md` - Coolify/Hetzner staging checklist and watchouts.
 - `08-environments-and-customer-handoff.md` - **Git vs database vs moodledata**; company reference server → customer migration.
 - `09-session-2026-05-19-hosting.md` - session log: Coolify install, config.php/CSS, handoff decisions.
+- `UEBERSICHT_EIGENE_ENTWICKLUNG.md` - **German working doc**: component matrix, architecture, module status, team skeleton (report source).
+- `upstream-moodle-readme.md` - original Moodle project README (GPL upstream reference).
+
+## Cursor dev tooling (not part of LMS)
+
+`.agents/skills/` and `skills-lock.json` in the repo root are **Cursor IDE development aids** — not required to run Moodle. See root [README.md](../README.md#cursor-entwicklungstools-nicht-teil-der-lms-lösung).
 
 ## Documentation Rules
 - Every significant technical decision must be documented.

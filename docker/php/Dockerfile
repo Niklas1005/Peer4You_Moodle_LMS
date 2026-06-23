@@ -1,3 +1,5 @@
+# Peer4You — PHP-Apache-Image für lokales Moodle (Moodle 5.2, PHP 8.3).
+# DocumentRoot: public/ (moodle.apache.conf). Hinter Coolify/Traefik: X-Forwarded-Proto + MOODLE_SSL_PROXY.
 FROM php:8.3-apache
 
 ENV DEBIAN_FRONTEND=noninteractive

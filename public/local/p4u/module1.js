@@ -1,4 +1,9 @@
+/**
+ * Peer4You Modul 1 — Client-Logik für Stationen, Übungen und Abschlussquiz.
+ * Nutzt P4UProgress (module-progress.js) für serverseitigen Fortschritt.
+ */
 (function() {
+    // Abschnittsreihenfolge (Sidebar + Fortschrittsbalken); Quiz erst nach requiredBeforeQuiz.
     const sections = ['intro', 'flashcards', 'roles', 'exercise', 'video', 'casestudy', 'quiz'];
     const sectionLabels = ['Einstieg', 'Grundlagen', 'Rolle kl\u00e4ren', 'Zuordnung', 'Praxisimpuls', 'Fallbeispiel', 'Abschlussquiz'];
     const requiredBeforeQuiz = ['intro', 'flashcards', 'roles', 'exercise', 'video', 'casestudy'];
@@ -31,6 +36,7 @@
     const progress = P4UProgress.create({
         moduleNumber: MODULE_NUMBER,
         sections,
+        // Gated: Station zählt erst nach erfüllter Aufgabe (nicht nur beim Ansehen).
         gatedSections: ['exercise', 'video', 'casestudy'],
         onRestore: restoreModuleExtra,
         collectExtra: collectModuleExtra,

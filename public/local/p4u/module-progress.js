@@ -1,5 +1,8 @@
 /**
- * Shared station progress persistence for P4U interactive modules.
+ * Peer4You — Gemeinsamer Fortschritts-Store für alle interaktiven Module (M1/M2/M5).
+ *
+ * P4UProgress.create() verwaltet besuchte Stationen, aktuelle Sektion und Quiz-Stats.
+ * Speichert serverseitig über module_state.php; localStorage nur als Fallback-Cache.
  *
  * @package   local_p4u
  * @copyright 2026
