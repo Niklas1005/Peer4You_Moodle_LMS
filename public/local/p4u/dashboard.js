@@ -1,8 +1,16 @@
-/**
- * Peer4You — Hero-Banner und Schulungsübersicht auf dem Moodle-Dashboard (/my/).
+﻿/**
+ * Peer4You local_p4u -- Dashboard hero banner and course overview for /my/.
  *
- * Fügt oberhalb der Standard-Blöcke eine Willkommenssektion mit CTA
- * „Schulung starten“ ein (angelehnt an den HTML-Prototyp).
+ * Injects a branded welcome section (hero, timeline panel, course list) above
+ * the standard Moodle blocks. Runs as a plain IIFE loaded via the CSS injection
+ * hook in local_p4u_before_standard_html_head(); no AMD required.
+ *
+ * The fallback course id (2) matches the reference server; the script also
+ * tries to read the real id from a block_myoverview link.
+ *
+ * @package   local_p4u
+ * @copyright 2026
+ * @license   http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
 (function() {
     const body = document.body;

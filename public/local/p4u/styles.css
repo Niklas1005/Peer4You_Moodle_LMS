@@ -1,3 +1,19 @@
+/**
+ * Peer4You local_p4u — Module stylesheet.
+ *
+ * Scoped to .p4u-shell; covers the shared module shell (all six interactive
+ * modules), quiz layout, flashcards, drag-drop zones, progress bar, and
+ * course-index status badges. Loaded via $PAGE->requires->css() in each
+ * module page — does NOT go through Boost SCSS compilation.
+ *
+ * Design tokens mirror theme_p4u/scss/p4u.scss; kept in sync manually.
+ *
+ * @package   local_p4u
+ * @copyright 2026
+ * @license   http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
+ */
+
+/* === Design tokens (local scope, mirrors theme_p4u) === */
 .p4u-shell {
     --p4u-brand: #009BDC;
     --p4u-brand-dark: #0080B8;
@@ -11,6 +27,8 @@
     color: var(--p4u-text);
 }
 
+/* === Navbar overrides (mirrors theme_p4u — applied here because the module
+       pages use incourse layout and load styles.css independently) === */
 .navbar.fixed-top {
     min-height: 64px;
     border-bottom: none;
@@ -127,6 +145,7 @@
     padding-left: 14px;
 }
 
+/* === Module hero header and status card === */
 .p4u-module-hero {
     padding: 22px;
     margin-bottom: 14px;
@@ -257,6 +276,7 @@
     transition: width .35s ease;
 }
 
+/* === Two-column layout: sticky sidebar nav + content area === */
 .p4u-layout {
     display: grid;
     grid-template-columns: 220px minmax(0, 1fr);
@@ -963,6 +983,7 @@
     margin: 18px 0;
 }
 
+/* === Flashcard component (3D flip) === */
 .p4u-flashwrap {
     max-width: 680px;
     margin: 22px auto 18px;
@@ -1055,6 +1076,7 @@
     transform: rotateY(180deg);
 }
 
+/* === Drag-and-drop zones and draggable cards === */
 .p4u-dropzone {
     min-height: 170px;
     padding: 12px;
@@ -1133,6 +1155,7 @@
     margin: 18px 0;
 }
 
+/* === Quiz question groups and result display === */
 .p4u-quiz {
     border: 1px solid var(--p4u-border);
     border-radius: 8px;
@@ -1348,6 +1371,7 @@
     opacity: .68;
 }
 
+/* === Responsive breakpoints === */
 @media (max-width: 860px) {
     .p4u-layout {
         grid-template-columns: 1fr;
@@ -1401,6 +1425,7 @@
     }
 }
 
+/* === Scoped colour overrides — ensure p4u tokens win over Boost !important rules === */
 .p4u-shell a {
     color: var(--p4u-brand);
 }

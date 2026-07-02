@@ -229,6 +229,11 @@
         renderFlashcard();
     }
 
+    /**
+     * Wires up HTML5 drag-and-drop for the role-assignment exercise.
+     * Cards start in #p4u-card-bank and can be dropped into .p4u-dropzone elements.
+     * Correct/incorrect feedback is applied after "Zuordnung prüfen" is clicked.
+     */
     function initDragDrop() {
         document.querySelectorAll('.p4u-draggable').forEach(card => {
             card.addEventListener('dragstart', () => {
@@ -259,6 +264,11 @@
         byId('p4u-reset-drag')?.addEventListener('click', resetDragAnswers);
     }
 
+    /**
+     * Evaluates the current drag-drop placement and marks cards correct/incorrect.
+     * Unlocks "Weiter" and completes the gated 'exercise' section when all placements
+     * are correct.
+     */
     function checkDragAnswers() {
         let total = 0;
         let correct = 0;
@@ -390,6 +400,12 @@
         });
     }
 
+    /**
+     * Evaluates all quiz questions in two phases:
+     *   Phase 1 — completeness check (marks unanswered groups, aborts if incomplete).
+     *   Phase 2 — scoring and reveal (correct/incorrect per option, per-question feedback).
+     * Passes at ≥ 60 %; triggers markModuleCompleted() and Moodle sync on pass.
+     */
     function checkQuiz() {
         if (quizSubmitted) {
             showMessage('Der aktuelle Versuch ist bereits abgeschlossen. Starte einen neuen Versuch.');
@@ -535,6 +551,13 @@
         });
     }
 
+    /**
+     * Snapshots all module-specific interactive state for server-side persistence.
+     * Called by P4UProgress.collectExtra before every remote save.
+     *
+     * @returns {object} Extra payload: flashIndex, dragPlacements, choice feedback
+     *   texts, quiz attempt number, submission state and selected answers.
+     */
     function collectModuleExtra() {
         const dragPlacements = {};
         document.querySelectorAll('.p4u-draggable').forEach(card => {
@@ -564,6 +587,12 @@
         };
     }
 
+    /**
+     * Restores module-specific interactive state from a persisted extra payload.
+     * Called by P4UProgress.onRestore after remote or local progress is loaded.
+     *
+     * @param {object} extra Payload previously produced by collectModuleExtra().
+     */
     function restoreModuleExtra(extra) {
         if (typeof extra.flashIndex === 'number') {
             flashIndex = Math.min(Math.max(0, extra.flashIndex), flashcards.length - 1);

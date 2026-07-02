@@ -1,3 +1,17 @@
+/**
+ * Peer4You local_p4u — Dashboard stylesheet.
+ *
+ * Scoped to body#page-my-index (Moodle /my/ dashboard). Overrides Boost
+ * defaults to match the Diakonie brand, hides default blocks replaced by
+ * the custom dashboard hero injected via dashboard.js, and applies the
+ * P4U colour palette to standard Moodle UI components.
+ *
+ * @package   local_p4u
+ * @copyright 2026
+ * @license   http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
+ */
+
+/* === Boost overrides scoped to the dashboard page === */
 body#page-my-index {
     background: #FDFBF9;
 }

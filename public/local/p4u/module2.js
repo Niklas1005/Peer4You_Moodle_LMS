@@ -199,6 +199,10 @@
         setTimeout(() => toast.remove(), 2800);
     }
 
+    /**
+     * Initialises the weekly-spending calculator in the 'everyday' section.
+     * Reacts to input changes and computes monthly (×4) and yearly (×48) totals.
+     */
     function initCalculator() {
         const input = byId('p4u-weekly-cost');
         if (!input) {
@@ -281,6 +285,10 @@
         byId('p4u-reset-drag')?.addEventListener('click', resetDragAnswers);
     }
 
+    /**
+     * Evaluates the current drag-drop placement and marks cards correct/incorrect.
+     * Unlocks "Weiter" and completes the gated 'budget' section when all correct.
+     */
     function checkDragAnswers() {
         let total = 0;
         let correct = 0;
@@ -329,6 +337,14 @@
         byId('p4u-drag-next').disabled = true;
     }
 
+    /**
+     * Generic single-choice card handler shared by practice and case sections.
+     *
+     * @param {string}      selector      CSS selector for the button group wrapper.
+     * @param {string}      feedbackId    Element id for the inline feedback text.
+     * @param {string|null} revealId      Optional element id to un-hide on any answer.
+     * @param {string|null} gateSectionId Optional section id to mark completed via P4UProgress.
+     */
     function initChoiceCards(selector, feedbackId, revealId, gateSectionId) {
         document.querySelectorAll(selector + ' button').forEach(option => {
             option.addEventListener('click', () => {
@@ -382,6 +398,12 @@
         updateQuizAttemptLabel();
     }
 
+    /**
+     * Evaluates all quiz questions in two phases:
+     *   Phase 1 — completeness check (marks unanswered groups, aborts if incomplete).
+     *   Phase 2 — scoring and reveal (correct/incorrect per option, per-question feedback).
+     * Passes at ≥ 60 %; triggers markModuleCompleted() and Moodle sync on pass.
+     */
     function checkQuiz() {
         if (quizSubmitted) {
             showMessage('Der aktuelle Versuch ist bereits abgeschlossen. Starte einen neuen Versuch.');
@@ -527,6 +549,13 @@
         });
     }
 
+    /**
+     * Snapshots all module-specific interactive state for server-side persistence.
+     * Called by P4UProgress.collectExtra before every remote save.
+     *
+     * @returns {object} Extra payload: flashIndex, weeklyCost, dragPlacements,
+     *   choice feedback texts, quiz attempt number, submission state and answers.
+     */
     function collectModuleExtra() {
         const dragPlacements = {};
         document.querySelectorAll('.p4u-draggable').forEach(card => {
@@ -556,6 +585,12 @@
         };
     }
 
+    /**
+     * Restores module-specific interactive state from a persisted extra payload.
+     * Called by P4UProgress.onRestore after remote or local progress is loaded.
+     *
+     * @param {object} extra Payload previously produced by collectModuleExtra().
+     */
     function restoreModuleExtra(extra) {
         if (typeof extra.flashIndex === 'number') {
             flashIndex = Math.min(Math.max(0, extra.flashIndex), flashcards.length - 1);

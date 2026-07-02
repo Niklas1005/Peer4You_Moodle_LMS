@@ -1,4 +1,18 @@
-// Diakonie Baden-Baden / Rastatt — primary blue + secondary purple (diakonie-bad-ra.de).
+// theme_p4u — Main SCSS partial for the Peer4You Boost child theme.
+//
+// Defines global CSS custom properties (design tokens), overrides Boost's
+// primary/secondary colours, and applies Diakonie brand styling to the navbar,
+// focus rings, and form controls. Loaded first by theme_p4u_get_main_scss_content()
+// in lib.php, after the Boost preset default.scss.
+//
+// Colour palette source: Diakonie Baden-Baden / Rastatt (diakonie-bad-ra.de).
+// Primary #009BDC, Secondary #5A2572, Accent #FABA00.
+//
+// @package   theme_p4u
+// @copyright 2026
+// @license   http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
+
+// === Global design tokens ===
 :root {
     --p4u-brand-50: #e8f6fc;
     --p4u-brand-100: #cceef9;

@@ -168,6 +168,11 @@
         window.scrollTo({top: 0, behavior: 'smooth'});
     }
 
+    /**
+     * Wires up the warning-signal drag-drop exercise in the 'signals' section.
+     * Items with data-zone are dragged into .p4u-dropzone[data-zone] targets.
+     * Completes the gated 'signals' section only when every item is correctly placed.
+     */
     function initSignalDragDrop() {
         document.querySelectorAll('.p4u-drag').forEach(item => {
             item.addEventListener('dragstart', event => {
@@ -223,6 +228,13 @@
         });
     }
 
+    /**
+     * Generic single-choice card handler for role-check and practice sections.
+     *
+     * @param {string}      selector      CSS selector for the button group wrapper.
+     * @param {string}      feedbackId    Element id for inline feedback text.
+     * @param {string|null} gateSectionId Optional section id to mark via P4UProgress.
+     */
     function initChoiceCards(selector, feedbackId, gateSectionId) {
         const feedback = byId(feedbackId);
         document.querySelectorAll(selector + ' button').forEach(button => {
@@ -239,6 +251,11 @@
         });
     }
 
+    /**
+     * Wires up the referral-case choice buttons via event delegation on document.
+     * Each .p4u-referral-case block is independent; selecting an answer in all blocks
+     * triggers updateReferralResult() which completes the gated 'referral' section.
+     */
     function initReferralChoices() {
         document.querySelectorAll('.p4u-referral-options button').forEach(button => {
             button.type = 'button';
@@ -265,6 +282,11 @@
         });
     }
 
+    /**
+     * Recalculates the aggregate referral result after any case answer changes.
+     * Completes the gated 'referral' section once all cases have been answered.
+     * Shows a summary result message; correct count determines good/bad styling.
+     */
     function updateReferralResult() {
         const cases = Array.from(document.querySelectorAll('.p4u-referral-case'));
         const answered = cases.filter(caseBlock => caseBlock.querySelector('button.selected'));
@@ -314,6 +336,12 @@
         updateQuizAttemptLabel();
     }
 
+    /**
+     * Evaluates all quiz questions in two phases:
+     *   Phase 1 — completeness check (marks unanswered groups, aborts if incomplete).
+     *   Phase 2 — scoring and reveal (correct/incorrect per option, per-question feedback).
+     * Passes at ≥ 60 %; triggers markModuleCompleted() and Moodle sync on pass.
+     */
     function checkQuiz() {
         if (quizSubmitted) {
             showMessage('Der aktuelle Versuch ist bereits abgeschlossen. Starte einen neuen Versuch.');
@@ -433,6 +461,13 @@
         progress.persist();
     }
 
+    /**
+     * Snapshots all module-specific interactive state for server-side persistence.
+     * Called by P4UProgress.collectExtra before every remote save.
+     *
+     * @returns {object} Extra payload: signalPlacements, referralSelections,
+     *   caseFeedback, quiz attempt number, submission state and selected answers.
+     */
     function collectModuleExtra() {
         const signalPlacements = {};
         document.querySelectorAll('.p4u-drag').forEach(item => {
@@ -467,6 +502,12 @@
         };
     }
 
+    /**
+     * Restores module-specific interactive state from a persisted extra payload.
+     * Called by P4UProgress.onRestore after remote or local progress is loaded.
+     *
+     * @param {object} extra Payload previously produced by collectModuleExtra().
+     */
     function restoreModuleExtra(extra) {
         if (extra.signalPlacements) {
             Object.entries(extra.signalPlacements).forEach(([itemKey, zoneId]) => {

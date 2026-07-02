@@ -1,5 +1,17 @@
-// P4U login page — Diakonie light branding, centered card.
+// theme_p4u — Login page SCSS.
+//
+// Provides a full-viewport login layout with a centred card, branded gradient
+// background, and subtle animation. Overrides Boost's default login chrome so
+// the page renders entirely within our custom login.mustache template.
+//
+// Included after p4u.scss by theme_p4u_get_main_scss_content() in lib.php.
+// Relies on CSS custom properties defined in p4u.scss (:root).
+//
+// @package   theme_p4u
+// @copyright 2026
+// @license   http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
 
+// Easing used for card entrance animation and arrow hover transition.
 $p4u-login-ease-out: cubic-bezier(0.23, 1, 0.32, 1);
 
 body.pagelayout-login,

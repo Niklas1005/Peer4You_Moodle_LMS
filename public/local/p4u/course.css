@@ -1,3 +1,16 @@
+/**
+ * Peer4You local_p4u — Course view stylesheet.
+ *
+ * Scoped to body#page-course-view-topics (the training course topic view).
+ * Reskins sections, activity items and Boost chrome to match Diakonie brand.
+ * The first section receives an accent gradient to signal the entry point.
+ *
+ * @package   local_p4u
+ * @copyright 2026
+ * @license   http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
+ */
+
+/* === Boost overrides scoped to the course topics view === */
 body#page-course-view-topics {
     background: #FDFBF9;
 }

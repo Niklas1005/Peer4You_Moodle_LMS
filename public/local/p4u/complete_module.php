@@ -1,5 +1,18 @@
-<?php
+﻿<?php
 // This file is part of Moodle - http://moodle.org/
+//
+// Moodle is free software: you can redistribute it and/or modify
+// it under the terms of the GNU General Public License as published by
+// the Free Software Foundation, either version 3 of the License, or
+// (at your option) any later version.
+//
+// Moodle is distributed in the hope that it will be useful,
+// but WITHOUT ANY WARRANTY; without even the implied warranty of
+// MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+// GNU General Public License for more details.
+//
+// You should have received a copy of the GNU General Public License
+// along with Moodle.  If not, see <http://www.gnu.org/licenses/>.
 
 /**
  * Peer4You — Moodle Activity Completion nach bestandenem Quiz.
@@ -36,12 +49,27 @@ $PAGE->set_url(new moodle_url('/local/p4u/complete_module.php', [
     'action' => $action,
 ]));
 
+/**
+ * Emits a JSON response and terminates the script.
+ *
+ * @param array $payload Associative array to encode as JSON.
+ */
 function local_p4u_json_response(array $payload): void {
     header('Content-Type: application/json');
     echo json_encode($payload);
     exit;
 }
 
+/**
+ * Finds the URL course-module that links to the interactive module page.
+ *
+ * Matches by URL path (/local/p4u/moduleN.php) or by the legacy activity name
+ * for module 1 ("Interaktives Lernmodul starten"). Returns null if not found.
+ *
+ * @param stdClass $course
+ * @param int      $module Module number 1-6.
+ * @return cm_info|null
+ */
 function local_p4u_find_module_cm(stdClass $course, int $module): ?cm_info {
     global $DB;
 
