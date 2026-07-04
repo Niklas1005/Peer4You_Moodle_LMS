@@ -64,3 +64,12 @@ jsconfig.json
 UPGRADING-CURRENT.md
 .phpunit.cache
 tsconfig.aliases.json
+
+# Local agent skills (Cursor IDE only)
+/.agents/
+
+# Internal project documentation (local use only)
+/docs/
+
+# Agent config (local only)
+/skills-lock.json
