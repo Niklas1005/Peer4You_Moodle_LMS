@@ -4,7 +4,7 @@
  * Peer4You CLI — Kursstruktur für 6 Schulungsmodule anlegen oder aktualisieren.
  *
  * Legt pro Modul einen Kursabschnitt und eine URL-Aktivität an (moduleN.php).
- * Wendet danach die Demo-Availability-Kette M1 → M2 → M5 an (Completion nach Quiz).
+ * Wendet danach die Availability-Kette M1 → M2 → M3 → M4 → M5 an (Completion nach Quiz).
  * Läuft gegen die Datenbank — nach Deploy auf jedem Server erneut ausführen.
  */
 
@@ -55,17 +55,19 @@ $modules = [
     ],
     3 => [
         'sectionname' => 'Modul 3: Kommunikation und Gesprächsführung',
-        'activityname' => 'Kommunikation vorbereiten',
-        'summary' => '<p>Geplant: aktives Zuhören, gute Fragen und Gesprächsstruktur.</p>',
-        'legacy' => ['Modul 3: Kommunikation & Gespraechsfuehrung', 'Modul 3: Kommunikation und Gespraechsfuehrung'],
-        'url' => '/local/p4u/module_placeholder.php?module=3',
+        'activityname' => 'Interaktives Lernmodul Kommunikation starten',
+        'summary' => '<p>Online-Kommunikation, wertschätzende Sprache, Grenzen und einen sicheren Erstkontakt interaktiv üben.</p>',
+        'legacy' => ['Kommunikation vorbereiten', 'Modul 3: Kommunikation & Gespraechsfuehrung', 'Modul 3: Kommunikation und Gespraechsfuehrung'],
+        'url' => '/local/p4u/module3.php',
+        'completion' => 'manual',
     ],
     4 => [
         'sectionname' => 'Modul 4: Digitale Sicherheit und Datenschutz',
-        'activityname' => 'Digitale Sicherheit vorbereiten',
-        'summary' => '<p>Geplant: vertrauliche und sichere digitale Peer-Beratung.</p>',
-        'legacy' => ['Modul 4: Digitale Sicherheit & Datenschutz'],
-        'url' => '/local/p4u/module_placeholder.php?module=4',
+        'activityname' => 'Interaktives Lernmodul Digitale Sicherheit starten',
+        'summary' => '<p>Anonymität, Datenminimierung, sichere Plattformen und Datenschutz interaktiv erarbeiten.</p>',
+        'legacy' => ['Digitale Sicherheit vorbereiten', 'Modul 4: Digitale Sicherheit & Datenschutz'],
+        'url' => '/local/p4u/module4.php',
+        'completion' => 'manual',
     ],
     5 => [
         'sectionname' => 'Modul 5: Krisen erkennen und weiterverweisen',
@@ -241,10 +243,10 @@ function p4u_training_find_activity(int $courseid, int $sectionnum, array $activ
 /**
  * Apply sequential module availability chain.
  *
- * Demo chain: M1 → M2 → M5.
- * M3, M4, M6 are placeholder modules without content and are excluded from the chain.
+ * Chain: M1 → M2 → M3 → M4 → M5.
+ * M6 remains a placeholder and is excluded from the chain.
  *
- * TODO (production): Once M3, M4 and M6 receive real content, update the chain to
+ * TODO (production): Once M6 receives real content, update the chain to
  * 1 → 2 → 3 → 4 → 5 → 6 and re-run this script on the server.
  * See: Notizen/Entwicklung To-Do.md
  *
@@ -254,11 +256,12 @@ function p4u_training_find_activity(int $courseid, int $sectionnum, array $activ
 function p4u_training_apply_availability_chain(stdClass $course, array $modules): void {
     global $DB;
 
-    // Demo-Kette: nächstes Modul erst nach Activity Completion des Vorgängers (Quiz ≥ 60 %).
-    // Produktion: Kette auf M1→M2→M3→M4→M5→M6 erweitern, wenn Inhalte vorliegen.
+    // Nächstes Modul erst nach Activity Completion des Vorgängers (Quiz ≥ 60 %).
     $chain = [
         2 => 1, // Modul 2 erst nach Abschluss Modul 1
-        5 => 2, // Modul 5 erst nach Abschluss Modul 2
+        3 => 2, // Modul 3 erst nach Abschluss Modul 2
+        4 => 3, // Modul 4 erst nach Abschluss Modul 3
+        5 => 4, // Modul 5 erst nach Abschluss Modul 4
     ];
 
     // Flush fast-modinfo cache so we get up-to-date cmids after add/update.
@@ -337,7 +340,7 @@ try {
         p4u_training_update_or_add_url($course, $sectionnum, $module);
     }
 
-    // Set sequential availability: M1 → M2 → M5 (M3, M4, M6 excluded — placeholders)
+    // Set sequential availability: M1 → M2 → M3 → M4 → M5 (M6 remains a placeholder).
     p4u_training_apply_availability_chain($course, $modules);
 
     rebuild_course_cache($course->id, true);

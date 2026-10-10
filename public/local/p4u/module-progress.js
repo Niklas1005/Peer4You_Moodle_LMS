@@ -1,5 +1,5 @@
 /**
- * Peer4You — Gemeinsamer Fortschritts-Store für alle interaktiven Module (M1/M2/M5).
+ * Peer4You — Gemeinsamer Fortschritts-Store für alle interaktiven Module.
  *
  * P4UProgress.create() verwaltet besuchte Stationen, aktuelle Sektion und Quiz-Stats.
  * Speichert serverseitig über module_state.php; localStorage nur als Fallback-Cache.
@@ -14,6 +14,8 @@
     const MODULE_ACTIVITY_LABELS = {
         1: 'Interaktives Lernmodul starten',
         2: 'Interaktives Lernmodul Finanzwissen starten',
+        3: 'Interaktives Lernmodul Kommunikation starten',
+        4: 'Interaktives Lernmodul Digitale Sicherheit starten',
         5: 'Interaktives Lernmodul Krisen erkennen starten',
     };
 

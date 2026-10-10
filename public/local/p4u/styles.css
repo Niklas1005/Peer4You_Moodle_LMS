@@ -1465,3 +1465,23 @@
 .p4u-shell .p4u-progressbar span {
     background: linear-gradient(90deg, var(--p4u-brand-dark), var(--p4u-brand), var(--p4u-accent)) !important;
 }
+.p4u-checklist {
+    display: grid;
+    gap: .8rem;
+}
+
+.p4u-checklist label {
+    display: flex;
+    align-items: flex-start;
+    gap: .7rem;
+    padding: .8rem 1rem;
+    border: 1px solid var(--p4u-border, #e8e4df);
+    border-radius: .75rem;
+    cursor: pointer;
+}
+
+.p4u-checklist input {
+    margin-top: .2rem;
+    width: 1.1rem;
+    height: 1.1rem;
+}

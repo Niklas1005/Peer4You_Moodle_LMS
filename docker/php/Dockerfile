@@ -41,7 +41,10 @@ RUN apt-get update \
 
 COPY docker/php/moodle.apache.conf /etc/apache2/sites-available/000-default.conf
 COPY docker/php/entrypoint-web.sh /usr/local/bin/entrypoint-web.sh
-RUN chmod +x /usr/local/bin/entrypoint-web.sh
+# Git on Windows may check the script out with CRLF. A CR in the shebang makes
+# Linux report the otherwise existing script as "not found".
+RUN sed -i 's/\r$//' /usr/local/bin/entrypoint-web.sh \
+    && chmod +x /usr/local/bin/entrypoint-web.sh
 
 RUN { \
       echo "memory_limit=512M"; \

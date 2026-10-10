@@ -21,7 +21,7 @@ php local/p4u/cli/create_training_modules.php
 1. Kurs `P4U-TEST` anlegen oder wiederverwenden (6 Abschnitte, Completion aktiviert)
 2. Pro Abschnitt: URL-Aktivität → `module1.php` … `module5.php` oder Platzhalter
 3. Admin-User einschreiben (Dashboard-Sichtbarkeit)
-4. **Availability-Kette** setzen: Demo **M1 → M2 → M5** (Freischaltung nach Quiz-Abschluss)
+4. **Availability-Kette** setzen: **M1 → M2 → M3 → M4 → M5** (Freischaltung nach Quiz-Abschluss; M6 bleibt Platzhalter)
 
 ### Wann ausführen?
 
